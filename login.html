@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - Mighty School For Valours</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QR Code scanner library -->
+    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <style>
         :root {
             --color-primary: #1c3877;
@@ -299,6 +301,17 @@
             background-color: var(--color-secondary-dark);
         }
 
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
         .login-divider {
             text-align: center;
             margin: 2rem 0;
@@ -337,6 +350,45 @@
 
         .help-link:hover {
             text-decoration: underline;
+        }
+
+        /* QR Code Scanner Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-text);
+        }
+
+        #qr-reader {
+            width: 100%;
+            margin: 1rem 0;
         }
 
         /* Loading Spinner */
@@ -526,7 +578,6 @@
                         <li><a href="academics.html" class="nav-link">Academics</a></li>
                         <li><a href="admissions.html" class="nav-link">Admissions</a></li>
                         <li><a href="news.html" class="nav-link">News & Events</a></li>
-                        <li><a href="contact.html" class="nav-link">Contact</a></li>
                     </ul>
                 </nav>
             </div>
@@ -560,12 +611,14 @@
                     <div id="student-alert" class="alert alert-error"></div>
                     <form id="student-login-form">
                         <div class="form-group">
-                            <label for="student-email" class="form-label">Email</label>
-                            <input type="email" id="student-email" class="form-input" placeholder="Enter your email" required>
+                            <label for="admission-number" class="form-label">Admission Number</label>
+                            <input type="text" id="admission-number" class="form-input"
+                                placeholder="Enter your admission number" required>
                         </div>
                         <div class="form-group password-toggle">
                             <label for="student-password" class="form-label">Password</label>
-                            <input type="password" id="student-password" class="form-input" placeholder="Enter your password" required>
+                            <input type="password" id="student-password" class="form-input"
+                                placeholder="Enter your password" required>
                             <button type="button" class="toggle-password" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye"></i>
                             </button>
@@ -581,6 +634,14 @@
                         </button>
                     </form>
                     <div class="login-divider">
+                        <span>Or</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="student-qr-btn" class="btn btn-outline">
+                            <i class="fas fa-qrcode"></i> Scan QR Code
+                        </button>
+                    </div>
+                    <div class="login-divider">
                         <span>Quick Access</span>
                     </div>
                     <div style="text-align: center;">
@@ -588,52 +649,69 @@
                     </div>
                 </div>
 
-                <!-- Admin Login -->
+                <!-- Admin/Staff Login -->
                 <div class="login-card">
                     <div class="login-header">
                         <div class="login-icon">
                             <i class="fas fa-user-tie"></i>
                         </div>
-                        <h2 class="login-title">Administrator Login</h2>
+                        <h2 class="login-title">Staff Login</h2>
                         <p class="login-subtitle">Access the administrative dashboard and management tools</p>
                     </div>
-                    <div id="admin-alert" class="alert alert-error"></div>
-                    <form id="admin-login-form">
+                    <div id="staff-alert" class="alert alert-error"></div>
+                    <form id="staff-login-form">
                         <div class="form-group">
-                            <label for="admin-email" class="form-label">Email</label>
-                            <input type="email" id="admin-email" class="form-input" placeholder="Enter your email" required>
+                            <label for="staff-email" class="form-label">Email</label>
+                            <input type="email" id="staff-email" class="form-input" placeholder="Enter your email"
+                                required>
                         </div>
                         <div class="form-group password-toggle">
-                            <label for="admin-password" class="form-label">Password</label>
-                            <input type="password" id="admin-password" class="form-input" placeholder="Enter your password" required>
+                            <label for="staff-password" class="form-label">Password</label>
+                            <input type="password" id="staff-password" class="form-input"
+                                placeholder="Enter your password" required>
                             <button type="button" class="toggle-password" aria-label="Toggle password visibility">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </div>
                         <div class="form-options">
                             <label class="remember-me">
-                                <input type="checkbox" id="remember-admin"> Remember me
+                                <input type="checkbox" id="remember-staff"> Remember me
                             </label>
                             <a href="#" class="forgot-password">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn btn-primary" id="admin-login-btn">
-                            <span class="btn-text">Login as Administrator</span>
+                        <button type="submit" class="btn btn-primary" id="staff-login-btn">
+                            <span class="btn-text">Login as Staff</span>
                         </button>
                     </form>
                     <div class="login-divider">
-                        <span>Additional Options</span>
+                        <span>Or</span>
                     </div>
                     <div style="text-align: center;">
-                        <a href="contact.html" class="btn btn-secondary">Request Admin Access</a>
+                        <button id="staff-qr-btn" class="btn btn-outline">
+                            <i class="fas fa-qrcode"></i> Scan QR Code
+                        </button>
                     </div>
                 </div>
             </div>
 
             <div class="help-links">
-                <p>Need help? <a href="contact.html" class="help-link">Contact Support</a> or <a href="faq.html" class="help-link">View FAQs</a></p>
+                <p>Need help? <a href="contact.html" class="help-link">Contact Support</a> or <a href="faq.html"
+                        class="help-link">View FAQs</a></p>
             </div>
         </div>
     </section>
+
+    <!-- QR Code Scanner Modal -->
+    <div id="qr-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" id="close-qr-modal">&times;</button>
+            <h2 id="qr-modal-title">Scan Your ID Card QR Code</h2>
+            <div id="qr-reader"></div>
+            <p id="qr-instructions">Position the QR code within the frame to scan. The scan will happen automatically.
+            </p>
+            <div id="qr-result" class="alert" style="display: none;"></div>
+        </div>
+    </div>
 
     <!-- Footer -->
     <footer class="footer">
@@ -720,12 +798,12 @@
 
         // Password Visibility Toggle
         const toggleButtons = document.querySelectorAll('.toggle-password');
-        
+
         toggleButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const input = button.previousElementSibling;
                 const icon = button.querySelector('i');
-                
+
                 if (input.type === 'password') {
                     input.type = 'text';
                     icon.classList.remove('fa-eye');
@@ -745,7 +823,7 @@
             alertElement.classList.remove('alert-error', 'alert-success');
             alertElement.classList.add(type === 'error' ? 'alert-error' : 'alert-success');
             alertElement.style.display = 'block';
-            
+
             // Hide alert after 5 seconds
             setTimeout(() => {
                 alertElement.style.display = 'none';
@@ -760,8 +838,8 @@
                 buttonText.innerHTML = '<span class="spinner"></span> Logging in...';
             } else {
                 button.disabled = false;
-                buttonText.textContent = buttonText.textContent.replace('<span class="spinner"></span> Logging in...', 
-                    button.id === 'student-login-btn' ? 'Login as Student' : 'Login as Administrator');
+                buttonText.textContent = buttonText.textContent.replace('<span class="spinner"></span> Logging in...',
+                    button.id === 'student-login-btn' ? 'Login as Student' : 'Login as Staff');
             }
         }
 
@@ -773,7 +851,7 @@
                     .then((doc) => {
                         if (doc.exists) {
                             const userData = doc.data();
-                            if (userData.role === 'admin') {
+                            if (userData.role === 'admin' || userData.role === 'staff') {
                                 window.location.href = 'admin-dashboard.html';
                             } else {
                                 window.location.href = 'student-dashboard.html';
@@ -787,124 +865,259 @@
         });
 
         // Student Login Form Submission
-        document.getElementById('student-login-form').addEventListener('submit', function(e) {
+        document.getElementById('student-login-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const studentLoginBtn = document.getElementById('student-login-btn');
-            const email = document.getElementById('student-email').value;
+            const admissionNumber = document.getElementById('admission-number').value;
             const password = document.getElementById('student-password').value;
-            
+
             // Validate inputs
-            if (!email || !password) {
+            if (!admissionNumber || !password) {
                 showAlert('student-alert', 'Please fill in all fields.', 'error');
                 return;
             }
-            
+
             setLoading(studentLoginBtn, true);
-            
-            // Sign in with email and password
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Check if user has student role
-                    const user = userCredential.user;
-                    return db.collection('users').doc(user.uid).get()
-                        .then((doc) => {
-                            if (doc.exists) {
-                                const userData = doc.data();
-                                if (userData.role === 'student') {
-                                    // Redirect to student dashboard
-                                    window.location.href = 'student-dashboard.html';
-                                } else {
-                                    // User doesn't have student role
-                                    auth.signOut();
-                                    showAlert('student-alert', 'Access denied. Student account required.', 'error');
-                                    setLoading(studentLoginBtn, false);
-                                }
-                            } else {
-                                // User document doesn't exist
-                                auth.signOut();
-                                showAlert('student-alert', 'User account not found.', 'error');
-                                setLoading(studentLoginBtn, false);
+
+            // Look up student by admission number
+            db.collection('students').where('admissionNumber', '==', admissionNumber).get()
+                .then((querySnapshot) => {
+                    if (querySnapshot.empty) {
+                        showAlert('student-alert', 'No student found with this admission number.', 'error');
+                        setLoading(studentLoginBtn, false);
+                        return;
+                    }
+
+                    // Get the student document
+                    const studentDoc = querySnapshot.docs[0];
+                    const studentData = studentDoc.data();
+
+                    // Sign in with email and password (using the email from student record)
+                    auth.signInWithEmailAndPassword(studentData.email, password)
+                        .then((userCredential) => {
+                            // Check if user has student role
+                            const user = userCredential.user;
+                            return db.collection('users').doc(user.uid).get()
+                                .then((doc) => {
+                                    if (doc.exists) {
+                                        const userData = doc.data();
+                                        if (userData.role === 'student') {
+                                            // Redirect to student dashboard
+                                            window.location.href = 'student-dashboard.html';
+                                        } else {
+                                            // User doesn't have student role
+                                            auth.signOut();
+                                            showAlert('student-alert', 'Access denied. Student account required.', 'error');
+                                            setLoading(studentLoginBtn, false);
+                                        }
+                                    } else {
+                                        // User document doesn't exist
+                                        auth.signOut();
+                                        showAlert('student-alert', 'Student account not found.', 'error');
+                                        setLoading(studentLoginBtn, false);
+                                    }
+                                });
+                        })
+                        .catch((error) => {
+                            setLoading(studentLoginBtn, false);
+                            // Handle errors
+                            switch (error.code) {
+                                case 'auth/user-not-found':
+                                    showAlert('student-alert', 'Student account not found.', 'error');
+                                    break;
+                                case 'auth/wrong-password':
+                                    showAlert('student-alert', 'Incorrect password.', 'error');
+                                    break;
+                                default:
+                                    showAlert('student-alert', error.message, 'error');
                             }
                         });
                 })
                 .catch((error) => {
                     setLoading(studentLoginBtn, false);
-                    // Handle errors
-                    switch (error.code) {
-                        case 'auth/user-not-found':
-                            showAlert('student-alert', 'No account found with this email.', 'error');
-                            break;
-                        case 'auth/wrong-password':
-                            showAlert('student-alert', 'Incorrect password.', 'error');
-                            break;
-                        case 'auth/invalid-email':
-                            showAlert('student-alert', 'Invalid email address.', 'error');
-                            break;
-                        default:
-                            showAlert('student-alert', error.message, 'error');
-                    }
+                    showAlert('student-alert', 'Error looking up student information.', 'error');
+                    console.error('Error getting student document:', error);
                 });
         });
 
-        // Admin Login Form Submission
-        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
+        // Staff Login Form Submission
+        document.getElementById('staff-login-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            const adminLoginBtn = document.getElementById('admin-login-btn');
-            const email = document.getElementById('admin-email').value;
-            const password = document.getElementById('admin-password').value;
-            
+            const staffLoginBtn = document.getElementById('staff-login-btn');
+            const email = document.getElementById('staff-email').value;
+            const password = document.getElementById('staff-password').value;
+
             // Validate inputs
             if (!email || !password) {
-                showAlert('admin-alert', 'Please fill in all fields.', 'error');
+                showAlert('staff-alert', 'Please fill in all fields.', 'error');
                 return;
             }
-            
-            setLoading(adminLoginBtn, true);
-            
+
+            setLoading(staffLoginBtn, true);
+
             // Sign in with email and password
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // Check if user has admin role
+                    // Check if user has staff or admin role
                     const user = userCredential.user;
                     return db.collection('users').doc(user.uid).get()
                         .then((doc) => {
                             if (doc.exists) {
                                 const userData = doc.data();
-                                if (userData.role === 'admin') {
+                                if (userData.role === 'admin' || userData.role === 'staff') {
                                     // Redirect to admin dashboard
                                     window.location.href = 'admin-dashboard.html';
                                 } else {
-                                    // User doesn't have admin role
+                                    // User doesn't have staff role
                                     auth.signOut();
-                                    showAlert('admin-alert', 'Access denied. Administrator account required.', 'error');
-                                    setLoading(adminLoginBtn, false);
+                                    showAlert('staff-alert', 'Access denied. Staff account required.', 'error');
+                                    setLoading(staffLoginBtn, false);
                                 }
                             } else {
                                 // User document doesn't exist
                                 auth.signOut();
-                                showAlert('admin-alert', 'Administrator account not found.', 'error');
-                                setLoading(adminLoginBtn, false);
+                                showAlert('staff-alert', 'Staff account not found.', 'error');
+                                setLoading(staffLoginBtn, false);
                             }
                         });
                 })
                 .catch((error) => {
-                    setLoading(adminLoginBtn, false);
+                    setLoading(staffLoginBtn, false);
                     // Handle errors
                     switch (error.code) {
                         case 'auth/user-not-found':
-                            showAlert('admin-alert', 'No administrator account found with this email.', 'error');
+                            showAlert('staff-alert', 'No staff account found with this email.', 'error');
                             break;
                         case 'auth/wrong-password':
-                            showAlert('admin-alert', 'Incorrect password.', 'error');
+                            showAlert('staff-alert', 'Incorrect password.', 'error');
                             break;
                         case 'auth/invalid-email':
-                            showAlert('admin-alert', 'Invalid email address.', 'error');
+                            showAlert('staff-alert', 'Invalid email address.', 'error');
                             break;
                         default:
-                            showAlert('admin-alert', error.message, 'error');
+                            showAlert('staff-alert', error.message, 'error');
                     }
                 });
         });
+
+        // QR Code Scanner Functionality
+        const qrModal = document.getElementById('qr-modal');
+        const closeQrModal = document.getElementById('close-qr-modal');
+        const studentQrBtn = document.getElementById('student-qr-btn');
+        const staffQrBtn = document.getElementById('staff-qr-btn');
+        const qrModalTitle = document.getElementById('qr-modal-title');
+        const qrReader = document.getElementById('qr-reader');
+        const qrResult = document.getElementById('qr-result');
+        let html5QrcodeScanner = null;
+        let currentUserType = null;
+
+        // Open QR modal for students
+        studentQrBtn.addEventListener('click', () => {
+            currentUserType = 'student';
+            qrModalTitle.textContent = 'Scan Your Student ID Card QR Code';
+            openQrModal();
+        });
+
+        // Open QR modal for staff
+        staffQrBtn.addEventListener('click', () => {
+            currentUserType = 'staff';
+            qrModalTitle.textContent = 'Scan Your Staff ID Card QR Code';
+            openQrModal();
+        });
+
+        // Close QR modal
+        closeQrModal.addEventListener('click', closeQrModalFunc);
+
+        function openQrModal() {
+            qrModal.style.display = 'flex';
+            qrResult.style.display = 'none';
+
+            // Initialize QR scanner
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+            }
+
+            html5QrcodeScanner = new Html5QrcodeScanner(
+                "qr-reader",
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                false
+            );
+
+            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+        }
+
+        function closeQrModalFunc() {
+            qrModal.style.display = 'none';
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.clear();
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // Handle the scanned code here
+            console.log(`Scan result: ${decodedText}`, decodedResult);
+
+            // Show success message
+            qrResult.textContent = `QR Code scanned successfully!`;
+            qrResult.classList.remove('alert-error', 'alert-success');
+            qrResult.classList.add('alert-success');
+            qrResult.style.display = 'block';
+
+            // Process the QR code data based on user type
+            if (currentUserType === 'student') {
+                processStudentQrCode(decodedText);
+            } else if (currentUserType === 'staff') {
+                processStaffQrCode(decodedText);
+            }
+
+            // Stop the scanner
+            html5QrcodeScanner.clear();
+
+            // Close modal after 2 seconds
+            setTimeout(() => {
+                closeQrModalFunc();
+            }, 2000);
+        }
+
+        function onScanFailure(error) {
+            // Handle scan failure, but ignore if it's just because we stopped the scanner
+            console.warn(`QR error = ${error}`);
+        }
+
+        function processStudentQrCode(qrData) {
+            // Parse the QR code data (assuming it's in JSON format)
+            try {
+                const studentData = JSON.parse(qrData);
+
+                // Auto-fill the student login form
+                if (studentData.admissionNumber) {
+                    document.getElementById('admission-number').value = studentData.admissionNumber;
+                    showAlert('student-alert', 'Admission number filled from QR code. Please enter your password.', 'success');
+                }
+            } catch (e) {
+                console.error('Error parsing QR code data:', e);
+                showAlert('student-alert', 'Invalid QR code format. Please try again or use manual login.', 'error');
+            }
+        }
+
+        function processStaffQrCode(qrData) {
+            // Parse the QR code data (assuming it's in JSON format)
+            try {
+                const staffData = JSON.parse(qrData);
+
+                // Auto-fill the staff login form
+                if (staffData.email) {
+                    document.getElementById('staff-email').value = staffData.email;
+                    showAlert('staff-alert', 'Email filled from QR code. Please enter your password.', 'success');
+                }
+            } catch (e) {
+                console.error('Error parsing QR code data:', e);
+                showAlert('staff-alert', 'Invalid QR code format. Please try again or use manual login.', 'error');
+            }
+        }
 
         // Close mobile nav when clicking on a link
         document.querySelectorAll('.nav-link').forEach(link => {
