@@ -340,6 +340,7 @@
         .help-links {
             text-align: center;
             margin-top: 2rem;
+            margin-bottom: 2rem;
         }
 
         .help-link {
@@ -391,6 +392,20 @@
             margin: 1rem 0;
         }
 
+        #qr-reader__dashboard_section_csr {
+            text-align: center;
+        }
+
+        #qr-reader__dashboard_section_csr button {
+            margin: 0.5rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
         /* Loading Spinner */
         .spinner {
             display: inline-block;
@@ -427,6 +442,22 @@
             background-color: #e8f5e9;
             color: #2e7d32;
             border: 1px solid #a5d6a7;
+        }
+
+        /* Camera Permission Message */
+        .camera-permission {
+            text-align: center;
+            padding: 1rem;
+            background-color: var(--color-primary-light);
+            border-radius: 4px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .camera-permission i {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
         }
 
         /* Footer */
@@ -578,6 +609,7 @@
                         <li><a href="academics.html" class="nav-link">Academics</a></li>
                         <li><a href="admissions.html" class="nav-link">Admissions</a></li>
                         <li><a href="news.html" class="nav-link">News & Events</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
                     </ul>
                 </nav>
             </div>
@@ -649,7 +681,7 @@
                     </div>
                 </div>
 
-                <!-- Admin/Staff Login -->
+                <!-- Staff Login -->
                 <div class="login-card">
                     <div class="login-header">
                         <div class="login-icon">
@@ -706,9 +738,14 @@
         <div class="modal-content">
             <button class="close-modal" id="close-qr-modal">&times;</button>
             <h2 id="qr-modal-title">Scan Your ID Card QR Code</h2>
+
+            <div id="camera-permission" class="camera-permission">
+                <i class="fas fa-camera"></i>
+                <p>Camera access is required to scan QR codes</p>
+                <p>Please allow camera permissions when prompted</p>
+            </div>
+
             <div id="qr-reader"></div>
-            <p id="qr-instructions">Position the QR code within the frame to scan. The scan will happen automatically.
-            </p>
             <div id="qr-result" class="alert" style="display: none;"></div>
         </div>
     </div>
@@ -1008,6 +1045,7 @@
         const qrModalTitle = document.getElementById('qr-modal-title');
         const qrReader = document.getElementById('qr-reader');
         const qrResult = document.getElementById('qr-result');
+        const cameraPermission = document.getElementById('camera-permission');
         let html5QrcodeScanner = null;
         let currentUserType = null;
 
@@ -1031,34 +1069,59 @@
         function openQrModal() {
             qrModal.style.display = 'flex';
             qrResult.style.display = 'none';
+            cameraPermission.style.display = 'block';
 
-            // Initialize QR scanner
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
+            // Clear previous scanner if exists
+            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
+                html5QrcodeScanner.clear().catch(error => {
+                    console.log("Could not clear previous scanner", error);
+                });
             }
 
+            // Initialize QR scanner
             html5QrcodeScanner = new Html5QrcodeScanner(
                 "qr-reader",
                 {
                     fps: 10,
-                    qrbox: { width: 250, height: 250 }
+                    qrbox: { width: 250, height: 250 },
+                    supportedScanTypes: [
+                        Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                    ]
                 },
-                false
+                /* verbose= */ false
             );
 
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            // Render the scanner
+            html5QrcodeScanner.render(
+                (decodedText, decodedResult) => {
+                    onScanSuccess(decodedText, decodedResult);
+                },
+                (errorMessage) => {
+                    onScanFailure(errorMessage);
+                }
+            ).catch(err => {
+                console.log("Error rendering scanner", err);
+                cameraPermission.style.display = 'block';
+                showAlert('qr-result', 'Could not access camera. Please check permissions.', 'error');
+                qrResult.style.display = 'block';
+            });
         }
 
         function closeQrModalFunc() {
             qrModal.style.display = 'none';
-            if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear();
+            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
+                html5QrcodeScanner.clear().catch(error => {
+                    console.log("Could not clear scanner", error);
+                });
             }
         }
 
         function onScanSuccess(decodedText, decodedResult) {
             // Handle the scanned code here
             console.log(`Scan result: ${decodedText}`, decodedResult);
+
+            // Hide camera permission message
+            cameraPermission.style.display = 'none';
 
             // Show success message
             qrResult.textContent = `QR Code scanned successfully!`;
@@ -1074,7 +1137,11 @@
             }
 
             // Stop the scanner
-            html5QrcodeScanner.clear();
+            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
+                html5QrcodeScanner.clear().catch(error => {
+                    console.log("Could not clear scanner", error);
+                });
+            }
 
             // Close modal after 2 seconds
             setTimeout(() => {
@@ -1084,7 +1151,10 @@
 
         function onScanFailure(error) {
             // Handle scan failure, but ignore if it's just because we stopped the scanner
-            console.warn(`QR error = ${error}`);
+            if (error && !error.includes('NotFoundException')) {
+                console.warn(`QR error = ${error}`);
+                cameraPermission.style.display = 'block';
+            }
         }
 
         function processStudentQrCode(qrData) {
