@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --color-primary: #2596be;
-            --color-primary-dark: #1d7a9c;
-            --color-primary-light: #d1ecf1;
-            --color-secondary: #f3a712;
-            --color-dark: #164e63;
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
             --color-text: #333333;
             --color-background: #f8f9fa;
             --color-light-gray: #e9ecef;
@@ -108,9 +109,9 @@
             background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
             background-position: center;
-            color: var(--color-white);
             padding: 5rem 0;
             text-align: center;
+            color: var(--color-white);
         }
 
         .page-title {
@@ -133,14 +134,14 @@
             text-decoration: none;
         }
 
-        .breadcrumb-item::after {
-            content: '/';
-            margin-left: 1rem;
-            color: var(--color-primary);
+        .breadcrumb-item.active {
+            color: var(--color-primary-light);
         }
 
-        .breadcrumb-item:last-child::after {
-            content: '';
+        .breadcrumb-item:not(:last-child):after {
+            content: ">";
+            margin-left: 1rem;
+            color: var(--color-white);
         }
 
         /* Section Styles */
@@ -167,67 +168,82 @@
         /* History Timeline */
         .timeline {
             position: relative;
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
         }
 
-        .timeline::after {
+        .timeline:before {
             content: '';
             position: absolute;
-            width: 6px;
-            background-color: var(--color-primary);
-            top: 0;
-            bottom: 0;
             left: 50%;
-            margin-left: -3px;
+            width: 2px;
+            height: 100%;
+            background-color: var(--color-primary);
+            transform: translateX(-50%);
         }
 
         .timeline-item {
-            padding: 10px 40px;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 30px;
             position: relative;
+            margin-bottom: 50px;
             width: 50%;
-            box-sizing: border-box;
-        }
-
-        .timeline-item:nth-child(odd) {
-            left: 0;
         }
 
         .timeline-item:nth-child(even) {
+            align-self: flex-end;
+            justify-content: flex-start;
+            padding-left: 30px;
+            padding-right: 0;
             left: 50%;
         }
 
         .timeline-content {
-            padding: 20px;
             background-color: var(--color-white);
+            padding: 20px;
             border-radius: 8px;
             box-shadow: var(--shadow);
+            width: 100%;
+            position: relative;
         }
 
-        .timeline-date {
-            font-weight: bold;
-            color: var(--color-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-item::after {
+        .timeline-content:after {
             content: '';
             position: absolute;
-            width: 25px;
-            height: 25px;
-            background-color: var(--color-white);
-            border: 4px solid var(--color-primary);
-            border-radius: 50%;
+            right: -10px;
             top: 20px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--color-white);
+            transform: rotate(45deg);
+        }
+
+        .timeline-item:nth-child(even) .timeline-content:after {
+            left: -10px;
+            right: auto;
+        }
+
+        .timeline-year {
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 20px;
+            right: -11px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--color-primary);
+            border-radius: 50%;
             z-index: 1;
         }
 
-        .timeline-item:nth-child(odd)::after {
-            right: -13px;
-        }
-
-        .timeline-item:nth-child(even)::after {
-            left: -13px;
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -9px;
+            right: auto;
         }
 
         /* Mission & Values */
@@ -256,14 +272,14 @@
             margin-bottom: 1rem;
         }
 
-        /* Leadership */
-        .leadership-grid {
+        /* Leadership Team */
+        .team-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 2rem;
         }
 
-        .leader-card {
+        .team-member {
             background-color: var(--color-white);
             border-radius: 8px;
             overflow: hidden;
@@ -271,11 +287,11 @@
             transition: var(--transition);
         }
 
-        .leader-card:hover {
+        .team-member:hover {
             transform: translateY(-5px);
         }
 
-        .leader-image {
+        .team-image {
             height: 250px;
             background-color: var(--color-light-gray);
             display: flex;
@@ -283,32 +299,56 @@
             justify-content: center;
         }
 
-        .leader-image i {
+        .team-image i {
             font-size: 5rem;
             color: var(--color-primary);
         }
 
-        .leader-info {
+        .team-info {
             padding: 1.5rem;
             text-align: center;
         }
 
-        .leader-name {
-            color: var(--color-dark);
+        .team-name {
+            font-size: 1.2rem;
             margin-bottom: 0.5rem;
+            color: var(--color-dark);
         }
 
-        .leader-role {
+        .team-position {
             color: var(--color-primary);
             font-weight: 500;
             margin-bottom: 1rem;
         }
 
         /* Staff Directory */
+        .staff-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.5rem;
+            background-color: var(--color-light-gray);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
         .staff-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
         }
 
         .staff-card {
@@ -316,8 +356,8 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: var(--shadow);
-            transition: var(--transition);
             text-align: center;
+            transition: var(--transition);
         }
 
         .staff-card:hover {
@@ -342,13 +382,35 @@
         }
 
         .staff-name {
-            color: var(--color-dark);
+            font-weight: 600;
             margin-bottom: 0.3rem;
         }
 
         .staff-subject {
             color: var(--color-primary);
             font-size: 0.9rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
         }
 
         /* Footer */
@@ -431,25 +493,27 @@
 
         /* Responsive Design */
         @media (max-width: 992px) {
-            .timeline::after {
-                left: 31px;
+            .timeline:before {
+                left: 30px;
             }
 
             .timeline-item {
                 width: 100%;
                 padding-left: 70px;
-                padding-right: 25px;
+                padding-right: 0;
             }
 
             .timeline-item:nth-child(even) {
                 left: 0;
             }
 
-            .timeline-item::after {
-                left: 18px;
+            .timeline-content:after {
+                left: -10px;
+                right: auto;
             }
 
-            .timeline-item:nth-child(odd)::after {
+            .timeline-dot {
+                left: 20px;
                 right: auto;
             }
         }
@@ -524,224 +588,289 @@
     <!-- Page Header -->
     <section class="page-header">
         <div class="container">
-            <h1 class="page-title">About Mighty School For Valours</h1>
+            <h1 class="page-title">About Our School</h1>
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item">About Us</li>
+                <li class="breadcrumb-item active">About Us</li>
             </ul>
         </div>
     </section>
 
-    <!-- History Timeline -->
+    <!-- History Section -->
     <section class="section">
         <div class="container">
             <h2 class="section-title">Our History</h2>
             <div class="timeline">
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <div class="timeline-date">1995</div>
-                        <h3>Foundation</h3>
+                        <div class="timeline-year">2003</div>
+                        <h3>School Founding</h3>
                         <p>Mighty School For Valours was established with a vision to provide quality education that
                             nurtures both academic excellence and strong character.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <div class="timeline-date">2002</div>
+                        <div class="timeline-year">2005</div>
                         <h3>First Graduating Class</h3>
-                        <p>Our first cohort of students graduated with outstanding results, with 95% gaining admission
-                            to top universities.</p>
+                        <p>Our first set of students graduated with outstanding results, setting a precedent for
+                            academic
+                            excellence that continues to this day.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <div class="timeline-date">2010</div>
-                        <h3>Campus Expansion</h3>
-                        <p>We expanded our campus to include state-of-the-art science laboratories and a modern library
-                            facility.</p>
+                        <div class="timeline-year">2010</div>
+                        <h3>New Campus Opening</h3>
+                        <p>We moved to our current state-of-the-art campus facility, equipped with modern classrooms,
+                            science labs, and sports facilities.</p>
                     </div>
                 </div>
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <div class="timeline-date">2018</div>
+                        <div class="timeline-year">2018</div>
+                        <h3>STEM Program Launch</h3>
+                        <p>We introduced our specialized STEM program to prepare students for careers in science,
+                            technology, engineering, and mathematics.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2023</div>
                         <h3>Digital Transformation</h3>
-                        <p>Implemented the CBT system and digital learning platforms to enhance the educational
-                            experience.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <div class="timeline-date">2023</div>
-                        <h3>Excellence Recognition</h3>
-                        <p>Received the National Award for Educational Excellence for the third consecutive year.</p>
+                        <p>We implemented our comprehensive CBT platform, integrating technology into our teaching and
+                            learning processes.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Mission, Vision & Values -->
+    <!-- Mission & Values Section -->
     <section class="section" style="background-color: var(--color-background);">
         <div class="container">
-            <h2 class="section-title">Our Mission, Vision & Values</h2>
+            <h2 class="section-title">Our Mission & Values</h2>
             <div class="mission-grid">
                 <div class="mission-card">
                     <div class="mission-icon">
                         <i class="fas fa-bullseye"></i>
                     </div>
                     <h3>Our Mission</h3>
-                    <p>To provide a holistic education that develops students into knowledgeable, skilled, and
-                        character-driven individuals who can contribute positively to society.</p>
+                    <p>To provide a holistic education that develops students academically, socially, and ethically,
+                        preparing them to become responsible global citizens and leaders of tomorrow.</p>
                 </div>
                 <div class="mission-card">
                     <div class="mission-icon">
                         <i class="fas fa-eye"></i>
                     </div>
                     <h3>Our Vision</h3>
-                    <p>To be a leading educational institution that nurtures future leaders and innovators through
-                        academic excellence and strong moral values.</p>
+                    <p>To raise GOOD CITIZENS who will be LITERATES, DISCIPLINED, HARDWORKING and GOD FEARING through
+                        the help of the DIVINE CREATOR/COUNSELLOR.</p>
                 </div>
                 <div class="mission-card">
                     <div class="mission-icon">
-                        <i class="fas fa-heart"></i>
+                        <i class="fas fa-star"></i>
                     </div>
                     <h3>Our Core Values</h3>
-                    <p>Integrity, Excellence, Innovation, Respect, and Responsibility. These values guide everything we
-                        do at Mighty School For Valours.</p>
+                    <p>Passtion for Excellence; Strength from Hardwork; Courage and Honesty; Respect for People; Praying
+                        in Unity.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Leadership -->
+    <!-- Leadership Team Section -->
     <section class="section">
         <div class="container">
-            <h2 class="section-title">Our Leadership</h2>
-            <div class="leadership-grid">
-                <div class="leader-card">
-                    <div class="leader-image">
+            <h2 class="section-title">Our Leadership Team</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="team-image">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <div class="leader-info">
-                        <h3 class="leader-name">Dr. Adebola Johnson</h3>
-                        <p class="leader-role">School Director</p>
-                        <p>With over 25 years in education leadership, Dr. Johnson is committed to academic excellence.
-                        </p>
+                    <div class="team-info">
+                        <h3 class="team-name">Dr. Adebola Johnson</h3>
+                        <p class="team-position">School Director</p>
+                        <p>With over 25 years in education leadership, Dr. Johnson is committed to academic excellence
+                            and student development.</p>
                     </div>
                 </div>
-                <div class="leader-card">
-                    <div class="leader-image">
+                <div class="team-member">
+                    <div class="team-image">
                         <i class="fas fa-user-graduate"></i>
                     </div>
-                    <div class="leader-info">
-                        <h3 class="leader-name">Mrs. Chinenye Okoro</h3>
-                        <p class="leader-role">Principal</p>
-                        <p>Mrs. Okoro brings innovative teaching methodologies and a passion for student development.
-                        </p>
+                    <div class="team-info">
+                        <h3 class="team-name">Mrs. Chinenye Okoro</h3>
+                        <p class="team-position">Principal</p>
+                        <p>Mrs. Okoro brings innovative teaching methodologies and a passion for student success to her
+                            role as Principal.</p>
                     </div>
                 </div>
-                <div class="leader-card">
-                    <div class="leader-image">
+                <div class="team-member">
+                    <div class="team-image">
                         <i class="fas fa-chalkboard-teacher"></i>
                     </div>
-                    <div class="leader-info">
-                        <h3 class="leader-name">Mr. Tunde Adewale</h3>
-                        <p class="leader-role">Vice Principal, Academics</p>
-                        <p>Mr. Adewale oversees curriculum development and ensures academic standards are maintained.
-                        </p>
+                    <div class="team-info">
+                        <h3 class="team-name">Mr. Tunde Adeyemi</h3>
+                        <p class="team-position">Vice Principal, Academics</p>
+                        <p>Mr. Adeyemi oversees our academic programs and ensures our curriculum meets the highest
+                            standards.</p>
                     </div>
                 </div>
-                <div class="leader-card">
-                    <div class="leader-image">
+                <div class="team-member">
+                    <div class="team-image">
                         <i class="fas fa-user-friends"></i>
                     </div>
-                    <div class="leader-info">
-                        <h3 class="leader-name">Mrs. Funke Alabi</h3>
-                        <p class="leader-role">Vice Principal, Administration</p>
-                        <p>Mrs. Alabi manages school operations and ensures a conducive learning environment.</p>
+                    <div class="team-info">
+                        <h3 class="team-name">Mrs. Funke Alabi</h3>
+                        <p class="team-position">Vice Principal, Administration</p>
+                        <p>Mrs. Alabi manages the school's operations and ensures a smooth functioning of all
+                            administrative processes.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Staff Directory -->
+    <!-- Staff Directory Section -->
     <section class="section" style="background-color: var(--color-background);">
         <div class="container">
             <h2 class="section-title">Our Teaching Staff</h2>
+            <div class="staff-filters">
+                <button class="filter-btn active" data-filter="all">All Departments</button>
+                <button class="filter-btn" data-filter="science">Science</button>
+                <button class="filter-btn" data-filter="arts">Arts</button>
+                <button class="filter-btn" data-filter="commercial">Commercial</button>
+                <button class="filter-btn" data-filter="language">Languages</button>
+            </div>
             <div class="staff-grid">
-                <div class="staff-card">
+                <div class="staff-card" data-department="science">
                     <div class="staff-image">
-                        <i class="fas fa-atom"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Mr. James Okafor</h3>
-                        <p class="staff-subject">Physics</p>
-                    </div>
-                </div>
-                <div class="staff-card">
-                    <div class="staff-image">
-                        <i class="fas fa-calculator"></i>
-                    </div>
-                    <div class="staff-info">
-                        <h3 class="staff-name">Mrs. Bisi Adeyemi</h3>
+                        <h4 class="staff-name">Mr. James Okafor</h4>
                         <p class="staff-subject">Mathematics</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="science">
                     <div class="staff-image">
-                        <i class="fas fa-flask"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Dr. Chidi Nwosu</h3>
+                        <h4 class="staff-name">Dr. Ngozi Eze</h4>
+                        <p class="staff-subject">Physics</p>
+                    </div>
+                </div>
+                <div class="staff-card" data-department="science">
+                    <div class="staff-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Mrs. Bisi Adekunle</h4>
                         <p class="staff-subject">Chemistry</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="science">
                     <div class="staff-image">
-                        <i class="fas fa-dna"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Ms. Amina Yusuf</h3>
+                        <h4 class="staff-name">Mr. Chidi Mbakwe</h4>
                         <p class="staff-subject">Biology</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="arts">
                     <div class="staff-image">
-                        <i class="fas fa-book"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Mrs. Grace Okon</h3>
-                        <p class="staff-subject">English Language</p>
+                        <h4 class="staff-name">Mrs. Amina Sule</h4>
+                        <p class="staff-subject">Literature</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="arts">
                     <div class="staff-image">
-                        <i class="fas fa-globe-africa"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Mr. Femi Balogun</h3>
-                        <p class="staff-subject">Geography</p>
+                        <h4 class="staff-name">Mr. Femi Balogun</h4>
+                        <p class="staff-subject">History</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="commercial">
                     <div class="staff-image">
-                        <i class="fas fa-landmark"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Mrs. Ngozi Eze</h3>
-                        <p class="staff-subject">Government</p>
+                        <h4 class="staff-name">Mrs. Grace Okon</h4>
+                        <p class="staff-subject">Accounting</p>
                     </div>
                 </div>
-                <div class="staff-card">
+                <div class="staff-card" data-department="commercial">
                     <div class="staff-image">
-                        <i class="fas fa-music"></i>
+                        <i class="fas fa-user"></i>
                     </div>
                     <div class="staff-info">
-                        <h3 class="staff-name">Mr. Tobi Adekunle</h3>
-                        <p class="staff-subject">Creative Arts</p>
+                        <h4 class="staff-name">Mr. Tobi Williams</h4>
+                        <p class="staff-subject">Economics</p>
                     </div>
                 </div>
+                <div class="staff-card" data-department="language">
+                    <div class="staff-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Mrs. Zainab Lawal</h4>
+                        <p class="staff-subject">English</p>
+                    </div>
+                </div>
+                <div class="staff-card" data-department="language">
+                    <div class="staff-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Mr. Pierre Dubois</h4>
+                        <p class="staff-subject">French</p>
+                    </div>
+                </div>
+                <div class="staff-card" data-department="language">
+                    <div class="staff-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Mrs. Chioma Nwosu</h4>
+                        <p class="staff-subject">Igbo</p>
+                    </div>
+                </div>
+                <div class="staff-card" data-department="language">
+                    <div class="staff-image">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Mr. Adewale Yusuf</h4>
+                        <p class="staff-subject">Yoruba</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Join Our Educational Community</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 2rem auto;">
+                Become part of our tradition of excellence. Schedule a visit to our campus to experience the Mighty
+                School For Valours difference.
+            </p>
+            <div style="text-align: center;">
+                <a href="contact.html" class="btn btn-primary">Schedule a Visit</a>
             </div>
         </div>
     </section>
@@ -752,7 +881,7 @@
             <div class="footer-grid">
                 <div>
                     <h3 class="footer-heading">Mighty School For Valours</h3>
-                    <p>Nurturing excellence and character since 1995. Our mission is to provide a holistic education
+                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
                         that prepares students for the challenges of tomorrow.</p>
                     <div class="social-icons">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -776,16 +905,15 @@
                 <div>
                     <h3 class="footer-heading">Contact Info</h3>
                     <ul class="footer-links">
-                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> 123 Education Road, Knowledge City
-                        </li>
-                        <li class="footer-link"><i class="fas fa-phone"></i> (+234) 123-456-7890</li>
-                        <li class="footer-link"><i class="fas fa-envelope"></i> info@mightyschoolforvalours.com</li>
-                        <li class="footer-link"><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> 123 Education Avenue, Knowledge
+                            City</li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Mighty School For Valours. All rights reserved.</p>
+                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -805,6 +933,36 @@
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
             }
+        });
+
+        // Staff Directory Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const staffCards = document.querySelectorAll('.staff-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Get filter value
+                const filterValue = button.getAttribute('data-filter');
+
+                // Show/hide staff cards based on filter
+                staffCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        if (card.getAttribute('data-department') === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
         });
 
         // Close mobile nav when clicking on a link

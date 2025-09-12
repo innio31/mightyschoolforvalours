@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academics - Mighty School For Valours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 5rem 0;
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--color-primary-light);
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: ">";
+            margin-left: 1rem;
+            color: var(--color-white);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--color-dark);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--color-primary);
+            margin: 0.5rem auto;
+        }
+
+        /* CBT Portal Section */
+        .cbt-portal {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            text-align: center;
+            padding: 4rem 0;
+            border-radius: 10px;
+            margin-bottom: 4rem;
+        }
+
+        .cbt-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-white);
+        }
+
+        .cbt-title {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cbt-description {
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Curriculum Section */
+        .curriculum-tabs {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--color-light-gray);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active,
+        .tab-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .curriculum-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .curriculum-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .curriculum-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .curriculum-image {
+            height: 180px;
+            background-color: var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .curriculum-image i {
+            font-size: 3rem;
+            color: var(--color-primary);
+        }
+
+        .curriculum-info {
+            padding: 1.5rem;
+        }
+
+        .curriculum-name {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark);
+        }
+
+        /* Departments Section */
+        .departments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .department-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .department-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .department-name {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+        }
+
+        /* Academic Calendar */
+        .calendar-container {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .calendar-event {
+            display: flex;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-light-gray);
+        }
+
+        .calendar-date {
+            min-width: 80px;
+            text-align: center;
+            margin-right: 1.5rem;
+        }
+
+        .calendar-day {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .calendar-month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--color-text);
+        }
+
+        .calendar-details {
+            flex: 1;
+        }
+
+        .calendar-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-dark);
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .footer-heading:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: var(--color-light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--color-white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--color-light-gray);
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .calendar-event {
+                flex-direction: column;
+            }
+
+            .calendar-date {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <button class="mobile-nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="academics.html" class="nav-link active">Academics</a></li>
+                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                        <li><a href="news.html" class="nav-link">News & Events</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Academic Excellence</h1>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Academics</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- CBT Portal Section -->
+    <section class="section">
+        <div class="container">
+            <div class="cbt-portal">
+                <div class="cbt-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h2 class="cbt-title">Computer-Based Testing Portal</h2>
+                <p class="cbt-description">Access our state-of-the-art CBT platform for practice tests, examinations,
+                    and interactive learning resources. Students can track their progress and teachers can monitor
+                    performance.</p>
+                <a href="https://cbt.mightyschoolforvalours.com" target="_blank"
+                    class="btn btn-secondary btn-large">Access CBT Portal</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum Section -->
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Our Curriculum</h2>
+
+            <div class="curriculum-tabs">
+                <button class="tab-btn active" data-tab="junior">Junior Secondary</button>
+                <button class="tab-btn" data-tab="senior">Senior Secondary</button>
+                <button class="tab-btn" data-tab="advanced">Advanced Program</button>
+            </div>
+
+            <div class="tab-content active" id="junior">
+                <div class="curriculum-grid">
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Mathematics</h3>
+                            <p>Our mathematics curriculum builds strong foundational skills in algebra, geometry, and
+                                problem-solving.</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-flask"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Basic Science</h3>
+                            <p>Students explore fundamental scientific concepts through hands-on experiments and
+                                discovery.</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-language"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">English Studies</h3>
+                            <p>Developing strong communication skills through reading, writing, speaking, and listening
+                                activities.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="senior">
+                <div class="curriculum-grid">
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-atom"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Physics</h3>
+                            <p>Exploring the fundamental principles of matter, energy, and the laws governing the
+                                physical world.</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-dna"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Biology</h3>
+                            <p>Studying living organisms, their structure, function, growth, and evolution through
+                                practical experiments.</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Economics</h3>
+                            <p>Understanding economic principles, market systems, and financial literacy for real-world
+                                applications.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="advanced">
+                <div class="curriculum-grid">
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Robotics & AI</h3>
+                            <p>Advanced program exploring robotics, automation, and artificial intelligence concepts.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Computer Science</h3>
+                            <p>In-depth study of programming, algorithms, and software development principles.</p>
+                        </div>
+                    </div>
+                    <div class="curriculum-card">
+                        <div class="curriculum-image">
+                            <i class="fas fa-microscope"></i>
+                        </div>
+                        <div class="curriculum-info">
+                            <h3 class="curriculum-name">Research Methods</h3>
+                            <p>Developing advanced research skills and scientific methodology for academic excellence.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Departments Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Academic Departments</h2>
+
+            <div class="departments-grid">
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-superscript"></i>
+                    </div>
+                    <h3 class="department-name">Mathematics</h3>
+                    <p>Our mathematics department focuses on developing critical thinking and problem-solving skills.
+                    </p>
+                </div>
+
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h3 class="department-name">Sciences</h3>
+                    <p>Hands-on learning in physics, chemistry, and biology with state-of-the-art laboratory facilities.
+                    </p>
+                </div>
+
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-language"></i>
+                    </div>
+                    <h3 class="department-name">Languages</h3>
+                    <p>Comprehensive language studies including English, French, and indigenous languages.</p>
+                </div>
+
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-landmark"></i>
+                    </div>
+                    <h3 class="department-name">Humanities</h3>
+                    <p>Exploring history, geography, and social studies to understand human societies and cultures.</p>
+                </div>
+
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3 class="department-name">Technology</h3>
+                    <p>Computer studies, programming, and digital literacy for the 21st century learner.</p>
+                </div>
+
+                <div class="department-card">
+                    <div class="department-icon">
+                        <i class="fas fa-paint-brush"></i>
+                    </div>
+                    <h3 class="department-name">Creative Arts</h3>
+                    <p>Nurturing creativity through visual arts, music, drama, and cultural expressions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Academic Calendar Section -->
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Academic Calendar</h2>
+
+            <div class="calendar-container">
+                <div class="calendar-event">
+                    <div class="calendar-date">
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-month">Sept</div>
+                    </div>
+                    <div class="calendar-details">
+                        <h3 class="calendar-title">First Term Begins</h3>
+                        <p>Start of the 2023/2024 academic session. All students are expected to resume.</p>
+                    </div>
+                </div>
+
+                <div class="calendar-event">
+                    <div class="calendar-date">
+                        <div class="calendar-day">25</div>
+                        <div class="calendar-month">Oct</div>
+                    </div>
+                    <div class="calendar-details">
+                        <h3 class="calendar-title">Mid-Term Break</h3>
+                        <p>One week break for students. School resumes on November 2nd.</p>
+                    </div>
+                </div>
+
+                <div class="calendar-event">
+                    <div class="calendar-date">
+                        <div class="calendar-day">15</div>
+                        <div class="calendar-month">Dec</div>
+                    </div>
+                    <div class="calendar-details">
+                        <h3 class="calendar-title">End of Term Examinations</h3>
+                        <p>First term examinations begin for all classes.</p>
+                    </div>
+                </div>
+
+                <div class="calendar-event">
+                    <div class="calendar-date">
+                        <div class="calendar-day">20</div>
+                        <div class="calendar-month">Dec</div>
+                    </div>
+                    <div class="calendar-details">
+                        <h3 class="calendar-title">First Term Ends</h3>
+                        <p>End of first term. Christmas break begins.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" class="btn btn-primary">Download Full Academic Calendar</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-heading">Mighty School For Valours</h3>
+                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
+                        that prepares students for the challenges of tomorrow.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="academics.html">Academics</a></li>
+                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
+                        <li class="footer-link"><a href="news.html">News & Events</a></li>
+                        <li class="footer-link"><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Info</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Osuke Road, Ota, Ogun State.
+                        </li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> (+234) 123-456-7890</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> info@mightyschoolforvalours.com</li>
+                        <li class="footer-link"><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const nav = document.querySelector('.nav');
+
+        mobileNavToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileNavToggle.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Curriculum Tabs
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and contents
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Show corresponding content
+                const tabId = button.getAttribute('data-tab');
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileNavToggle.querySelector('i').classList.remove('fa-times');
+                mobileNavToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --color-primary: #2596be;
-            --color-primary-dark: #1d7a9c;
-            --color-primary-light: #d1ecf1;
-            --color-secondary: #f3a712;
-            --color-dark: #164e63;
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
             --color-text: #333333;
             --color-background: #f8f9fa;
             --color-light-gray: #e9ecef;
@@ -189,6 +190,15 @@
 
         .btn-primary:hover {
             background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-dark);
         }
 
         .btn-outline {
@@ -490,8 +500,11 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-slider">
-            <div class="slide slide-1 active">
-                <img src="images/school-building.jpg" alt="school building">
+            <div class="slide">
+                <img src="images/slide1.jpg" alt="Slide 1" style="width:100%; height:100%; object-fit: cover;">
+            </div>
+            <div class="slide">
+                <img src="images/slide2.jpg" alt="Slide 2" style="width:100%; height:100%; object-fit: cover;">
             </div>
         </div>
         <div class="hero-content">
@@ -499,7 +512,7 @@
             <p class="hero-subtitle">Broad and Balanced Education</p>
             <div class="hero-cta">
                 <a href="admissions.html#apply" class="btn btn-primary">Apply Now</a>
-                <a href="https://cbt.mightyschoolforvalours.com" target="_blank" class="btn btn-outline">CBT Login</a>
+                <a href="https://cbt.mightyschoolforvalours.com" target="_blank" class="btn btn-secondary">CBT Login</a>
             </div>
         </div>
     </section>
@@ -510,15 +523,15 @@
             <h2 class="section-title">Why Choose Us?</h2>
             <div class="quick-facts">
                 <div class="fact">
-                    <div class="fact-number">Since 2000</div>
+                    <div class="fact-number">Since 2003</div>
                     <p>Years of Educational Excellence</p>
                 </div>
                 <div class="fact">
-                    <div class="fact-number">1500+</div>
+                    <div class="fact-number">500+</div>
                     <p>Successful Alumni</p>
                 </div>
                 <div class="fact">
-                    <div class="fact-number">20+</div>
+                    <div class="fact-number">10+</div>
                     <p>Clubs & Societies</p>
                 </div>
                 <div class="fact">
@@ -534,7 +547,6 @@
         <div class="container">
             <div class="welcome-container">
                 <div class="director-image">
-                    <img src="images/director.png" alt="director">
                     <i class="fas fa-user-tie"></i>
                 </div>
                 <div>
@@ -560,43 +572,43 @@
             <div class="news-highlights">
                 <div class="news-card">
                     <div class="news-image">
-                        <i class="fas fa-running"></i>
-                    </div>
-                    <div class="news-content">
-                        <h3>Annual Sports Day</h3>
-                        <p class="news-date">March 25, 2024</p>
-                        <p>Our annual sports day is scheduled for next month. Students are preparing for various track
-                            and field events.</p>
-                        <a href="news.html#sports-day" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary); margin-top: 1rem;">Read
-                            More</a>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image">
-                        <i class="fas fa-flask"></i>
-                    </div>
-                    <div class="news-content">
-                        <h3>Science Fair Winners</h3>
-                        <p class="news-date">March 18, 2024</p>
-                        <p>Congratulations to our students who won first prize at the Regional Science Fair with their
-                            innovative project.</p>
-                        <a href="news.html#science-fair" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary); margin-top: 1rem;">Read
-                            More</a>
-                    </div>
-                </div>
-                <div class="news-card">
-                    <div class="news-image">
                         <i class="fas fa-graduation-cap"></i>
                     </div>
                     <div class="news-content">
-                        <h3>College Admission Workshop</h3>
-                        <p class="news-date">April 5, 2024</p>
-                        <p>We're hosting a workshop for seniors on college applications and admission processes. Parents
-                            are welcome.</p>
-                        <a href="news.html#college-workshop" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary); margin-top: 1rem;">Read
+                        <h3>Annual Graduation Ceremony</h3>
+                        <div class="news-date">June 15, 2023</div>
+                        <p>Our annual graduation ceremony will be held on June 15th. All parents and guardians are
+                            invited to celebrate our students' achievements.</p>
+                        <a href="news.html#graduation" class="btn btn-outline"
+                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
+                            More</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-image">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="news-content">
+                        <h3>Science Olympiad Winners</h3>
+                        <div class="news-date">May 28, 2023</div>
+                        <p>Our students have once again excelled in the National Science Olympiad, bringing home three
+                            gold medals and the overall championship trophy.</p>
+                        <a href="news.html#olympiad" class="btn btn-outline"
+                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
+                            More</a>
+                    </div>
+                </div>
+                <div class="news-card">
+                    <div class="news-image">
+                        <i class="fas fa-calendar-alt"></i>
+                    </div>
+                    <div class="news-content">
+                        <h3>Open Day Announcement</h3>
+                        <div class="news-date">July 10, 2023</div>
+                        <p>We are excited to announce our annual Open Day on July 10th. Prospective students and parents
+                            are welcome to tour our campus and meet our faculty.</p>
+                        <a href="news.html#open-day" class="btn btn-outline"
+                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
                             More</a>
                     </div>
                 </div>
@@ -607,36 +619,18 @@
         </div>
     </section>
 
-    <!-- Final CTA Section -->
-    <section class="section">
-        <div class="container">
-            <h2 class="section-title">Ready to Join Our Community?</h2>
-            <p class="container" style="max-width: 700px; margin: 0 auto 2rem auto; text-align: center;">Take the first
-                step towards an exceptional educational journey for your child. Discover our admission process, schedule
-                a campus tour, or apply today.</p>
-            <div style="text-align: center;">
-                <a href="admissions.html" class="btn btn-primary">Explore Admissions Process</a>
-                <a href="contact.html" class="btn btn-outline"
-                    style="color: var(--color-primary); border-color: var(--color-primary); margin-left: 1rem;">Schedule
-                    a Tour</a>
-            </div>
-        </div>
-    </section>
-
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div>
                     <h3 class="footer-heading">Mighty School For Valours</h3>
-                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
-                        that prepares students for the challenges of tomorrow.</p>
+                    <p>Excellence in Education Since 2003</p>
                     <div class="social-icons">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div>
@@ -653,16 +647,15 @@
                 <div>
                     <h3 class="footer-heading">Contact Info</h3>
                     <ul class="footer-links">
-                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Osuke Road, Ota, Ogun State.
-                        </li>
-                        <li class="footer-link"><i class="fas fa-phone"></i> (+234) 123-456-7890</li>
-                        <li class="footer-link"><i class="fas fa-envelope"></i> info@mightyschoolforvalours.com</li>
-                        <li class="footer-link"><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> 123 Education Avenue, Knowledge
+                            City</li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
+                <p>&copy; 2025 Mighty School For Valours. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
@@ -684,29 +677,18 @@
             }
         });
 
-        // Hero Slider Functionality
+        // Hero Slider
         const slides = document.querySelectorAll('.slide');
         let currentSlide = 0;
 
-        function showSlide(n) {
-            slides.forEach(slide => slide.classList.remove('active'));
-            currentSlide = (n + slides.length) % slides.length;
+        function nextSlide() {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
             slides[currentSlide].classList.add('active');
         }
 
-        // Auto-advance slides every 5 seconds
-        setInterval(() => {
-            showSlide(currentSlide + 1);
-        }, 5000);
-
-        // Close mobile nav when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                mobileNavToggle.querySelector('i').classList.remove('fa-times');
-                mobileNavToggle.querySelector('i').classList.add('fa-bars');
-            });
-        });
+        // Change slide every 5 seconds
+        setInterval(nextSlide, 5000);
     </script>
 </body>
 
