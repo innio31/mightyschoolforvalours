@@ -4,36 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Brainfield CBT System</title>
+    <title>Login - Mighty School For Valours</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
     <style>
-        /* Global Styles */
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        :root {
-            --primary: #1a4b8c;
-            --secondary: #f37b21;
-            --accent: #34a853;
-            --light: #f8f9fa;
-            --dark: #343a40;
-            --danger: #dc3545;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--color-text);
+            background-color: var(--color-background);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -46,60 +46,29 @@
             padding: 0 15px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 28px;
-            background-color: var(--secondary);
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
+        /* Header & Navigation */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
-        .btn:hover {
-            background-color: #e06e1d;
-            transform: translateY(-2px);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            border: 2px solid var(--secondary);
-            color: var(--secondary);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .btn-large {
-            padding: 14px 32px;
-            font-size: 1.1rem;
-        }
-
-        /* Header Styles */
-        header {
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 15px 0;
-        }
-
-        .header-container {
+        .nav-wrapper {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 1rem 0;
         }
 
         .logo {
             display: flex;
             align-items: center;
+            text-decoration: none;
         }
 
-        .logo img {
+        .logo-img {
             height: 50px;
             margin-right: 10px;
         }
@@ -107,590 +76,642 @@
         .logo-text {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--primary);
+            color: var(--color-primary);
         }
 
-        .logo-text span {
-            color: var(--secondary);
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 3rem 0;
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--color-primary-light);
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: ">";
+            margin-left: 1rem;
+            color: var(--color-white);
         }
 
         /* Login Section */
         .login-section {
             flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 0;
+            padding: 3rem 0;
         }
 
         .login-container {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .login-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            flex: 1;
+            min-width: 300px;
             max-width: 450px;
-            padding: 40px;
+            transition: var(--transition);
+        }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
-        .login-header h1 {
-            color: var(--primary);
-            font-size: 2rem;
-            margin-bottom: 10px;
+        .login-icon {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
         }
 
-        .login-header p {
-            color: #666;
+        .login-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark);
+        }
+
+        .login-subtitle {
+            color: var(--color-text);
+            font-size: 0.9rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--color-dark);
         }
 
-        .form-control {
+        .form-input {
             width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--color-light-gray);
+            border-radius: 4px;
+            font-family: inherit;
             font-size: 1rem;
-            transition: border-color 0.3s;
+            transition: var(--transition);
         }
 
-        .form-control:focus {
-            border-color: var(--secondary);
+        .form-input:focus {
             outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(28, 56, 119, 0.1);
         }
 
-        .user-type-selector {
-            display: flex;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
+        .password-toggle {
+            position: relative;
         }
 
-        .user-type {
-            flex: 1;
-            text-align: center;
-            padding: 12px;
-            background: #f8f9fa;
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--color-text);
             cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .user-type.active {
-            background: var(--primary);
-            color: white;
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
         }
 
-        .login-btn {
-            width: 100%;
-            text-align: center;
-            margin-top: 10px;
+        .remember-me {
+            display: flex;
+            align-items: center;
+        }
+
+        .remember-me input {
+            margin-right: 0.5rem;
         }
 
         .forgot-password {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .forgot-password a {
-            color: var(--primary);
+            color: var(--color-primary);
             text-decoration: none;
         }
 
-        .forgot-password a:hover {
+        .forgot-password:hover {
             text-decoration: underline;
         }
 
-        .alert {
-            padding: 12px 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
         }
 
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            width: 100%;
         }
 
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-dark);
+        }
+
+        .login-divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .login-divider:before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: var(--color-light-gray);
+            z-index: 1;
+        }
+
+        .login-divider span {
+            background-color: var(--color-white);
+            padding: 0 1rem;
+            position: relative;
+            z-index: 2;
+            color: var(--color-text);
+        }
+
+        .help-links {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .help-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            margin: 0 0.5rem;
+        }
+
+        .help-link:hover {
+            text-decoration: underline;
         }
 
         /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 30px 0 20px;
+        .footer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 2rem 0 1rem;
             margin-top: auto;
         }
 
-        .footer-container {
+        .footer-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 30px;
+            gap: 2rem;
+            margin-bottom: 2rem;
         }
 
-        .footer-col h3 {
+        .footer-heading {
             font-size: 1.2rem;
-            margin-bottom: 15px;
-            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            position: relative;
         }
 
-        .footer-col p,
-        .footer-col li {
-            margin-bottom: 10px;
-            opacity: 0.8;
-            font-size: 0.9rem;
+        .footer-heading:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            margin-top: 0.5rem;
         }
 
-        .copyright {
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: var(--color-light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
             text-align: center;
-            padding-top: 20px;
+            padding-top: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.9rem;
-            opacity: 0.7;
         }
 
         /* Responsive Design */
         @media (max-width: 768px) {
-            .login-container {
-                padding: 30px 20px;
+            .mobile-nav-toggle {
+                display: block;
             }
 
-            .logo-text {
-                font-size: 1.2rem;
+            .nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--color-white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--color-light-gray);
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .login-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .login-card {
+                width: 100%;
             }
         }
     </style>
-
-    <script>
-        // Firebase configuration - Replace with your actual config
-        const firebaseConfig = {
-            apiKey: "AIzaSyCk4OXci0l9WNJHRjSQ3ylpMpG0k9q1vOI",
-            authDomain: "brainfield-schools.firebaseapp.com",
-            projectId: "brainfield-schools",
-            storageBucket: "brainfield-schools.firebasestorage.app",
-            messagingSenderId: "147221931117",
-            appId: "1:147221931117:web:8bb22a18b6ce725c510b64",
-            measurementId: "G-SQ5VPJLYJW"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
-    </script>
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container header-container">
-            <div class="logo">
-                <div class="logo-text">Brainfield International <span>Schools</span></div>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <button class="mobile-nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="academics.html" class="nav-link">Academics</a></li>
+                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                        <li><a href="news.html" class="nav-link">News & Events</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">Login Portal</h1>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Login</li>
+            </ul>
+        </div>
+    </section>
 
     <!-- Login Section -->
     <section class="login-section">
         <div class="container">
             <div class="login-container">
-                <div class="login-header">
-                    <h1>Login to CBT Portal</h1>
-                    <p>Access your dashboard to take exams and view results</p>
+                <!-- Student Login -->
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="login-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <h2 class="login-title">Student Login</h2>
+                        <p class="login-subtitle">Access your student dashboard and learning resources</p>
+                    </div>
+                    <form id="student-login-form">
+                        <div class="form-group">
+                            <label for="student-id" class="form-label">Student ID</label>
+                            <input type="text" id="student-id" class="form-input" placeholder="Enter your student ID" required>
+                        </div>
+                        <div class="form-group password-toggle">
+                            <label for="student-password" class="form-label">Password</label>
+                            <input type="password" id="student-password" class="form-input" placeholder="Enter your password" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember-student"> Remember me
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login as Student</button>
+                    </form>
+                    <div class="login-divider">
+                        <span>Quick Access</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="https://cbt.mightyschoolforvalours.com" class="btn btn-secondary">Go to CBT Portal</a>
+                    </div>
                 </div>
 
-                <div class="alert alert-error" id="errorMessage"></div>
-                <div class="alert alert-success" id="successMessage"></div>
-
-                <div class="user-type-selector">
-                    <div class="user-type active" data-type="student">Student</div>
-                    <div class="user-type" data-type="teacher">Teacher</div>
-                    <div class="user-type" data-type="admin">Admin</div>
+                <!-- Admin Login -->
+                <div class="login-card">
+                    <div class="login-header">
+                        <div class="login-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h2 class="login-title">Administrator Login</h2>
+                        <p class="login-subtitle">Access the administrative dashboard and management tools</p>
+                    </div>
+                    <form id="admin-login-form">
+                        <div class="form-group">
+                            <label for="admin-username" class="form-label">Username</label>
+                            <input type="text" id="admin-username" class="form-input" placeholder="Enter your username" required>
+                        </div>
+                        <div class="form-group password-toggle">
+                            <label for="admin-password" class="form-label">Password</label>
+                            <input type="password" id="admin-password" class="form-input" placeholder="Enter your password" required>
+                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember-admin"> Remember me
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login as Administrator</button>
+                    </form>
+                    <div class="login-divider">
+                        <span>Additional Options</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="contact.html" class="btn btn-secondary">Request Admin Access</a>
+                    </div>
                 </div>
+            </div>
 
-                <form id="loginForm">
-                    <div class="form-group" id="emailField">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
-                    </div>
-
-                    <div class="form-group" id="admissionField" style="display: none;">
-                        <label for="admissionNumber">Admission Number</label>
-                        <input type="text" id="admissionNumber" class="form-control"
-                            placeholder="Enter your admission number">
-                    </div>
-
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" class="form-control" placeholder="Enter your password"
-                            required>
-                    </div>
-
-                    <div class="login-btn">
-                        <button type="submit" class="btn btn-large" id="loginButton">Login</button>
-                    </div>
-
-                    <div class="forgot-password">
-                        <a href="#" id="resetPasswordLink">Forgot Password?</a>
-                    </div>
-                </form>
+            <div class="help-links">
+                <p>Need help? <a href="contact.html" class="help-link">Contact Support</a> or <a href="faq.html" class="help-link">View FAQs</a></p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer>
+    <footer class="footer">
         <div class="container">
-            <div class="footer-container">
-                <div class="footer-col">
-                    <h3>Brainfield International Schools</h3>
-                    <p>Excellence in Education since 2012. Committed to nurturing young minds and shaping future
-                        leaders.</p>
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-heading">Mighty School For Valours</h3>
+                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
+                        that prepares students for the challenges of tomorrow.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
-                <div class="footer-col">
-                    <h3>Need Help?</h3>
-                    <p>Contact support if you're having trouble accessing your account.</p>
-                    <p>Email: support@brainfieldschools.edu.ng</p>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="academics.html">Academics</a></li>
+                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
+                        <li class="footer-link"><a href="news.html">News & Events</a></li>
+                        <li class="footer-link"><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Info</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Osuke Road, Ota, Ogun State.
+                        </li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> (+234) 123-456-7890</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> info@mightyschoolforvalours.com</li>
+                        <li class="footer-link"><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                    </ul>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 Brainfield School. All Rights Reserved.</p>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // DOM Elements
-        const userTypeSelectors = document.querySelectorAll('.user-type');
-        const emailField = document.getElementById('emailField');
-        const admissionField = document.getElementById('admissionField');
-        const loginForm = document.getElementById('loginForm');
-        const errorMessage = document.getElementById('errorMessage');
-        const successMessage = document.getElementById('successMessage');
-        const loginButton = document.getElementById('loginButton');
-        const resetPasswordLink = document.getElementById('resetPasswordLink');
+        // Mobile Navigation Toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const nav = document.querySelector('.nav');
 
-        // User type selection
-        userTypeSelectors.forEach(selector => {
-            selector.addEventListener('click', () => {
-                // Remove active class from all
-                userTypeSelectors.forEach(s => s.classList.remove('active'));
+        mobileNavToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileNavToggle.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
 
-                // Add active class to clicked
-                selector.classList.add('active');
-
-                // Show appropriate field based on user type
-                const userType = selector.getAttribute('data-type');
-
-                if (userType === 'student') {
-                    emailField.style.display = 'none';
-                    admissionField.style.display = 'block';
-                    document.getElementById('email').removeAttribute('required');
-                    document.getElementById('admissionNumber').setAttribute('required', 'true');
+        // Password Visibility Toggle
+        const toggleButtons = document.querySelectorAll('.toggle-password');
+        
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const input = button.previousElementSibling;
+                const icon = button.querySelector('i');
+                
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
                 } else {
-                    emailField.style.display = 'block';
-                    admissionField.style.display = 'none';
-                    document.getElementById('email').setAttribute('required', 'true');
-                    document.getElementById('admissionNumber').removeAttribute('required');
+                    input.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
                 }
             });
         });
 
-        // Form submission
-        loginForm.addEventListener('submit', function (e) {
+        // Form Submission
+        document.getElementById('student-login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const activeUserType = document.querySelector('.user-type.active').getAttribute('data-type');
-            let identifier, password;
-
-            if (activeUserType === 'student') {
-                identifier = document.getElementById('admissionNumber').value.trim();
-                password = document.getElementById('password').value;
+            // In a real implementation, this would connect to your authentication system
+            const studentId = document.getElementById('student-id').value;
+            const password = document.getElementById('student-password').value;
+            
+            // Simple validation
+            if (studentId && password) {
+                alert('Student login successful! Redirecting to dashboard...');
+                // In a real implementation, you would redirect to the student dashboard
+                // window.location.href = 'student-dashboard.html';
             } else {
-                identifier = document.getElementById('email').value.trim();
-                password = document.getElementById('password').value;
-            }
-
-            // Basic validation
-            if ((activeUserType !== 'student' && !identifier) || !password) {
-                showError('Please fill in all fields');
-                return;
-            }
-
-            // Login based on user type
-            if (activeUserType === 'student') {
-                loginStudent(identifier, password);
-            } else {
-                loginEmailUser(identifier, password, activeUserType);
+                alert('Please fill in all required fields.');
             }
         });
 
-        // Login function for students (using admission number)
-        async function loginStudent(admissionNumber, password) {
-            try {
-                showLoading(true);
-
-                // First, get the email associated with this admission number
-                const studentsRef = db.collection('students');
-                const snapshot = await studentsRef.where('admissionNumber', '==', admissionNumber).get();
-
-                if (snapshot.empty) {
-                    showError('No student found with this admission number');
-                    showLoading(false);
-                    return;
-                }
-
-                // Get the student data
-                let studentData;
-                snapshot.forEach(doc => {
-                    studentData = doc.data();
-                    studentData.id = doc.id;
-                });
-
-                // Sign in with email and password
-                const userCredential = await auth.signInWithEmailAndPassword(studentData.email, password);
-                const user = userCredential.user;
-
-                // Store user data in localStorage
-                const userData = {
-                    type: 'student',
-                    id: studentData.id,
-                    uid: user.uid,
-                    name: studentData.name,
-                    admissionNumber: studentData.admissionNumber,
-                    class: studentData.class
-                };
-
-                localStorage.setItem('currentUser', JSON.stringify(userData));
-
-                // Redirect to dashboard
-                window.location.href = 'student-dashboard.html';
-
-            } catch (error) {
-                console.error('Login error:', error);
-                showError(getAuthErrorMessage(error));
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Login function for teachers and admins (using email)
-        async function loginEmailUser(email, password, userType) {
-            try {
-                showLoading(true);
-
-                // Sign in with email and password
-                const userCredential = await auth.signInWithEmailAndPassword(email, password);
-                const user = userCredential.user;
-
-                // Verify user type
-                let userData;
-                if (userType === 'teacher') {
-                    const teacherDoc = await db.collection('teachers').doc(user.uid).get();
-                    if (!teacherDoc.exists) {
-                        await auth.signOut();
-                        showError('No teacher account found with this email');
-                        return;
-                    }
-
-                    const teacherData = teacherDoc.data();
-                    userData = {
-                        type: 'teacher',
-                        id: teacherDoc.id,
-                        uid: user.uid,
-                        name: teacherData.name,
-                        subjects: teacherData.subjects,
-                        classes: teacherData.classes
-                    };
-                } else if (userType === 'admin') {
-                    const adminDoc = await db.collection('admins').doc(user.uid).get();
-                    if (!adminDoc.exists) {
-                        await auth.signOut();
-                        showError('No admin account found with this email');
-                        return;
-                    }
-
-                    const adminData = adminDoc.data();
-                    userData = {
-                        type: 'admin',
-                        id: adminDoc.id,
-                        uid: user.uid,
-                        name: adminData.name,
-                        role: adminData.role
-                    };
-                }
-
-                // Store user data in localStorage
-                localStorage.setItem('currentUser', JSON.stringify(userData));
-
-                // Redirect to appropriate dashboard
-                window.location.href = `${userType}-dashboard.html`;
-
-            } catch (error) {
-                console.error('Login error:', error);
-                showError(getAuthErrorMessage(error));
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        // Password reset functionality
-        resetPasswordLink.addEventListener('click', function (e) {
+        document.getElementById('admin-login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            const activeUserType = document.querySelector('.user-type.active').getAttribute('data-type');
-
-            if (activeUserType === 'student') {
-                showError('Please contact administration to reset your password');
-                return;
+            // In a real implementation, this would connect to your authentication system
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // Simple validation
+            if (username && password) {
+                alert('Admin login successful! Redirecting to admin panel...');
+                // In a real implementation, you would redirect to the admin dashboard
+                // window.location.href = 'admin-dashboard.html';
+            } else {
+                alert('Please fill in all required fields.');
             }
-
-            const email = document.getElementById('email').value.trim();
-            if (!email) {
-                showError('Please enter your email address first');
-                return;
-            }
-
-            auth.sendPasswordResetEmail(email)
-                .then(() => {
-                    showSuccess('Password reset email sent. Check your inbox.');
-                })
-                .catch(error => {
-                    showError(getAuthErrorMessage(error));
-                });
         });
 
-        // Utility functions
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            successMessage.style.display = 'none';
-
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
-        }
-
-        function showSuccess(message) {
-            successMessage.textContent = message;
-            successMessage.style.display = 'block';
-            errorMessage.style.display = 'none';
-
-            // Auto hide after 5 seconds
-            setTimeout(() => {
-                successMessage.style.display = 'none';
-            }, 5000);
-        }
-
-        function showLoading(loading) {
-            if (loading) {
-                loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-                loginButton.disabled = true;
-            } else {
-                loginButton.innerHTML = 'Login';
-                loginButton.disabled = false;
-            }
-        }
-
-        function getAuthErrorMessage(error) {
-            switch (error.code) {
-                case 'auth/user-not-found':
-                    return 'No account found with these credentials';
-                case 'auth/wrong-password':
-                    return 'Incorrect password';
-                case 'auth/invalid-email':
-                    return 'Invalid email address';
-                case 'auth/user-disabled':
-                    return 'This account has been disabled';
-                default:
-                    return 'Login failed. Please try again.';
-            }
-        }
-
-        // Check if user is already logged in
-        auth.onAuthStateChanged(async (user) => {
-            if (user) {
-                // User is signed in, check what type of user they are
-                try {
-                    // Check if student
-                    const studentDoc = await db.collection('students').doc(user.uid).get();
-                    if (studentDoc.exists) {
-                        const studentData = studentDoc.data();
-                        const userData = {
-                            type: 'student',
-                            id: studentDoc.id,
-                            uid: user.uid,
-                            name: studentData.name,
-                            admissionNumber: studentData.admissionNumber,
-                            class: studentData.class
-                        };
-                        localStorage.setItem('currentUser', JSON.stringify(userData));
-                        window.location.href = 'student-dashboard.html';
-                        return;
-                    }
-
-                    // Check if teacher
-                    const teacherDoc = await db.collection('teachers').doc(user.uid).get();
-                    if (teacherDoc.exists) {
-                        const teacherData = teacherDoc.data();
-                        const userData = {
-                            type: 'teacher',
-                            id: teacherDoc.id,
-                            uid: user.uid,
-                            name: teacherData.name,
-                            subjects: teacherData.subjects,
-                            classes: teacherData.classes
-                        };
-                        localStorage.setItem('currentUser', JSON.stringify(userData));
-                        window.location.href = 'teacher-dashboard.html';
-                        return;
-                    }
-
-                    // Check if admin
-                    const adminDoc = await db.collection('admins').doc(user.uid).get();
-                    if (adminDoc.exists) {
-                        const adminData = adminDoc.data();
-                        const userData = {
-                            type: 'admin',
-                            id: adminDoc.id,
-                            uid: user.uid,
-                            name: adminData.name,
-                            role: adminData.role
-                        };
-                        localStorage.setItem('currentUser', JSON.stringify(userData));
-                        window.location.href = 'admin-dashboard.html';
-                        return;
-                    }
-
-                    // If user exists in auth but not in any collection, sign them out
-                    await auth.signOut();
-                    localStorage.removeItem('currentUser');
-
-                } catch (error) {
-                    console.error('Auth state change error:', error);
-                }
-            }
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileNavToggle.querySelector('i').classList.remove('fa-times');
+                mobileNavToggle.querySelector('i').classList.add('fa-bars');
+            });
         });
     </script>
 </body>
