@@ -554,6 +554,34 @@
                 font-size: 2rem;
             }
         }
+
+        .team-image {
+            height: 250px;
+            background-color: var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .team-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Fallback for if images don't load */
+        .team-image i {
+            font-size: 5rem;
+            color: var(--color-primary);
+            display: none;
+            /* Hide icons when using images */
+        }
+
+        .team-image:not(:has(img)) i {
+            display: flex;
+            /* Show icons only if no image is present */
+        }
     </style>
 </head>
 
@@ -689,48 +717,59 @@
         <div class="container">
             <h2 class="section-title">Our Leadership Team</h2>
             <div class="team-grid">
-                <div class="team-member">
-                    <div class="team-image">
-                        <i class="fas fa-user-tie"></i>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-image">
+                            <img src="images/grand-patron.jpg" alt="Mr. Moyosola Soetan - Grand Patron">
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Mr. Moyosola Soetan</h3>
+                            <p class="team-position">Grand Patron</p>
+                            <p>As our esteemed Grand Patron, Mr. Soetan provides visionary guidance and strategic
+                                direction to the school. With his extensive experience and dedication to educational
+                                excellence, he ensures our institution maintains the highest standards of academic and
+                                moral development.</p>
+                        </div>
                     </div>
-                    <div class="team-info">
-                        <h3 class="team-name">Dr. Adebola Johnson</h3>
-                        <p class="team-position">School Director</p>
-                        <p>With over 25 years in education leadership, Dr. Johnson is committed to academic excellence
-                            and student development.</p>
+                    <div class="team-member">
+                        <div class="team-image">
+                            <img src="images/director.png" alt="Mr. Moyosola Soetan - Director">
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Mr. Moyosola Soetan</h3>
+                            <p class="team-position">Director</p>
+                            <p>As Director, Mr. Soetan leads the institution with a clear vision for academic excellence
+                                and holistic student development. He implements innovative educational strategies while
+                                preserving the school's core values and traditions, ensuring we remain at the forefront
+                                of quality education.</p>
+                        </div>
                     </div>
-                </div>
-                <div class="team-member">
-                    <div class="team-image">
-                        <i class="fas fa-user-graduate"></i>
+                    <div class="team-member">
+                        <div class="team-image">
+                            <img src="images/mrs-soetan-director-of-studies.jpg"
+                                alt="Mrs. Soetan - Director of Studies">
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Mrs. Soetan</h3>
+                            <p class="team-position">Director of Studies</p>
+                            <p>Mrs. Soetan oversees all academic programs, curriculum development, and teaching
+                                standards. She ensures our educational offerings meet both national standards and
+                                international best practices, while fostering an environment conducive to learning and
+                                intellectual growth for all students.</p>
+                        </div>
                     </div>
-                    <div class="team-info">
-                        <h3 class="team-name">Mrs. Chinenye Okoro</h3>
-                        <p class="team-position">Principal</p>
-                        <p>Mrs. Okoro brings innovative teaching methodologies and a passion for student success to her
-                            role as Principal.</p>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="team-image">
-                        <i class="fas fa-chalkboard-teacher"></i>
-                    </div>
-                    <div class="team-info">
-                        <h3 class="team-name">Mr. Tunde Adeyemi</h3>
-                        <p class="team-position">Vice Principal, Academics</p>
-                        <p>Mr. Adeyemi oversees our academic programs and ensures our curriculum meets the highest
-                            standards.</p>
-                    </div>
-                </div>
-                <div class="team-member">
-                    <div class="team-image">
-                        <i class="fas fa-user-friends"></i>
-                    </div>
-                    <div class="team-info">
-                        <h3 class="team-name">Mrs. Funke Alabi</h3>
-                        <p class="team-position">Vice Principal, Administration</p>
-                        <p>Mrs. Alabi manages the school's operations and ensures a smooth functioning of all
-                            administrative processes.</p>
+                    <div class="team-member">
+                        <div class="team-image">
+                            <img src="images/mrs-funke-alabi-bursar.jpg" alt="Mrs. Funke Alabi - Bursar">
+                        </div>
+                        <div class="team-info">
+                            <h3 class="team-name">Mrs. Funke Alabi</h3>
+                            <p class="team-position">Bursar</p>
+                            <p>Mrs. Alabi manages the school's financial operations, budgeting, and resource allocation.
+                                She ensures fiscal responsibility and efficient financial management, enabling the
+                                institution to provide quality education while maintaining affordable fee structures and
+                                sustainable operations.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -905,8 +944,8 @@
                 <div>
                     <h3 class="footer-heading">Contact Info</h3>
                     <ul class="footer-links">
-                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> 123 Education Avenue, Knowledge
-                            City</li>
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
+                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
                         <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
                         <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
                     </ul>

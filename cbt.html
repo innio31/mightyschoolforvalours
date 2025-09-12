@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Portal - Mighty School For Valours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a4b8c;
+            --secondary: #f37b21;
+            --accent: #34a853;
+            --light: #f8f9fa;
+            --dark: #343a40;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            background-color: #e06e1d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-large {
+            padding: 18px 40px;
+            font-size: 1.2rem;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            color: var(--primary);
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--secondary);
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            color: var(--secondary);
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-left: 25px;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--secondary);
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .cbt-hero {
+            background: linear-gradient(rgba(26, 75, 140, 0.9), rgba(26, 75, 140, 0.85)), url('https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .cbt-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cbt-hero-content h1 {
+            font-size: 3.2rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .cbt-hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        /* Mode Selection */
+        .mode-selection {
+            background-color: white;
+            border-radius: 12px;
+            padding: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-top: -70px;
+            position: relative;
+            z-index: 100;
+        }
+
+        .mode-cards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .mode-card {
+            flex: 1;
+            background: white;
+            padding: 40px 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            max-width: 450px;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--secondary);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .mode-icon {
+            font-size: 3.5rem;
+            color: var(--secondary);
+            margin-bottom: 25px;
+        }
+
+        .mode-card h3 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .mode-card p {
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .mode-features {
+            text-align: left;
+            margin: 25px 0;
+            list-style-type: none;
+        }
+
+        .mode-features li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .mode-features li i {
+            color: var(--accent);
+            margin-right: 10px;
+        }
+
+        /* Instructions Section */
+        .instructions {
+            background-color: var(--light);
+            border-radius: 12px;
+            padding: 50px;
+            margin: 60px 0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .instructions h3 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .instruction-list {
+            list-style-type: none;
+            columns: 2;
+            column-gap: 40px;
+        }
+
+        .instruction-list li {
+            padding: 12px 0;
+            margin-bottom: 10px;
+            break-inside: avoid;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .instruction-list li i {
+            color: var(--secondary);
+            margin-right: 15px;
+            margin-top: 5px;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--secondary);
+        }
+
+        .footer-col p,
+        .footer-col li {
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--secondary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--secondary);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .cbt-hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .mode-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .mode-card {
+                width: 100%;
+                max-width: 500px;
+            }
+
+            .instruction-list {
+                columns: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 80px;
+                left: -100%;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+                padding: 20px 0;
+            }
+
+            .nav-menu.active {
+                left: 0;
+            }
+
+            .nav-menu li {
+                margin: 15px 0;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .cbt-hero-content h1 {
+                font-size: 2.3rem;
+            }
+
+            .cbt-hero-content p {
+                font-size: 1.1rem;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .mode-selection {
+                padding: 30px 20px;
+            }
+
+            .instructions {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cbt-hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .cbt-hero {
+                height: 50vh;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .mode-card {
+                padding: 30px 20px;
+            }
+
+            .mode-icon {
+                font-size: 2.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-text">Mighty School for <span>Valours</span></div>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admissions.html">Admissions</a></li>
+                <li><a href="#instructions">CBT Portal</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="cbt-hero">
+        <div class="container cbt-hero-content">
+            <h1>Computer-Based Testing Portal</h1>
+            <p>Welcome to Mighty School for Valours' online examination system. Select your preferred mode to
+                continue.</p>
+        </div>
+    </section>
+
+    <!-- Mode Selection -->
+    <section class="section">
+        <div class="container">
+            <div class="mode-selection">
+                <div class="section-title">
+                    <h2>Choose Your Testing Mode</h2>
+                    <p>Select between practice mode to prepare or live exam mode for actual assessment</p>
+                </div>
+
+                <div class="mode-cards">
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3>Practice Mode</h3>
+                        <p>Hone your skills with unlimited practice tests and instant feedback.</p>
+                        <ul class="mode-features">
+                            <li><i class="fas fa-check-circle"></i> Unlimited attempts</li>
+                            <li><i class="fas fa-check-circle"></i> Instant results and feedback</li>
+                            <li><i class="fas fa-check-circle"></i> No time limits</li>
+                            <li><i class="fas fa-check-circle"></i> Topic-based practice tests</li>
+                        </ul>
+                        <a href="practice.html" class="btn btn-outline">Start Practice</a>
+                    </div>
+
+                    <div class="mode-card">
+                        <div class="mode-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Live Exam Mode</h3>
+                        <p>Take officially proctored exams with time limits and final scoring.</p>
+                        <ul class="mode-features">
+                            <li><i class="fas fa-check-circle"></i> Timed examination</li>
+                            <li><i class="fas fa-check-circle"></i> Official results</li>
+                            <li><i class="fas fa-check-circle"></i> Proctored environment</li>
+                            <li><i class="fas fa-check-circle"></i> One-time attempt</li>
+                        </ul>
+                        <a href="login.html" class="btn">Start Exam</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions Section -->
+            <div class="instructions" id="instructions">
+                <h3>Before You Begin</h3>
+                <ul class="instruction-list">
+                    <li><i class="fas fa-info-circle"></i> Ensure you have a stable internet connection</li>
+                    <li><i class="fas fa-info-circle"></i> Use a supported browser (Chrome, Firefox, or Edge)</li>
+                    <li><i class="fas fa-info-circle"></i> Close all other tabs and applications</li>
+                    <li><i class="fas fa-info-circle"></i> Disable pop-up blockers for this site</li>
+                    <li><i class="fas fa-info-circle"></i> Have your login credentials ready</li>
+                    <li><i class="fas fa-info-circle"></i> For live exams, ensure you have a webcam</li>
+                    <li><i class="fas fa-info-circle"></i> Make sure your device is charged or plugged in</li>
+                    <li><i class="fas fa-info-circle"></i> Find a quiet environment with minimal distractions</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Mighty School For Valours</h3>
+                    <p>Excellence in Education since 2013. Committed to nurturing young minds and shaping future
+                        leaders.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a hrcef="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="index.html#about">About Us</a></li>
+                        <li><a href="index.html#mission">Mission & Vision</a></li>
+                        <li><a href="admission.html">Admission</a></li>
+                        <li><a href="index.html#achievements">Achievements</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
+                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
+                        <li><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 8:00 AM - 5:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Mighty School For Valours. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            hamburger.innerHTML = navMenu.classList.contains('active')
+                ? '<i class="fas fa-times"></i>'
+                : '<i class="fas fa-bars"></i>';
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+            });
+        });
+
+        // Simple animation for mode cards when scrolling
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe mode cards for animation
+        document.querySelectorAll('.mode-card').forEach(el => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+
+</html>

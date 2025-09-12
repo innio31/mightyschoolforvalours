@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News & Events - Mighty School For Valours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1584697964358-3e14ca57658b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 5rem 0;
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--color-primary-light);
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: ">";
+            margin-left: 1rem;
+            color: var(--color-white);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--color-dark);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--color-primary);
+            margin: 0.5rem auto;
+        }
+
+        /* Category Filters */
+        .category-filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.6rem 1.5rem;
+            background-color: var(--color-light-gray);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .news-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .news-image {
+            height: 200px;
+            background-color: var(--color-light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .news-card:hover .news-image img {
+            transform: scale(1.05);
+        }
+
+        .news-category {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-date {
+            color: var(--color-primary);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .news-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+        }
+
+        .news-excerpt {
+            margin-bottom: 1.5rem;
+            color: var(--color-text);
+        }
+
+        /* Event Calendar */
+        .calendar-container {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-nav {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .calendar-nav-btn {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            text-align: center;
+            font-weight: 600;
+            padding: 0.5rem;
+            color: var(--color-primary);
+        }
+
+        .calendar-date {
+            text-align: center;
+            padding: 0.8rem;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .calendar-date:hover {
+            background-color: var(--color-primary-light);
+        }
+
+        .calendar-date.has-event {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .calendar-date.current {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        /* Upcoming Events */
+        .events-list {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .event-item {
+            display: flex;
+            background-color: var(--color-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .event-date {
+            min-width: 100px;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .event-day {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .event-month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        .event-details {
+            padding: 1.5rem;
+            flex: 1;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-dark);
+        }
+
+        .event-time {
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .event-actions {
+            margin-top: 1rem;
+        }
+
+        /* Newsletter Section */
+        .newsletter {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .newsletter-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-description {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-input {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-family: inherit;
+        }
+
+        .newsletter-btn {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+            border: none;
+            padding: 0 1.5rem;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .newsletter-btn:hover {
+            background-color: var(--color-secondary-dark);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 3rem;
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            background-color: var(--color-light-gray);
+            color: var(--color-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .page-link.active,
+        .page-link:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .footer-heading:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: var(--color-light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .news-grid {
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--color-white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--color-light-gray);
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .event-item {
+                flex-direction: column;
+            }
+
+            .event-date {
+                min-width: 100%;
+                flex-direction: row;
+                justify-content: center;
+                gap: 1rem;
+                padding: 0.8rem;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-input {
+                border-radius: 4px;
+                margin-bottom: 0.5rem;
+            }
+
+            .newsletter-btn {
+                border-radius: 4px;
+                padding: 0.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <button class="mobile-nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="academics.html" class="nav-link">Academics</a></li>
+                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                        <li><a href="news.html" class="nav-link active">News & Events</a></li>
+                        <li><a href="contact.html" class="nav-link">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">News & Events</h1>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">News & Events</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- News Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Latest News</h2>
+
+            <div class="category-filters">
+                <button class="filter-btn active" data-filter="all">All News</button>
+                <button class="filter-btn" data-filter="academics">Academics</button>
+                <button class="filter-btn" data-filter="sports">Sports</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+                <button class="filter-btn" data-filter="announcements">Announcements</button>
+            </div>
+
+            <div class="news-grid">
+                <div class="news-card" data-category="academics">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="Science Fair">
+                        <span class="news-category">Academics</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">June 15, 2023</span>
+                        <h3 class="news-title">Annual Science Fair Winners Announced</h3>
+                        <p class="news-excerpt">Congratulations to our students who excelled in this year's science fair
+                            with innovative projects showcasing their scientific knowledge and creativity.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+
+                <div class="news-card" data-category="sports">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="Sports Day">
+                        <span class="news-category">Sports</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">June 10, 2023</span>
+                        <h3 class="news-title">Annual Sports Day Results</h3>
+                        <p class="news-excerpt">Our annual sports day was a huge success with students showcasing their
+                            athletic talents. Green House emerged as the overall winner.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+
+                <div class="news-card" data-category="events">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="Cultural Day">
+                        <span class="news-category">Events</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">May 28, 2023</span>
+                        <h3 class="news-title">Cultural Day Celebration</h3>
+                        <p class="news-excerpt">Our students celebrated Nigeria's diverse cultures with performances,
+                            traditional attire, and culinary displays at our annual Cultural Day event.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+
+                <div class="news-card" data-category="academics">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="Math Olympiad">
+                        <span class="news-category">Academics</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">May 20, 2023</span>
+                        <h3 class="news-title">Math Olympiad Team Qualifies for Nationals</h3>
+                        <p class="news-excerpt">Our mathematics team has qualified for the National Mathematics Olympiad
+                            after outstanding performance at the regional level.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+
+                <div class="news-card" data-category="announcements">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="New Library">
+                        <span class="news-category">Announcements</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">May 15, 2023</span>
+                        <h3 class="news-title">New Library Facility Opening</h3>
+                        <p class="news-excerpt">We're excited to announce the opening of our new state-of-the-art
+                            library facility, providing students with enhanced learning resources.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+
+                <div class="news-card" data-category="events">
+                    <div class="news-image">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                            alt="Career Day">
+                        <span class="news-category">Events</span>
+                    </div>
+                    <div class="news-content">
+                        <span class="news-date">May 5, 2023</span>
+                        <h3 class="news-title">Annual Career Day Success</h3>
+                        <p class="news-excerpt">Professionals from various fields visited our school for Career Day,
+                            providing valuable insights and guidance to our students.</p>
+                        <a href="#" class="btn btn-outline">Read More</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pagination">
+                <a href="#" class="page-link active">1</a>
+                <a href="#" class="page-link">2</a>
+                <a href="#" class="page-link">3</a>
+                <a href="#" class="page-link">Next</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Upcoming Events</h2>
+
+            <div class="events-list">
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">25</span>
+                        <span class="event-month">Jun</span>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">Parent-Teacher Conference</h3>
+                        <span class="event-time"><i class="far fa-clock"></i> 9:00 AM - 3:00 PM</span>
+                        <p>Quarterly parent-teacher conference to discuss student progress and development.</p>
+                        <div class="event-actions">
+                            <a href="#" class="btn btn-primary btn-small">Register</a>
+                            <a href="#" class="btn btn-outline btn-small">Add to Calendar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">30</span>
+                        <span class="event-month">Jun</span>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">Inter-School Debate Competition</h3>
+                        <span class="event-time"><i class="far fa-clock"></i> 10:00 AM - 2:00 PM</span>
+                        <p>Our debate team will be competing against other schools in the regional debate championship.
+                        </p>
+                        <div class="event-actions">
+                            <a href="#" class="btn btn-primary btn-small">Register</a>
+                            <a href="#" class="btn btn-outline btn-small">Add to Calendar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">05</span>
+                        <span class="event-month">Jul</span>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">Art Exhibition</h3>
+                        <span class="event-time"><i class="far fa-clock"></i> 11:00 AM - 4:00 PM</span>
+                        <p>Annual student art exhibition showcasing creative works from our talented art students.</p>
+                        <div class="event-actions">
+                            <a href="#" class="btn btn-primary btn-small">Register</a>
+                            <a href="#" class="btn btn-outline btn-small">Add to Calendar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="event-date">
+                        <span class="event-day">15</span>
+                        <span class="event-month">Jul</span>
+                    </div>
+                    <div class="event-details">
+                        <h3 class="event-title">End of Term Ceremony</h3>
+                        <span class="event-time"><i class="far fa-clock"></i> 10:00 AM - 12:00 PM</span>
+                        <p>End of academic term ceremony with award presentations and cultural performances.</p>
+                        <div class="event-actions">
+                            <a href="#" class="btn btn-primary btn-small">Register</a>
+                            <a href="#" class="btn btn-outline btn-small">Add to Calendar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="#" class="btn btn-primary">View All Events</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Calendar Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Event Calendar</h2>
+
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3>June 2023</h3>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn"><i class="fas fa-chevron-left"></i></button>
+                        <button class="calendar-nav-btn"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+
+                <div class="calendar-grid">
+                    <div class="calendar-day">Sun</div>
+                    <div class="calendar-day">Mon</div>
+                    <div class="calendar-day">Tue</div>
+                    <div class="calendar-day">Wed</div>
+                    <div class="calendar-day">Thu</div>
+                    <div class="calendar-day">Fri</div>
+                    <div class="calendar-day">Sat</div>
+
+                    <div class="calendar-date"></div>
+                    <div class="calendar-date"></div>
+                    <div class="calendar-date"></div>
+                    <div class="calendar-date">1</div>
+                    <div class="calendar-date">2</div>
+                    <div class="calendar-date">3</div>
+                    <div class="calendar-date">4</div>
+
+                    <div class="calendar-date">5</div>
+                    <div class="calendar-date">6</div>
+                    <div class="calendar-date">7</div>
+                    <div class="calendar-date">8</div>
+                    <div class="calendar-date">9</div>
+                    <div class="calendar-date">10</div>
+                    <div class="calendar-date">11</div>
+
+                    <div class="calendar-date">12</div>
+                    <div class="calendar-date">13</div>
+                    <div class="calendar-date">14</div>
+                    <div class="calendar-date">15</div>
+                    <div class="calendar-date">16</div>
+                    <div class="calendar-date">17</div>
+                    <div class="calendar-date">18</div>
+
+                    <div class="calendar-date">19</div>
+                    <div class="calendar-date">20</div>
+                    <div class="calendar-date">21</div>
+                    <div class="calendar-date">22</div>
+                    <div class="calendar-date">23</div>
+                    <div class="calendar-date">24</div>
+                    <div class="calendar-date has-event">25</div>
+
+                    <div class="calendar-date">26</div>
+                    <div class="calendar-date">27</div>
+                    <div class="calendar-date">28</div>
+                    <div class="calendar-date">29</div>
+                    <div class="calendar-date has-event">30</div>
+                    <div class="calendar-date"></div>
+                    <div class="calendar-date"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="newsletter">
+        <div class="container">
+            <h2 class="newsletter-title">Stay Updated</h2>
+            <p class="newsletter-description">Subscribe to our newsletter to receive the latest news and event updates
+                directly to your inbox.</p>
+
+            <form class="newsletter-form">
+                <input type="email" class="newsletter-input" placeholder="Enter your email address" required>
+                <button type="submit" class="newsletter-btn">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-heading">Mighty School For Valours</h3>
+                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
+                        that prepares students for the challenges of tomorrow.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="academics.html">Academics</a></li>
+                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
+                        <li class="footer-link"><a href="news.html">News & Events</a></li>
+                        <li class="footer-link"><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Info</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
+                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const nav = document.querySelector('.nav');
+
+        mobileNavToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileNavToggle.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // News Category Filtering
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const newsCards = document.querySelectorAll('.news-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                // Add active class to clicked button
+                button.classList.add('active');
+
+                // Get filter value
+                const filterValue = button.getAttribute('data-filter');
+
+                // Show/hide news cards based on filter
+                newsCards.forEach(card => {
+                    if (filterValue === 'all') {
+                        card.style.display = 'block';
+                    } else {
+                        if (card.getAttribute('data-category') === filterValue) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+        // Newsletter Form Submission
+        document.querySelector('.newsletter-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Thank you for subscribing to our newsletter!');
+            this.reset();
+        });
+
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileNavToggle.querySelector('i').classList.remove('fa-times');
+                mobileNavToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+
+</html>

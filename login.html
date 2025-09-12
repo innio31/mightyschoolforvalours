@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Brainfield CBT System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1a4b8c;
+            --secondary: #f37b21;
+            --accent: #34a853;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --danger: #dc3545;
+        }
+
+        body {
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            background-color: var(--secondary);
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background-color: #e06e1d;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-large {
+            padding: 14px 32px;
+            font-size: 1.1rem;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .logo-text span {
+            color: var(--secondary);
+        }
+
+        /* Login Section */
+        .login-section {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 0;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .login-header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            outline: none;
+        }
+
+        .user-type-selector {
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .user-type {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .user-type.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .login-btn {
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 30px 0 20px;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .footer-col p,
+        .footer-col li {
+            margin-bottom: 10px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+
+            .logo-text {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+
+    <script>
+        // Firebase configuration - Replace with your actual config
+        const firebaseConfig = {
+            apiKey: "AIzaSyCk4OXci0l9WNJHRjSQ3ylpMpG0k9q1vOI",
+            authDomain: "brainfield-schools.firebaseapp.com",
+            projectId: "brainfield-schools",
+            storageBucket: "brainfield-schools.firebasestorage.app",
+            messagingSenderId: "147221931117",
+            appId: "1:147221931117:web:8bb22a18b6ce725c510b64",
+            measurementId: "G-SQ5VPJLYJW"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+    </script>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <div class="logo-text">Brainfield International <span>Schools</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Section -->
+    <section class="login-section">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-header">
+                    <h1>Login to CBT Portal</h1>
+                    <p>Access your dashboard to take exams and view results</p>
+                </div>
+
+                <div class="alert alert-error" id="errorMessage"></div>
+                <div class="alert alert-success" id="successMessage"></div>
+
+                <div class="user-type-selector">
+                    <div class="user-type active" data-type="student">Student</div>
+                    <div class="user-type" data-type="teacher">Teacher</div>
+                    <div class="user-type" data-type="admin">Admin</div>
+                </div>
+
+                <form id="loginForm">
+                    <div class="form-group" id="emailField">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+
+                    <div class="form-group" id="admissionField" style="display: none;">
+                        <label for="admissionNumber">Admission Number</label>
+                        <input type="text" id="admissionNumber" class="form-control"
+                            placeholder="Enter your admission number">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password"
+                            required>
+                    </div>
+
+                    <div class="login-btn">
+                        <button type="submit" class="btn btn-large" id="loginButton">Login</button>
+                    </div>
+
+                    <div class="forgot-password">
+                        <a href="#" id="resetPasswordLink">Forgot Password?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Brainfield International Schools</h3>
+                    <p>Excellence in Education since 2012. Committed to nurturing young minds and shaping future
+                        leaders.</p>
+                </div>
+                <div class="footer-col">
+                    <h3>Need Help?</h3>
+                    <p>Contact support if you're having trouble accessing your account.</p>
+                    <p>Email: support@brainfieldschools.edu.ng</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Brainfield School. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // DOM Elements
+        const userTypeSelectors = document.querySelectorAll('.user-type');
+        const emailField = document.getElementById('emailField');
+        const admissionField = document.getElementById('admissionField');
+        const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const loginButton = document.getElementById('loginButton');
+        const resetPasswordLink = document.getElementById('resetPasswordLink');
+
+        // User type selection
+        userTypeSelectors.forEach(selector => {
+            selector.addEventListener('click', () => {
+                // Remove active class from all
+                userTypeSelectors.forEach(s => s.classList.remove('active'));
+
+                // Add active class to clicked
+                selector.classList.add('active');
+
+                // Show appropriate field based on user type
+                const userType = selector.getAttribute('data-type');
+
+                if (userType === 'student') {
+                    emailField.style.display = 'none';
+                    admissionField.style.display = 'block';
+                    document.getElementById('email').removeAttribute('required');
+                    document.getElementById('admissionNumber').setAttribute('required', 'true');
+                } else {
+                    emailField.style.display = 'block';
+                    admissionField.style.display = 'none';
+                    document.getElementById('email').setAttribute('required', 'true');
+                    document.getElementById('admissionNumber').removeAttribute('required');
+                }
+            });
+        });
+
+        // Form submission
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const activeUserType = document.querySelector('.user-type.active').getAttribute('data-type');
+            let identifier, password;
+
+            if (activeUserType === 'student') {
+                identifier = document.getElementById('admissionNumber').value.trim();
+                password = document.getElementById('password').value;
+            } else {
+                identifier = document.getElementById('email').value.trim();
+                password = document.getElementById('password').value;
+            }
+
+            // Basic validation
+            if ((activeUserType !== 'student' && !identifier) || !password) {
+                showError('Please fill in all fields');
+                return;
+            }
+
+            // Login based on user type
+            if (activeUserType === 'student') {
+                loginStudent(identifier, password);
+            } else {
+                loginEmailUser(identifier, password, activeUserType);
+            }
+        });
+
+        // Login function for students (using admission number)
+        async function loginStudent(admissionNumber, password) {
+            try {
+                showLoading(true);
+
+                // First, get the email associated with this admission number
+                const studentsRef = db.collection('students');
+                const snapshot = await studentsRef.where('admissionNumber', '==', admissionNumber).get();
+
+                if (snapshot.empty) {
+                    showError('No student found with this admission number');
+                    showLoading(false);
+                    return;
+                }
+
+                // Get the student data
+                let studentData;
+                snapshot.forEach(doc => {
+                    studentData = doc.data();
+                    studentData.id = doc.id;
+                });
+
+                // Sign in with email and password
+                const userCredential = await auth.signInWithEmailAndPassword(studentData.email, password);
+                const user = userCredential.user;
+
+                // Store user data in localStorage
+                const userData = {
+                    type: 'student',
+                    id: studentData.id,
+                    uid: user.uid,
+                    name: studentData.name,
+                    admissionNumber: studentData.admissionNumber,
+                    class: studentData.class
+                };
+
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Redirect to dashboard
+                window.location.href = 'student-dashboard.html';
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(getAuthErrorMessage(error));
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Login function for teachers and admins (using email)
+        async function loginEmailUser(email, password, userType) {
+            try {
+                showLoading(true);
+
+                // Sign in with email and password
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Verify user type
+                let userData;
+                if (userType === 'teacher') {
+                    const teacherDoc = await db.collection('teachers').doc(user.uid).get();
+                    if (!teacherDoc.exists) {
+                        await auth.signOut();
+                        showError('No teacher account found with this email');
+                        return;
+                    }
+
+                    const teacherData = teacherDoc.data();
+                    userData = {
+                        type: 'teacher',
+                        id: teacherDoc.id,
+                        uid: user.uid,
+                        name: teacherData.name,
+                        subjects: teacherData.subjects,
+                        classes: teacherData.classes
+                    };
+                } else if (userType === 'admin') {
+                    const adminDoc = await db.collection('admins').doc(user.uid).get();
+                    if (!adminDoc.exists) {
+                        await auth.signOut();
+                        showError('No admin account found with this email');
+                        return;
+                    }
+
+                    const adminData = adminDoc.data();
+                    userData = {
+                        type: 'admin',
+                        id: adminDoc.id,
+                        uid: user.uid,
+                        name: adminData.name,
+                        role: adminData.role
+                    };
+                }
+
+                // Store user data in localStorage
+                localStorage.setItem('currentUser', JSON.stringify(userData));
+
+                // Redirect to appropriate dashboard
+                window.location.href = `${userType}-dashboard.html`;
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showError(getAuthErrorMessage(error));
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Password reset functionality
+        resetPasswordLink.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const activeUserType = document.querySelector('.user-type.active').getAttribute('data-type');
+
+            if (activeUserType === 'student') {
+                showError('Please contact administration to reset your password');
+                return;
+            }
+
+            const email = document.getElementById('email').value.trim();
+            if (!email) {
+                showError('Please enter your email address first');
+                return;
+            }
+
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showSuccess('Password reset email sent. Check your inbox.');
+                })
+                .catch(error => {
+                    showError(getAuthErrorMessage(error));
+                });
+        });
+
+        // Utility functions
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading(loading) {
+            if (loading) {
+                loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+                loginButton.disabled = true;
+            } else {
+                loginButton.innerHTML = 'Login';
+                loginButton.disabled = false;
+            }
+        }
+
+        function getAuthErrorMessage(error) {
+            switch (error.code) {
+                case 'auth/user-not-found':
+                    return 'No account found with these credentials';
+                case 'auth/wrong-password':
+                    return 'Incorrect password';
+                case 'auth/invalid-email':
+                    return 'Invalid email address';
+                case 'auth/user-disabled':
+                    return 'This account has been disabled';
+                default:
+                    return 'Login failed. Please try again.';
+            }
+        }
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                // User is signed in, check what type of user they are
+                try {
+                    // Check if student
+                    const studentDoc = await db.collection('students').doc(user.uid).get();
+                    if (studentDoc.exists) {
+                        const studentData = studentDoc.data();
+                        const userData = {
+                            type: 'student',
+                            id: studentDoc.id,
+                            uid: user.uid,
+                            name: studentData.name,
+                            admissionNumber: studentData.admissionNumber,
+                            class: studentData.class
+                        };
+                        localStorage.setItem('currentUser', JSON.stringify(userData));
+                        window.location.href = 'student-dashboard.html';
+                        return;
+                    }
+
+                    // Check if teacher
+                    const teacherDoc = await db.collection('teachers').doc(user.uid).get();
+                    if (teacherDoc.exists) {
+                        const teacherData = teacherDoc.data();
+                        const userData = {
+                            type: 'teacher',
+                            id: teacherDoc.id,
+                            uid: user.uid,
+                            name: teacherData.name,
+                            subjects: teacherData.subjects,
+                            classes: teacherData.classes
+                        };
+                        localStorage.setItem('currentUser', JSON.stringify(userData));
+                        window.location.href = 'teacher-dashboard.html';
+                        return;
+                    }
+
+                    // Check if admin
+                    const adminDoc = await db.collection('admins').doc(user.uid).get();
+                    if (adminDoc.exists) {
+                        const adminData = adminDoc.data();
+                        const userData = {
+                            type: 'admin',
+                            id: adminDoc.id,
+                            uid: user.uid,
+                            name: adminData.name,
+                            role: adminData.role
+                        };
+                        localStorage.setItem('currentUser', JSON.stringify(userData));
+                        window.location.href = 'admin-dashboard.html';
+                        return;
+                    }
+
+                    // If user exists in auth but not in any collection, sign them out
+                    await auth.signOut();
+                    localStorage.removeItem('currentUser');
+
+                } catch (error) {
+                    console.error('Auth state change error:', error);
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
