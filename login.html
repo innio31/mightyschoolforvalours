@@ -339,6 +339,44 @@
             text-decoration: underline;
         }
 
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--color-white);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert-error {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ef9a9a;
+        }
+
+        .alert-success {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+            border: 1px solid #a5d6a7;
+        }
+
         /* Footer */
         .footer {
             background-color: var(--color-dark);
@@ -519,10 +557,11 @@
                         <h2 class="login-title">Student Login</h2>
                         <p class="login-subtitle">Access your student dashboard and learning resources</p>
                     </div>
+                    <div id="student-alert" class="alert alert-error"></div>
                     <form id="student-login-form">
                         <div class="form-group">
-                            <label for="student-id" class="form-label">Student ID</label>
-                            <input type="text" id="student-id" class="form-input" placeholder="Enter your student ID" required>
+                            <label for="student-email" class="form-label">Email</label>
+                            <input type="email" id="student-email" class="form-input" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group password-toggle">
                             <label for="student-password" class="form-label">Password</label>
@@ -537,7 +576,9 @@
                             </label>
                             <a href="#" class="forgot-password">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn btn-primary">Login as Student</button>
+                        <button type="submit" class="btn btn-primary" id="student-login-btn">
+                            <span class="btn-text">Login as Student</span>
+                        </button>
                     </form>
                     <div class="login-divider">
                         <span>Quick Access</span>
@@ -556,10 +597,11 @@
                         <h2 class="login-title">Administrator Login</h2>
                         <p class="login-subtitle">Access the administrative dashboard and management tools</p>
                     </div>
+                    <div id="admin-alert" class="alert alert-error"></div>
                     <form id="admin-login-form">
                         <div class="form-group">
-                            <label for="admin-username" class="form-label">Username</label>
-                            <input type="text" id="admin-username" class="form-input" placeholder="Enter your username" required>
+                            <label for="admin-email" class="form-label">Email</label>
+                            <input type="email" id="admin-email" class="form-input" placeholder="Enter your email" required>
                         </div>
                         <div class="form-group password-toggle">
                             <label for="admin-password" class="form-label">Password</label>
@@ -574,7 +616,9 @@
                             </label>
                             <a href="#" class="forgot-password">Forgot Password?</a>
                         </div>
-                        <button type="submit" class="btn btn-primary">Login as Administrator</button>
+                        <button type="submit" class="btn btn-primary" id="admin-login-btn">
+                            <span class="btn-text">Login as Administrator</span>
+                        </button>
                     </form>
                     <div class="login-divider">
                         <span>Additional Options</span>
@@ -635,7 +679,29 @@
         </div>
     </footer>
 
+    <!-- Firebase App (core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <script>
+        // Firebase configuration - You'll need to replace this with your actual config
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "your-project-id.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project-id.appspot.com",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
         // Mobile Navigation Toggle
         const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
         const nav = document.querySelector('.nav');
@@ -672,37 +738,172 @@
             });
         });
 
-        // Form Submission
-        document.getElementById('student-login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            // In a real implementation, this would connect to your authentication system
-            const studentId = document.getElementById('student-id').value;
-            const password = document.getElementById('student-password').value;
+        // Show alert message
+        function showAlert(elementId, message, type) {
+            const alertElement = document.getElementById(elementId);
+            alertElement.textContent = message;
+            alertElement.classList.remove('alert-error', 'alert-success');
+            alertElement.classList.add(type === 'error' ? 'alert-error' : 'alert-success');
+            alertElement.style.display = 'block';
             
-            // Simple validation
-            if (studentId && password) {
-                alert('Student login successful! Redirecting to dashboard...');
-                // In a real implementation, you would redirect to the student dashboard
-                // window.location.href = 'student-dashboard.html';
+            // Hide alert after 5 seconds
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        // Set loading state for a button
+        function setLoading(button, isLoading) {
+            const buttonText = button.querySelector('.btn-text');
+            if (isLoading) {
+                button.disabled = true;
+                buttonText.innerHTML = '<span class="spinner"></span> Logging in...';
             } else {
-                alert('Please fill in all required fields.');
+                button.disabled = false;
+                buttonText.textContent = buttonText.textContent.replace('<span class="spinner"></span> Logging in...', 
+                    button.id === 'student-login-btn' ? 'Login as Student' : 'Login as Administrator');
+            }
+        }
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, check their role and redirect accordingly
+                db.collection('users').doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const userData = doc.data();
+                            if (userData.role === 'admin') {
+                                window.location.href = 'admin-dashboard.html';
+                            } else {
+                                window.location.href = 'student-dashboard.html';
+                            }
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error getting user document:', error);
+                    });
             }
         });
 
+        // Student Login Form Submission
+        document.getElementById('student-login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const studentLoginBtn = document.getElementById('student-login-btn');
+            const email = document.getElementById('student-email').value;
+            const password = document.getElementById('student-password').value;
+            
+            // Validate inputs
+            if (!email || !password) {
+                showAlert('student-alert', 'Please fill in all fields.', 'error');
+                return;
+            }
+            
+            setLoading(studentLoginBtn, true);
+            
+            // Sign in with email and password
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Check if user has student role
+                    const user = userCredential.user;
+                    return db.collection('users').doc(user.uid).get()
+                        .then((doc) => {
+                            if (doc.exists) {
+                                const userData = doc.data();
+                                if (userData.role === 'student') {
+                                    // Redirect to student dashboard
+                                    window.location.href = 'student-dashboard.html';
+                                } else {
+                                    // User doesn't have student role
+                                    auth.signOut();
+                                    showAlert('student-alert', 'Access denied. Student account required.', 'error');
+                                    setLoading(studentLoginBtn, false);
+                                }
+                            } else {
+                                // User document doesn't exist
+                                auth.signOut();
+                                showAlert('student-alert', 'User account not found.', 'error');
+                                setLoading(studentLoginBtn, false);
+                            }
+                        });
+                })
+                .catch((error) => {
+                    setLoading(studentLoginBtn, false);
+                    // Handle errors
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            showAlert('student-alert', 'No account found with this email.', 'error');
+                            break;
+                        case 'auth/wrong-password':
+                            showAlert('student-alert', 'Incorrect password.', 'error');
+                            break;
+                        case 'auth/invalid-email':
+                            showAlert('student-alert', 'Invalid email address.', 'error');
+                            break;
+                        default:
+                            showAlert('student-alert', error.message, 'error');
+                    }
+                });
+        });
+
+        // Admin Login Form Submission
         document.getElementById('admin-login-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            // In a real implementation, this would connect to your authentication system
-            const username = document.getElementById('admin-username').value;
+            const adminLoginBtn = document.getElementById('admin-login-btn');
+            const email = document.getElementById('admin-email').value;
             const password = document.getElementById('admin-password').value;
             
-            // Simple validation
-            if (username && password) {
-                alert('Admin login successful! Redirecting to admin panel...');
-                // In a real implementation, you would redirect to the admin dashboard
-                // window.location.href = 'admin-dashboard.html';
-            } else {
-                alert('Please fill in all required fields.');
+            // Validate inputs
+            if (!email || !password) {
+                showAlert('admin-alert', 'Please fill in all fields.', 'error');
+                return;
             }
+            
+            setLoading(adminLoginBtn, true);
+            
+            // Sign in with email and password
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Check if user has admin role
+                    const user = userCredential.user;
+                    return db.collection('users').doc(user.uid).get()
+                        .then((doc) => {
+                            if (doc.exists) {
+                                const userData = doc.data();
+                                if (userData.role === 'admin') {
+                                    // Redirect to admin dashboard
+                                    window.location.href = 'admin-dashboard.html';
+                                } else {
+                                    // User doesn't have admin role
+                                    auth.signOut();
+                                    showAlert('admin-alert', 'Access denied. Administrator account required.', 'error');
+                                    setLoading(adminLoginBtn, false);
+                                }
+                            } else {
+                                // User document doesn't exist
+                                auth.signOut();
+                                showAlert('admin-alert', 'Administrator account not found.', 'error');
+                                setLoading(adminLoginBtn, false);
+                            }
+                        });
+                })
+                .catch((error) => {
+                    setLoading(adminLoginBtn, false);
+                    // Handle errors
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            showAlert('admin-alert', 'No administrator account found with this email.', 'error');
+                            break;
+                        case 'auth/wrong-password':
+                            showAlert('admin-alert', 'Incorrect password.', 'error');
+                            break;
+                        case 'auth/invalid-email':
+                            showAlert('admin-alert', 'Invalid email address.', 'error');
+                            break;
+                        default:
+                            showAlert('admin-alert', error.message, 'error');
+                    }
+                });
         });
 
         // Close mobile nav when clicking on a link
