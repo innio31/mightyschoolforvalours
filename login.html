@@ -4,805 +4,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mighty School For Valours</title>
-    <meta name="author" content="Emmanuel Ademuyiwa">
+    <title>Student Login - Mighty School for Valours</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QR Code scanner library -->
-    <script src="https://unpkg.com/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <style>
         :root {
-            --color-primary: #1c3877;
-            --color-primary-dark: #152a5f;
-            --color-primary-light: #d1e0ff;
-            --color-secondary: #e23639;
-            --color-secondary-dark: #c21f22;
-            --color-dark: #0f1f3d;
-            --color-text: #333333;
-            --color-background: #f8f9fa;
-            --color-light-gray: #e9ecef;
-            --color-white: #ffffff;
-            --color-success: #22bb33;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+            --primary: #1a4b8c;
+            --secondary: #f37b21;
+            --light: #f8f9fa;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--color-text);
-            background-color: var(--color-background);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-
-        /* Header & Navigation */
-        .header {
-            background-color: var(--color-white);
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .nav-wrapper {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 0;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-        }
-
-        .logo-img {
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--color-primary);
-        }
-
-        .nav-list {
-            display: flex;
-            list-style: none;
-        }
-
-        .nav-link {
-            text-decoration: none;
-            color: var(--color-text);
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-            transition: var(--transition);
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: var(--color-primary);
-        }
-
-        .mobile-nav-toggle {
-            display: none;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--color-primary);
-        }
-
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-            background-size: cover;
-            background-position: center;
-            padding: 3rem 0;
-            text-align: center;
-            color: var(--color-white);
-        }
-
-        .page-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .breadcrumb {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             display: flex;
             justify-content: center;
-            list-style: none;
-        }
-
-        .breadcrumb-item {
-            margin: 0 0.5rem;
-        }
-
-        .breadcrumb-item a {
-            color: var(--color-white);
-            text-decoration: none;
-        }
-
-        .breadcrumb-item.active {
-            color: var(--color-primary-light);
-        }
-
-        .breadcrumb-item:not(:last-child):after {
-            content: ">";
-            margin-left: 1rem;
-            color: var(--color-white);
-        }
-
-        /* Login Section */
-        .login-section {
-            flex: 1;
-            padding: 3rem 0;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
         }
 
         .login-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .login-card {
-            background-color: var(--color-white);
-            border-radius: 8px;
-            padding: 2.5rem;
-            box-shadow: var(--shadow);
-            flex: 1;
-            min-width: 300px;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
             max-width: 450px;
-            transition: var(--transition);
-        }
-
-        .login-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        .login-header {
             text-align: center;
-            margin-bottom: 2rem;
         }
 
-        .login-icon {
-            font-size: 3rem;
-            color: var(--color-primary);
-            margin-bottom: 1rem;
+        .login-container h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 20px;
         }
 
-        .login-title {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-            color: var(--color-dark);
-        }
-
-        .login-subtitle {
-            color: var(--color-text);
-            font-size: 0.9rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--color-dark);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--color-light-gray);
-            border-radius: 4px;
-            font-family: inherit;
+        .login-container p {
             font-size: 1rem;
-            transition: var(--transition);
+            color: #666;
+            margin-bottom: 30px;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(28, 56, 119, 0.1);
-        }
-
-        .password-toggle {
+        .input-group {
             position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(243, 123, 33, 0.2);
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #aaa;
+        }
+
+        .password-group {
+            position: relative;
+        }
+
+        .password-group input {
+            padding-right: 45px;
         }
 
         .toggle-password {
             position: absolute;
-            right: 10px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--color-text);
             cursor: pointer;
+            color: #aaa;
         }
 
-        .form-options {
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #e06e1d;
+            transform: translateY(-2px);
+        }
+
+        .links-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-top: 15px;
             font-size: 0.9rem;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-        }
-
-        .remember-me input {
-            margin-right: 0.5rem;
-        }
-
-        .forgot-password {
-            color: var(--color-primary);
-            text-decoration: none;
-        }
-
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
-
-        /* Buttons */
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+        .links-container a {
+            color: var(--primary);
             text-decoration: none;
             font-weight: 600;
-            text-align: center;
-            transition: var(--transition);
         }
 
-        .btn-primary {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-            width: 100%;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--color-primary-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--color-secondary);
-            color: var(--color-white);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--color-secondary-dark);
-        }
-
-        .btn-outline {
-            background-color: transparent;
-            color: var(--color-primary);
-            border: 2px solid var(--color-primary);
-        }
-
-        .btn-outline:hover {
-            background-color: var(--color-primary);
-            color: var(--color-white);
-        }
-
-        .login-divider {
-            text-align: center;
-            margin: 2rem 0;
-            position: relative;
-        }
-
-        .login-divider:before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background-color: var(--color-light-gray);
-            z-index: 1;
-        }
-
-        .login-divider span {
-            background-color: var(--color-white);
-            padding: 0 1rem;
-            position: relative;
-            z-index: 2;
-            color: var(--color-text);
-        }
-
-        .help-links {
-            text-align: center;
-            margin-top: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .help-link {
-            color: var(--color-primary);
-            text-decoration: none;
-            margin: 0 0.5rem;
-        }
-
-        .help-link:hover {
+        .links-container a:hover {
             text-decoration: underline;
         }
 
-        /* QR Code Scanner Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background-color: var(--color-white);
+        #error-message {
+            color: #d9534f;
+            background-color: #f2dede;
+            border: 1px solid #ebccd1;
+            padding: 10px;
             border-radius: 8px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--color-text);
-        }
-
-        #qr-reader {
-            width: 100%;
-            margin: 1rem 0;
-        }
-
-        #qr-reader__dashboard_section_csr {
-            text-align: center;
-        }
-
-        #qr-reader__dashboard_section_csr button {
-            margin: 0.5rem;
-            padding: 0.5rem 1rem;
-            background-color: var(--color-primary);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: var(--color-white);
-            animation: spin 1s ease-in-out infinite;
-            margin-right: 10px;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        /* Alert Messages */
-        .alert {
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
+            margin-bottom: 20px;
             display: none;
-        }
-
-        .alert-error {
-            background-color: #ffebee;
-            color: #c62828;
-            border: 1px solid #ef9a9a;
-        }
-
-        .alert-success {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            border: 1px solid #a5d6a7;
-        }
-
-        /* Camera Permission Message */
-        .camera-permission {
-            text-align: center;
-            padding: 1rem;
-            background-color: var(--color-primary-light);
-            border-radius: 4px;
-            margin: 1rem 0;
-            display: none;
-        }
-
-        .camera-permission i {
-            font-size: 2rem;
-            color: var(--color-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        .footer {
-            background-color: var(--color-dark);
-            color: var(--color-white);
-            padding: 2rem 0 1rem;
-            margin-top: auto;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-heading {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .footer-heading:after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 3px;
-            background: var(--color-primary);
-            margin-top: 0.5rem;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-link {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-link a {
-            color: var(--color-light-gray);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-link a:hover {
-            color: var(--color-primary);
-            padding-left: 5px;
-        }
-
-        .social-icons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .social-icon {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--color-white);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .social-icon:hover {
-            background-color: var(--color-primary);
-            transform: translateY(-3px);
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .mobile-nav-toggle {
-                display: block;
-            }
-
-            .nav {
-                position: fixed;
-                top: 70px;
-                right: -100%;
-                width: 80%;
-                height: calc(100vh - 70px);
-                background-color: var(--color-white);
-                flex-direction: column;
-                padding: 2rem;
-                transition: var(--transition);
-                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-            }
-
-            .nav.active {
-                right: 0;
-            }
-
-            .nav-list {
-                flex-direction: column;
-            }
-
-            .nav-link {
-                display: block;
-                padding: 1rem 0;
-                border-bottom: 1px solid var(--color-light-gray);
-            }
-
-            .page-title {
-                font-size: 2rem;
-            }
-
-            .login-container {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .login-card {
-                width: 100%;
-            }
+            font-size: 0.9rem;
         }
     </style>
 </head>
 
 <body>
-    <!-- Header & Navigation -->
-    <header class="header">
-        <div class="container">
-            <div class="nav-wrapper">
-                <a href="index.html" class="logo">
-                    <div class="logo-img">
-                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
-                    </div>
-                    <div class="logo-text">Mighty School For Valours</div>
-                </a>
-                <button class="mobile-nav-toggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <nav class="nav">
-                    <ul class="nav-list">
-                        <li><a href="index.html" class="nav-link">Home</a></li>
-                        <li><a href="about.html" class="nav-link">About Us</a></li>
-                        <li><a href="academics.html" class="nav-link">Academics</a></li>
-                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
-                        <li><a href="news.html" class="nav-link">News & Events</a></li>
-                        <li><a href="contact.html" class="nav-link">Contact</a></li>
-                    </ul>
-                </nav>
+    <div class="login-container">
+        <h2>Student Login</h2>
+        <p>Enter your admission number and password to access the CBT portal.</p>
+        <div id="error-message"></div>
+        <form id="login-form">
+            <div class="input-group">
+                <i class="fas fa-user-circle"></i>
+                <input type="text" id="admissionNumber" placeholder="Admission Number" required>
             </div>
-        </div>
-    </header>
-
-    <!-- Page Header -->
-    <section class="page-header">
-        <div class="container">
-            <h1 class="page-title">Login Portal</h1>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item active">Login</li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- Login Section -->
-    <section class="login-section">
-        <div class="container">
-            <div class="login-container">
-                <!-- Student Login -->
-                <div class="login-card">
-                    <div class="login-header">
-                        <div class="login-icon">
-                            <i class="fas fa-user-graduate"></i>
-                        </div>
-                        <h2 class="login-title">Student Login</h2>
-                        <p class="login-subtitle">Access your student dashboard and learning resources</p>
-                    </div>
-                    <div id="student-alert" class="alert alert-error"></div>
-                    <form id="student-login-form">
-                        <div class="form-group">
-                            <label for="admission-number" class="form-label">Admission Number</label>
-                            <input type="text" id="admission-number" class="form-input"
-                                placeholder="Enter your admission number" required>
-                        </div>
-                        <div class="form-group password-toggle">
-                            <label for="student-password" class="form-label">Password</label>
-                            <input type="password" id="student-password" class="form-input"
-                                placeholder="Enter your password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div class="form-options">
-                            <label class="remember-me">
-                                <input type="checkbox" id="remember-student"> Remember me
-                            </label>
-                            <a href="#" class="forgot-password">Forgot Password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="student-login-btn">
-                            <span class="btn-text">Login as Student</span>
-                        </button>
-                    </form>
-                    <div class="login-divider">
-                        <span>Or</span>
-                    </div>
-                    <div style="text-align: center;">
-                        <button id="student-qr-btn" class="btn btn-outline">
-                            <i class="fas fa-qrcode"></i> Scan QR Code
-                        </button>
-                    </div>
-                    <div class="login-divider">
-                        <span>Quick Access</span>
-                    </div>
-                    <div style="text-align: center;">
-                        <a href="https://cbt.mightyschoolforvalours.com" class="btn btn-secondary">Go to CBT Portal</a>
-                    </div>
-                </div>
-
-                <!-- Staff Login -->
-                <div class="login-card">
-                    <div class="login-header">
-                        <div class="login-icon">
-                            <i class="fas fa-user-tie"></i>
-                        </div>
-                        <h2 class="login-title">Staff Login</h2>
-                        <p class="login-subtitle">Access the administrative dashboard and management tools</p>
-                    </div>
-                    <div id="staff-alert" class="alert alert-error"></div>
-                    <form id="staff-login-form">
-                        <div class="form-group">
-                            <label for="staff-email" class="form-label">Email</label>
-                            <input type="email" id="staff-email" class="form-input" placeholder="Enter your email"
-                                required>
-                        </div>
-                        <div class="form-group password-toggle">
-                            <label for="staff-password" class="form-label">Password</label>
-                            <input type="password" id="staff-password" class="form-input"
-                                placeholder="Enter your password" required>
-                            <button type="button" class="toggle-password" aria-label="Toggle password visibility">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                        <div class="form-options">
-                            <label class="remember-me">
-                                <input type="checkbox" id="remember-staff"> Remember me
-                            </label>
-                            <a href="#" class="forgot-password">Forgot Password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary" id="staff-login-btn">
-                            <span class="btn-text">Login as Staff</span>
-                        </button>
-                    </form>
-                    <div class="login-divider">
-                        <span>Or</span>
-                    </div>
-                    <div style="text-align: center;">
-                        <button id="staff-qr-btn" class="btn btn-outline">
-                            <i class="fas fa-qrcode"></i> Scan QR Code
-                        </button>
-                    </div>
-                </div>
+            <div class="input-group password-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" placeholder="Password" required>
+                <span class="toggle-password" id="toggle-password">
+                    <i class="fas fa-eye-slash"></i>
+                </span>
             </div>
-
-            <div class="help-links">
-                <p>Need help? <a href="contact.html" class="help-link">Contact Support</a> or <a href="faq.html"
-                        class="help-link">View FAQs</a></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- QR Code Scanner Modal -->
-    <div id="qr-modal" class="modal">
-        <div class="modal-content">
-            <button class="close-modal" id="close-qr-modal">&times;</button>
-            <h2 id="qr-modal-title">Scan Your ID Card QR Code</h2>
-
-            <div id="camera-permission" class="camera-permission">
-                <i class="fas fa-camera"></i>
-                <p>Camera access is required to scan QR codes</p>
-                <p>Please allow camera permissions when prompted</p>
-            </div>
-
-            <div id="qr-reader"></div>
-            <div id="qr-result" class="alert" style="display: none;"></div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div class="links-container">
+            <a href="academics.html">Back to Academics</a>
+            <a href="#" id="forgot-password-link">Forgot Password?</a>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <h3 class="footer-heading">Mighty School For Valours</h3>
-                    <p>Nurturing excellence and character since 2000. Our mission is to provide a holistic education
-                        that prepares students for the challenges of tomorrow.</p>
-                    <div class="social-icons">
-                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
-                <div>
-                    <h3 class="footer-heading">Quick Links</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link"><a href="index.html">Home</a></li>
-                        <li class="footer-link"><a href="about.html">About Us</a></li>
-                        <li class="footer-link"><a href="academics.html">Academics</a></li>
-                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
-                        <li class="footer-link"><a href="news.html">News & Events</a></li>
-                        <li class="footer-link"><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h3 class="footer-heading">Contact Info</h3>
-                    <ul class="footer-links">
-                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
-                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
-                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
-                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Firebase App (core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <!-- Firebase Auth -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <!-- Firebase Firestore -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script>
-        // Firebase configuration - You'll need to replace this with your actual config
+        // Your Firebase configuration object
         const firebaseConfig = {
             apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
             authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
@@ -816,387 +183,76 @@
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
-        const db = firebase.firestore();
 
-        // Mobile Navigation Toggle
-        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-        const nav = document.querySelector('.nav');
+        // Get form elements
+        const loginForm = document.getElementById('login-form');
+        const admissionNumberInput = document.getElementById('admissionNumber');
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('toggle-password');
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const errorMessage = document.getElementById('error-message');
 
-        mobileNavToggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            const icon = mobileNavToggle.querySelector('i');
-            if (nav.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
+        // Toggle password visibility
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.querySelector('i').classList.toggle('fa-eye');
+            togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
         });
 
-        // Password Visibility Toggle
-        const toggleButtons = document.querySelectorAll('.toggle-password');
-
-        toggleButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const input = button.previousElementSibling;
-                const icon = button.querySelector('i');
-
-                if (input.type === 'password') {
-                    input.type = 'text';
-                    icon.classList.remove('fa-eye');
-                    icon.classList.add('fa-eye-slash');
-                } else {
-                    input.type = 'password';
-                    icon.classList.remove('fa-eye-slash');
-                    icon.classList.add('fa-eye');
-                }
-            });
-        });
-
-        // Show alert message
-        function showAlert(elementId, message, type) {
-            const alertElement = document.getElementById(elementId);
-            alertElement.textContent = message;
-            alertElement.classList.remove('alert-error', 'alert-success');
-            alertElement.classList.add(type === 'error' ? 'alert-error' : 'alert-success');
-            alertElement.style.display = 'block';
-
-            // Hide alert after 5 seconds
-            setTimeout(() => {
-                alertElement.style.display = 'none';
-            }, 5000);
-        }
-
-        // Set loading state for a button
-        function setLoading(button, isLoading) {
-            const buttonText = button.querySelector('.btn-text');
-            if (isLoading) {
-                button.disabled = true;
-                buttonText.innerHTML = '<span class="spinner"></span> Logging in...';
-            } else {
-                button.disabled = false;
-                buttonText.textContent = buttonText.textContent.replace('<span class="spinner"></span> Logging in...',
-                    button.id === 'student-login-btn' ? 'Login as Student' : 'Login as Staff');
-            }
-        }
-
-        // Check if user is already logged in
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // User is signed in, check their role and redirect accordingly
-                db.collection('users').doc(user.uid).get()
-                    .then((doc) => {
-                        if (doc.exists) {
-                            const userData = doc.data();
-                            if (userData.role === 'admin' || userData.role === 'staff') {
-                                window.location.href = 'admin-dashboard.html';
-                            } else {
-                                window.location.href = 'student-dashboard.html';
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Error getting user document:', error);
-                    });
-            }
-        });
-
-        // Student Login Form Submission
-        document.getElementById('student-login-form').addEventListener('submit', function (e) {
+        // Handle forgot password functionality
+        forgotPasswordLink.addEventListener('click', async (e) => {
             e.preventDefault();
-            const studentLoginBtn = document.getElementById('student-login-btn');
-            const admissionNumber = document.getElementById('admission-number').value;
-            const password = document.getElementById('student-password').value;
+            const admissionNumber = admissionNumberInput.value.trim();
 
-            // Validate inputs
-            if (!admissionNumber || !password) {
-                showAlert('student-alert', 'Please fill in all fields.', 'error');
+            if (!admissionNumber) {
+                errorMessage.textContent = 'Please enter your admission number to reset your password.';
+                errorMessage.style.display = 'block';
                 return;
             }
 
-            setLoading(studentLoginBtn, true);
+            // Assuming a mapping exists to get the user's email from their admission number
+            // This would typically involve a Cloud Function or a secure database lookup.
+            // For this example, we'll assume the email is the admission number + a domain.
+            const userEmail = `${admissionNumber}@mightyvalours.edu.ng`;
 
-            // Look up student by admission number
-            db.collection('students').where('admissionNumber', '==', admissionNumber).get()
-                .then((querySnapshot) => {
-                    if (querySnapshot.empty) {
-                        showAlert('student-alert', 'No student found with this admission number.', 'error');
-                        setLoading(studentLoginBtn, false);
-                        return;
-                    }
-
-                    // Get the student document
-                    const studentDoc = querySnapshot.docs[0];
-                    const studentData = studentDoc.data();
-
-                    // Sign in with email and password (using the email from student record)
-                    auth.signInWithEmailAndPassword(studentData.email, password)
-                        .then((userCredential) => {
-                            // Check if user has student role
-                            const user = userCredential.user;
-                            return db.collection('users').doc(user.uid).get()
-                                .then((doc) => {
-                                    if (doc.exists) {
-                                        const userData = doc.data();
-                                        if (userData.role === 'student') {
-                                            // Redirect to student dashboard
-                                            window.location.href = 'student-dashboard.html';
-                                        } else {
-                                            // User doesn't have student role
-                                            auth.signOut();
-                                            showAlert('student-alert', 'Access denied. Student account required.', 'error');
-                                            setLoading(studentLoginBtn, false);
-                                        }
-                                    } else {
-                                        // User document doesn't exist
-                                        auth.signOut();
-                                        showAlert('student-alert', 'Student account not found.', 'error');
-                                        setLoading(studentLoginBtn, false);
-                                    }
-                                });
-                        })
-                        .catch((error) => {
-                            setLoading(studentLoginBtn, false);
-                            // Handle errors
-                            switch (error.code) {
-                                case 'auth/user-not-found':
-                                    showAlert('student-alert', 'Student account not found.', 'error');
-                                    break;
-                                case 'auth/wrong-password':
-                                    showAlert('student-alert', 'Incorrect password.', 'error');
-                                    break;
-                                default:
-                                    showAlert('student-alert', error.message, 'error');
-                            }
-                        });
-                })
-                .catch((error) => {
-                    setLoading(studentLoginBtn, false);
-                    showAlert('student-alert', 'Error looking up student information.', 'error');
-                    console.error('Error getting student document:', error);
-                });
+            try {
+                await auth.sendPasswordResetEmail(userEmail);
+                errorMessage.textContent = 'A password reset link has been sent to your registered email address.';
+                errorMessage.style.backgroundColor = '#dff0d8';
+                errorMessage.style.borderColor = '#d6e9c6';
+                errorMessage.style.color = '#3c763d';
+                errorMessage.style.display = 'block';
+            } catch (error) {
+                console.error("Password reset failed:", error.code, error.message);
+                errorMessage.textContent = 'Error: The admission number provided is not associated with an account.';
+                errorMessage.style.backgroundColor = '#f2dede';
+                errorMessage.style.borderColor = '#ebccd1';
+                errorMessage.style.color = '#d9534f';
+                errorMessage.style.display = 'block';
+            }
         });
 
-        // Staff Login Form Submission
-        document.getElementById('staff-login-form').addEventListener('submit', function (e) {
+        // Handle form submission
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const staffLoginBtn = document.getElementById('staff-login-btn');
-            const email = document.getElementById('staff-email').value;
-            const password = document.getElementById('staff-password').value;
+            errorMessage.style.display = 'none';
 
-            // Validate inputs
-            if (!email || !password) {
-                showAlert('staff-alert', 'Please fill in all fields.', 'error');
-                return;
-            }
+            const admissionNumber = admissionNumberInput.value.trim();
+            const password = passwordInput.value;
 
-            setLoading(staffLoginBtn, true);
+            // Assuming the user's email is their admission number plus a domain
+            // This requires a pre-existing setup in Firebase Authentication where the user's email is structured this way.
+            const userEmail = `${admissionNumber}@mightyvalours.edu.ng`;
 
-            // Sign in with email and password
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Check if user has staff or admin role
-                    const user = userCredential.user;
-                    return db.collection('users').doc(user.uid).get()
-                        .then((doc) => {
-                            if (doc.exists) {
-                                const userData = doc.data();
-                                if (userData.role === 'admin' || userData.role === 'staff') {
-                                    // Redirect to admin dashboard
-                                    window.location.href = 'admin-dashboard.html';
-                                } else {
-                                    // User doesn't have staff role
-                                    auth.signOut();
-                                    showAlert('staff-alert', 'Access denied. Staff account required.', 'error');
-                                    setLoading(staffLoginBtn, false);
-                                }
-                            } else {
-                                // User document doesn't exist
-                                auth.signOut();
-                                showAlert('staff-alert', 'Staff account not found.', 'error');
-                                setLoading(staffLoginBtn, false);
-                            }
-                        });
-                })
-                .catch((error) => {
-                    setLoading(staffLoginBtn, false);
-                    // Handle errors
-                    switch (error.code) {
-                        case 'auth/user-not-found':
-                            showAlert('staff-alert', 'No staff account found with this email.', 'error');
-                            break;
-                        case 'auth/wrong-password':
-                            showAlert('staff-alert', 'Incorrect password.', 'error');
-                            break;
-                        case 'auth/invalid-email':
-                            showAlert('staff-alert', 'Invalid email address.', 'error');
-                            break;
-                        default:
-                            showAlert('staff-alert', error.message, 'error');
-                    }
-                });
-        });
-
-        // QR Code Scanner Functionality
-        const qrModal = document.getElementById('qr-modal');
-        const closeQrModal = document.getElementById('close-qr-modal');
-        const studentQrBtn = document.getElementById('student-qr-btn');
-        const staffQrBtn = document.getElementById('staff-qr-btn');
-        const qrModalTitle = document.getElementById('qr-modal-title');
-        const qrReader = document.getElementById('qr-reader');
-        const qrResult = document.getElementById('qr-result');
-        const cameraPermission = document.getElementById('camera-permission');
-        let html5QrcodeScanner = null;
-        let currentUserType = null;
-
-        // Open QR modal for students
-        studentQrBtn.addEventListener('click', () => {
-            currentUserType = 'student';
-            qrModalTitle.textContent = 'Scan Your Student ID Card QR Code';
-            openQrModal();
-        });
-
-        // Open QR modal for staff
-        staffQrBtn.addEventListener('click', () => {
-            currentUserType = 'staff';
-            qrModalTitle.textContent = 'Scan Your Staff ID Card QR Code';
-            openQrModal();
-        });
-
-        // Close QR modal
-        closeQrModal.addEventListener('click', closeQrModalFunc);
-
-        function openQrModal() {
-            qrModal.style.display = 'flex';
-            qrResult.style.display = 'none';
-            cameraPermission.style.display = 'block';
-
-            // Clear previous scanner if exists
-            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
-                html5QrcodeScanner.clear().catch(error => {
-                    console.log("Could not clear previous scanner", error);
-                });
-            }
-
-            // Initialize QR scanner
-            html5QrcodeScanner = new Html5QrcodeScanner(
-                "qr-reader",
-                {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    supportedScanTypes: [
-                        Html5QrcodeScanType.SCAN_TYPE_CAMERA
-                    ]
-                },
-                /* verbose= */ false
-            );
-
-            // Render the scanner
-            html5QrcodeScanner.render(
-                (decodedText, decodedResult) => {
-                    onScanSuccess(decodedText, decodedResult);
-                },
-                (errorMessage) => {
-                    onScanFailure(errorMessage);
-                }
-            ).catch(err => {
-                console.log("Error rendering scanner", err);
-                cameraPermission.style.display = 'block';
-                showAlert('qr-result', 'Could not access camera. Please check permissions.', 'error');
-                qrResult.style.display = 'block';
-            });
-        }
-
-        function closeQrModalFunc() {
-            qrModal.style.display = 'none';
-            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
-                html5QrcodeScanner.clear().catch(error => {
-                    console.log("Could not clear scanner", error);
-                });
-            }
-        }
-
-        function onScanSuccess(decodedText, decodedResult) {
-            // Handle the scanned code here
-            console.log(`Scan result: ${decodedText}`, decodedResult);
-
-            // Hide camera permission message
-            cameraPermission.style.display = 'none';
-
-            // Show success message
-            qrResult.textContent = `QR Code scanned successfully!`;
-            qrResult.classList.remove('alert-error', 'alert-success');
-            qrResult.classList.add('alert-success');
-            qrResult.style.display = 'block';
-
-            // Process the QR code data based on user type
-            if (currentUserType === 'student') {
-                processStudentQrCode(decodedText);
-            } else if (currentUserType === 'staff') {
-                processStaffQrCode(decodedText);
-            }
-
-            // Stop the scanner
-            if (html5QrcodeScanner && typeof html5QrcodeScanner.clear === 'function') {
-                html5QrcodeScanner.clear().catch(error => {
-                    console.log("Could not clear scanner", error);
-                });
-            }
-
-            // Close modal after 2 seconds
-            setTimeout(() => {
-                closeQrModalFunc();
-            }, 2000);
-        }
-
-        function onScanFailure(error) {
-            // Handle scan failure, but ignore if it's just because we stopped the scanner
-            if (error && !error.includes('NotFoundException')) {
-                console.warn(`QR error = ${error}`);
-                cameraPermission.style.display = 'block';
-            }
-        }
-
-        function processStudentQrCode(qrData) {
-            // Parse the QR code data (assuming it's in JSON format)
             try {
-                const studentData = JSON.parse(qrData);
-
-                // Auto-fill the student login form
-                if (studentData.admissionNumber) {
-                    document.getElementById('admission-number').value = studentData.admissionNumber;
-                    showAlert('student-alert', 'Admission number filled from QR code. Please enter your password.', 'success');
-                }
-            } catch (e) {
-                console.error('Error parsing QR code data:', e);
-                showAlert('student-alert', 'Invalid QR code format. Please try again or use manual login.', 'error');
+                await auth.signInWithEmailAndPassword(userEmail, password);
+                window.location.replace("cbt.html");
+            } catch (error) {
+                console.error("Login failed:", error.code, error.message);
+                errorMessage.textContent = 'Error: Incorrect admission number or password.';
+                errorMessage.style.display = 'block';
             }
-        }
-
-        function processStaffQrCode(qrData) {
-            // Parse the QR code data (assuming it's in JSON format)
-            try {
-                const staffData = JSON.parse(qrData);
-
-                // Auto-fill the staff login form
-                if (staffData.email) {
-                    document.getElementById('staff-email').value = staffData.email;
-                    showAlert('staff-alert', 'Email filled from QR code. Please enter your password.', 'success');
-                }
-            } catch (e) {
-                console.error('Error parsing QR code data:', e);
-                showAlert('staff-alert', 'Invalid QR code format. Please try again or use manual login.', 'error');
-            }
-        }
-
-        // Close mobile nav when clicking on a link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                nav.classList.remove('active');
-                mobileNavToggle.querySelector('i').classList.remove('fa-times');
-                mobileNavToggle.querySelector('i').classList.add('fa-bars');
-            });
         });
     </script>
 </body>
