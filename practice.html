@@ -179,41 +179,6 @@
             color: var(--primary);
         }
 
-        /* Student Info Styles */
-        .student-info {
-            background: white;
-            border-radius: 8px;
-            padding: 15px 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .student-details {
-            font-size: 1rem;
-        }
-
-        .student-name {
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .student-class {
-            color: #666;
-        }
-
-        .back-btn {
-            background-color: var(--primary);
-            padding: 8px 16px;
-            font-size: 0.9rem;
-        }
-
-        .back-btn:hover {
-            background-color: #0d3a7a;
-        }
-
         /* Form Styles */
         .form-container {
             background: white;
@@ -446,7 +411,6 @@
         .score-display {
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
         }
 
         .score-value {
@@ -458,15 +422,6 @@
 
         .score-max {
             font-size: 1.5rem;
-            color: #666;
-        }
-
-        .student-score-info {
-            position: absolute;
-            right: 0;
-            top: 0;
-            text-align: right;
-            font-size: 0.9rem;
             color: #666;
         }
 
@@ -506,29 +461,6 @@
         /* Hidden Class */
         .hidden {
             display: none;
-        }
-
-        /* Access Denied Styles */
-        .access-denied {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .access-denied i {
-            font-size: 5rem;
-            color: var(--danger);
-            margin-bottom: 20px;
-        }
-
-        .access-denied h2 {
-            color: var(--danger);
-            margin-bottom: 15px;
-        }
-
-        .access-denied p {
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            color: #666;
         }
 
         /* Responsive Design */
@@ -597,18 +529,6 @@
                 flex-direction: column;
                 gap: 15px;
             }
-
-            .student-info {
-                flex-direction: column;
-                gap: 10px;
-                text-align: center;
-            }
-
-            .student-score-info {
-                position: static;
-                text-align: center;
-                margin-top: 15px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -667,25 +587,7 @@
 
     <!-- Main Content -->
     <main class="container">
-        <!-- Access Denied Message (Initially Hidden) -->
-        <div id="accessDenied" class="access-denied hidden">
-            <i class="fas fa-exclamation-circle"></i>
-            <h2>Access Denied</h2>
-            <p>You must be logged in to access the practice mode.</p>
-            <a href="login.html" class="btn">Go to Login Page</a>
-        </div>
-
-        <!-- Student Info (Initially Hidden) -->
-        <div id="studentInfo" class="student-info hidden">
-            <div class="student-details">
-                <span class="student-name" id="studentNameDisplay">Student Name</span>
-                <span class="student-class" id="studentClassDisplay"> - Class</span>
-            </div>
-            <a href="dashboard.html" class="btn back-btn">Back to Dashboard</a>
-        </div>
-
-        <!-- Practice Section (Initially Hidden) -->
-        <section id="practiceSection" class="section hidden">
+        <section class="section">
             <div class="section-title">
                 <h2>Practice Mode</h2>
                 <p>Select your preferred practice options to begin</p>
@@ -693,6 +595,12 @@
 
             <!-- Setup Form -->
             <div id="setupForm" class="form-container">
+                <div class="form-group">
+                    <label for="studentName">Your Name</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="Enter your full name"
+                        required>
+                </div>
+
                 <div class="form-group">
                     <label for="practiceMode">Practice Mode</label>
                     <select id="practiceMode" class="form-control" required>
@@ -890,10 +798,6 @@
                     <div class="score-value" id="finalScore">0</div>
                     <div class="score-max" id="maxScore">out of 0</div>
                     <div id="gradeDisplay"></div>
-                    <div class="student-score-info">
-                        <div id="resultStudentName"></div>
-                        <div id="resultStudentClass"></div>
-                    </div>
                 </div>
 
                 <div class="feedback-section">
@@ -903,38 +807,605 @@
 
                 <div style="text-align: center; margin-top: 30px;">
                     <button id="restartPractice" class="btn">Start New Practice</button>
-                    <a href="dashboard.html" class="btn back-btn" style="margin-left: 10px;">Back to Dashboard</a>
                 </div>
             </div>
         </section>
     </main>
 
     <script>
-        // Firebase configuration (you'll need to add your actual config here)
-        const firebaseConfig = {
-            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
-            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
-            projectId: "mightyschoolforvalours-91aa4",
-            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
-            messagingSenderId: "778024125256",
-            appId: "1:778024125256:web:31d482406bf06a2125a97d",
-            measurementId: "G-C2NY58GRFT"
+        // Enhanced question database with exam type differentiation
+        const questionBank = {
+            // JAMB Questions
+            jamb: {
+                mathematics: [
+                    {
+                        question: "If y = x² + 3x, find dy/dx.",
+                        options: ["2x + 3", "x + 3", "2x", "3x"],
+                        answer: 0,
+                        explanation: "Using the power rule of differentiation, the derivative of x² is 2x and the derivative of 3x is 3."
+                    },
+                    {
+                        question: "Solve the equation 2x - 3 = 7",
+                        options: ["x = 5", "x = 2", "x = 10", "x = 4"],
+                        answer: 0,
+                        explanation: "Add 3 to both sides: 2x = 10, then divide by 2: x = 5."
+                    },
+                    {
+                        question: "What is the value of sin²θ + cos²θ?",
+                        options: ["0", "1", "2", "tanθ"],
+                        answer: 1,
+                        explanation: "This is the Pythagorean trigonometric identity: sin²θ + cos²θ = 1."
+                    }
+                ],
+                english: [
+                    {
+                        question: "Choose the word that has a different stress pattern.",
+                        options: ["document", "comment", "cement", "compliment"],
+                        answer: 3,
+                        explanation: "'Compliment' has stress on the first syllable while others have stress on the second syllable."
+                    },
+                    {
+                        question: "Identify the sentence with the correct punctuation.",
+                        options: [
+                            "The man, who is my uncle, is a doctor.",
+                            "The man who is my uncle is a doctor.",
+                            "The man, who is my uncle is a doctor.",
+                            "The man who is my uncle, is a doctor."
+                        ],
+                        answer: 0,
+                        explanation: "The clause 'who is my uncle' is non-restrictive and should be set off with commas."
+                    }
+                ],
+                physics: [
+                    {
+                        question: "What is the S.I unit of inductance?",
+                        options: ["Farad", "Henry", "Ohm", "Volt"],
+                        answer: 1,
+                        explanation: "The Henry (H) is the SI unit of inductance."
+                    },
+                    {
+                        question: "Which of the following is a vector quantity?",
+                        options: ["Mass", "Speed", "Velocity", "Temperature"],
+                        answer: 2,
+                        explanation: "Velocity has both magnitude and direction, making it a vector quantity."
+                    }
+                ],
+                chemistry: [
+                    {
+                        question: "What is the electronic configuration of magnesium (atomic number 12)?",
+                        options: ["2:8:2", "2:8:1", "2:8:3", "2:8"],
+                        answer: 0,
+                        explanation: "Magnesium has 12 electrons: 2 in the first shell, 8 in the second, and 2 in the third."
+                    }
+                ],
+                biology: [
+                    {
+                        question: "Which of these is not a function of the liver?",
+                        options: ["Storage of glycogen", "Production of bile", "Detoxification", "Oxygenation of blood"],
+                        answer: 3,
+                        explanation: "The liver does not oxygenate blood; that is the function of the lungs."
+                    }
+                ]
+            },
+
+            // WAEC Questions
+            waec: {
+                mathematics: [
+                    {
+                        question: "Simplify 2½ + 1¾",
+                        options: ["4¼", "3¾", "4½", "3¼"],
+                        answer: 0,
+                        explanation: "2½ = 5/2, 1¾ = 7/4. Common denominator is 4: 10/4 + 7/4 = 17/4 = 4¼"
+                    },
+                    {
+                        question: "A trader bought 100 oranges for ₦40.00. She sold them in groups of 5 for ₦2.50. What is her percentage profit?",
+                        options: ["25%", "20%", "15%", "10%"],
+                        answer: 0,
+                        explanation: "Cost price per orange = 40/100 = ₦0.40. Selling price per orange = 2.50/5 = ₦0.50. Profit per orange = ₦0.10. Percentage profit = (0.10/0.40) × 100 = 25%."
+                    }
+                ],
+                english: [
+                    {
+                        question: "From the words lettered A to D, choose the word that best completes the sentence. The ____ of the volcano was a terrible sight.",
+                        options: ["eruption", "corruption", "disruption", "interruption"],
+                        answer: 0,
+                        explanation: "Eruption is the correct term for a volcano emitting lava, ash, and gases."
+                    }
+                ],
+                biology: [
+                    {
+                        question: "Which of these is not a characteristic of insects?",
+                        options: ["Three pairs of legs", "Two pairs of wings", "Three body segments", "Four pairs of legs"],
+                        answer: 3,
+                        explanation: "Insects have three pairs of legs, not four."
+                    }
+                ]
+            },
+
+            // BECE Questions
+            bece: {
+                mathematics: [
+                    { question: "Why do governments and businesses collect statistical data?", options: ["For decoration", "To make informed decisions and plan for the future", "To keep people busy", "Because it is a law"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "Which of the following is a reason for collecting data in a community?", options: ["To identify the number of schools needed", "To guess the population", "To make the community look good", "To reduce the number of people"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "What is the main purpose of presenting data in a chart or graph?", options: ["To use more paper", "To make information difficult to understand", "To display data in a visual and easy-to-understand way", "To hide the true results"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which method is used to collect data when every member of a group is studied?", options: ["Sampling", "Census", "Estimation", "Prediction"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "What is the probability of getting a head when a fair coin is tossed once?", options: ["0", "1/2", "1/4", "1"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "The most frequent score in a data set is known as the?", options: ["Mean", "Median", "Mode", "Range"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "The difference between the highest and lowest values in a data set is called the?", options: ["Mean", "Median", "Mode", "Range"], answer: 3, topic: "Everyday Statistics" },
+                    { question: "Which of the following is a measure of central tendency?", options: ["Range", "Mean", "Variance", "Standard Deviation"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "If the marks of 5 students are 70, 80, 80, 85, 90, what is the modal mark?", options: ["70", "80", "85", "90"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "What is the median of the following numbers: 3, 5, 7, 9, 11?", options: ["3", "5", "7", "9"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the mean of the numbers 10, 15, 20, 25, 30?", options: ["15", "20", "25", "30"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "A bag contains 3 red and 5 blue marbles. What is the probability of picking a red marble at random?", options: ["3/5", "3/8", "5/8", "1/3"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "Which of these is a method of primary data collection?", options: ["Reading a newspaper", "Conducting a survey", "Watching television", "Reading a book"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "Data presented using rectangular bars of equal width is called a?", options: ["Pie chart", "Pictogram", "Bar chart", "Line graph"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the range of the data set: 12, 15, 18, 12, 20, 25?", options: ["12", "13", "15", "25"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "The middle value of a data set when arranged in order is the?", options: ["Mean", "Median", "Mode", "Mean deviation"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "A student is chosen at random from a class of 20 boys and 30 girls. What is the probability that the student is a girl?", options: ["1/2", "2/3", "3/5", "3/4"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which of the following is a measure of dispersion?", options: ["Mean", "Mode", "Median", "Range"], answer: 3, topic: "Everyday Statistics" },
+                    { question: "What is the probability of an event that is certain to happen?", options: ["0", "1/2", "1", "2"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "If the mean of 4, 6, x, 10, 12 is 8, what is the value of x?", options: ["6", "7", "8", "9"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which chart is best for showing the proportion of parts to a whole?", options: ["Bar chart", "Line graph", "Pie chart", "Histogram"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the median of the numbers: 8, 3, 5, 1, 7?", options: ["3", "5", "7", "8"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "A die is thrown once. What is the probability of getting a prime number? (1 is not prime)", options: ["1/2", "1/3", "2/3", "5/6"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "The scores of a student in 5 tests are 10, 13, 8, 15, 12. What is the range?", options: ["5", "6", "7", "8"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the mode of the data: 2, 3, 4, 2, 5, 6, 2?", options: ["2", "3", "4", "5"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "If the mean of five numbers is 10 and four of them are 7, 9, 11, 13, what is the fifth number?", options: ["8", "9", "10", "11"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which of the following is a secondary source of data?", options: ["Personal diary", "Population census report", "Data from your own experiment", "Survey you conducted"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "A pie chart is used to represent data that shows?", options: ["Changes over time", "How a whole is divided into parts", "Comparison of different categories", "Frequency distribution"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "What is the probability of getting an even number when a fair die is rolled once?", options: ["1/6", "1/3", "1/2", "2/3"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "The mean of 6, 8, 9, 10, x is 8. What is the value of x?", options: ["5", "6", "7", "8"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which measure of central tendency is most affected by extreme values?", options: ["Mean", "Median", "Mode", "Range"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "The number of times a particular value appears in a data set is called its?", options: ["Frequency", "Range", "Mean", "Median"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "What is the mean of the first five prime numbers?", options: ["5.0", "5.2", "5.6", "5.8"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "A bag contains 4 white and 6 black balls. What is the probability of picking a white ball?", options: ["2/5", "3/5", "1/2", "2/3"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "If the range of a set of scores is 0, what does this imply?", options: ["The mean is 0", "All the scores are the same", "The mode is 0", "The median is 0"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "Which of the following is used to represent data with pictures or symbols?", options: ["Bar chart", "Pie chart", "Pictogram", "Line graph"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the median of the first ten whole numbers (0,1,2,...,9)?", options: ["4", "4.5", "5", "5.5"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "The probability of an event that cannot happen is?", options: ["0", "0.5", "1", "2"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "If the mean of 3, 5, 7, x, 11 is 7, what is the value of x?", options: ["7", "9", "10", "11"], answer: 3, topic: "Everyday Statistics" },
+                    { question: "What is the range of these ages: 12, 14, 16, 18, 20?", options: ["6", "7", "8", "9"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "A chart that uses lines to connect points showing changes over time is a?", options: ["Bar chart", "Pictogram", "Line graph", "Pie chart"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the mode of the data: 5, 7, 8, 5, 9, 7, 5?", options: ["5", "7", "8", "9"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "The mean mark of 5 students is 60. If the marks of four students are 50, 60, 70, 80, what is the mark of the fifth student?", options: ["30", "40", "50", "60"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "From a pack of 52 cards, what is the probability of drawing an ace?", options: ["1/13", "1/26", "1/52", "4/13"], answer: 0, topic: "Everyday Statistics" },
+                    { question: "Which measure of central tendency can be used for data that is not numerical?", options: ["Mean", "Median", "Mode", "Range"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the probability of getting a number less than 4 when a fair die is rolled?", options: ["1/6", "1/3", "1/2", "2/3"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "The heights (in cm) of five players are 150, 155, 160, 165, 170. What is the mean height?", options: ["155 cm", "158 cm", "160 cm", "165 cm"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "If the median of 2, 3, x, 7, 9 is 5, what is the value of x?", options: ["4", "5", "6", "7"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "What is the range of the data: 21, 18, 35, 42, 11?", options: ["11", "21", "31", "42"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "A spinner with 8 equal sectors numbered 1-8 is spun. What is the probability of getting an even number?", options: ["1/8", "1/4", "1/2", "3/4"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "Which of the following is NOT a measure of central tendency?", options: ["Mean", "Variance", "Median", "Mode"], answer: 1, topic: "Everyday Statistics" },
+                    { question: "The mean of five numbers is 12. If four numbers are 10, 11, 13, 14, what is the fifth number?", options: ["10", "11", "12", "13"], answer: 2, topic: "Everyday Statistics" },
+                    { question: "What is the value of 7³?", options: ["21", "49", "343", "2401"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Express 1101₂ as a base ten numeral.", options: ["11", "12", "13", "14"], answer: 2, topic: "Number and Numeration" },
+                    { question: "What is the LCM of 12 and 18?", options: ["6", "36", "72", "108"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Find the HCF of 36 and 60.", options: ["6", "12", "18", "24"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Which of these is a non-rational number?", options: ["0.75", "√4", "√2", "-5"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Simplify 3/4 + 1/6.", options: ["11/12", "4/10", "1/2", "13/12"], answer: 0, topic: "Number and Numeration" },
+                    { question: "What is the sum of the first five prime numbers?", options: ["18", "26", "28", "30"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Convert the decimal number 15 to binary.", options: ["1110₂", "1111₂", "1010₂", "1100₂"], answer: 1, topic: "Number and Numeration" },
+                    { question: "If the HCF of two numbers is 5 and their LCM is 60, and one number is 15, what is the other?", options: ["10", "15", "20", "30"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Which digit in the number 3056.724 is in the hundredths place?", options: ["0", "2", "4", "7"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the value of the digit 7 in the number 47,582?", options: ["7", "70", "700", "7000"], answer: 3, topic: "Number and Numeration" },
+                    { question: "Arrange 3/5, 2/3, and 5/8 in ascending order.", options: ["3/5, 5/8, 2/3", "5/8, 3/5, 2/3", "2/3, 5/8, 3/5", "3/5, 2/3, 5/8"], answer: 0, topic: "Number and Numeration" },
+                    { question: "Subtract 1011₂ from 11010₂.", options: ["1111₂", "1011₂", "1110₂", "1010₂"], answer: 0, topic: "Number and Numeration" },
+                    { question: "A number is divisible by 9 if...", options: ["its last digit is even", "the sum of its digits is divisible by 9", "its last digit is 0 or 5", "it is an even number"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is 3/8 divided by 5/12?", options: ["5/32", "9/10", "10/9", "32/5"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Express 0.375 as a fraction in its lowest terms.", options: ["3/8", "375/1000", "15/40", "6/16"], answer: 0, topic: "Number and Numeration" },
+                    { question: "Find the smallest number by which 108 must be multiplied to make it a perfect square.", options: ["2", "3", "4", "5"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the square root of 1 9/16?", options: ["1 1/4", "1 3/8", "1 1/2", "1 3/4"], answer: 0, topic: "Number and Numeration" },
+                    { question: "If n is an odd number, which of these is an even number?", options: ["n + 1", "2n + 1", "n²", "n² + n"], answer: 0, topic: "Number and Numeration" },
+                    { question: "Calculate 1 1/2 × 2 2/3 ÷ 4/5.", options: ["2.5", "4", "5", "6.25"], answer: 2, topic: "Number and Numeration" },
+                    { question: "What is the sum of all prime numbers between 1 and 10?", options: ["15", "17", "18", "26"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Which of these numbers is a perfect cube?", options: ["100", "125", "200", "225"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Add 25₈ and 37₈.", options: ["54₈", "64₈", "74₈", "84₈"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Find the difference between the LCM and HCF of 8 and 12.", options: ["4", "16", "20", "24"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Round off 48.967 to the nearest tenth.", options: ["48.0", "48.9", "49.0", "49.1"], answer: 2, topic: "Number and Numeration" },
+                    { question: "If 30% of a number is 45, what is the number?", options: ["135", "150", "180", "200"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the multiplicative inverse of -0.2?", options: ["0.2", "2", "-5", "5"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Express 5.25 × 10⁻³ in ordinary form.", options: ["0.00525", "0.0525", "525", "5250"], answer: 0, topic: "Number and Numeration" },
+                    { question: "Identify a composite number from the list: 17, 23, 29, 33.", options: ["17", "23", "29", "33"], answer: 3, topic: "Number and Numeration" },
+                    { question: "Solve for x: 2/3 = x/27", options: ["9", "18", "20", "24"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the total number of base ten numerals in the binary number 101101₂?", options: ["3", "4", "5", "6"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Find the smallest whole number that can be added to 103 to make it divisible by 5.", options: ["1", "2", "3", "4"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Simplify 4 ÷ (1/2 + 1/3).", options: ["4 4/5", "4 2/5", "3 3/5", "2 2/5"], answer: 0, topic: "Number and Numeration" },
+                    { question: "What is the place value of 8 in the number 28471?", options: ["8", "80", "800", "8000"], answer: 3, topic: "Number and Numeration" },
+                    { question: "Which of these is not a rational number?", options: ["0.333...", "π", "0.5", "-7"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Multiply 11₂ by 101₂.", options: ["111₁₂", "1001₂", "1111₂", "1011₂"], answer: 2, topic: "Number and Numeration" },
+                    { question: "Find the square of 2.5.", options: ["5", "5.25", "6.25", "6.5"], answer: 2, topic: "Number and Numeration" },
+                    { question: "A number is multiplied by 5 and then 12 is added. The result is 47. What is the number?", options: ["5", "6", "7", "8"], answer: 2, topic: "Number and Numeration" },
+                    { question: "What is the reciprocal of 2 1/3?", options: ["3/7", "7/3", "2/7", "3/2"], answer: 0, topic: "Number and Numeration" },
+                    { question: "Express 72 as a product of its prime factors.", options: ["2² × 3³", "2³ × 3²", "2⁴ × 3", "6 × 12"], answer: 1, topic: "Number and Numeration" },
+                    { question: "If 2^x = 16, what is x?", options: ["2", "4", "6", "8"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Calculate 0.06 × 0.8.", options: ["0.0048", "0.048", "0.48", "4.8"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Find the average of the first 10 counting numbers.", options: ["5", "5.5", "6", "6.5"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is 25% of ¼ of 1200?", options: ["30", "75", "300", "750"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Subtract 0.928 from 2.05.", options: ["1.022", "1.122", "1.222", "1.322"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Which of these numbers is the smallest? 0.6, 2/3, 65%, 5/8", options: ["0.6", "2/3", "65%", "5/8"], answer: 3, topic: "Number and Numeration" },
+                    { question: "Find the value of 8 + (-5) - (-3).", options: ["0", "6", "10", "16"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the next number in the sequence? 1, 4, 9, 16, 25, ...", options: ["30", "36", "40", "49"], answer: 1, topic: "Number and Numeration" },
+                    { question: "A man shared ₵100.00 among his three children. Kwame got ⅖, Kojo got ⅓, and Yaw got the rest. How much did Yaw get?", options: ["₵20.00", "₵26.67", "₵40.00", "₵53.33"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the estimated product of 19.8 and 5.2 to the nearest whole number?", options: ["100", "103", "104", "110"], answer: 1, topic: "Number and Numeration" },
+                    { question: "If the number 45x2 is divisible by 3, what is the smallest possible value of x?", options: ["0", "1", "2", "3"], answer: 1, topic: "Number and Numeration" },
+                    { question: "Simplify 1.2 ÷ 0.04.", options: ["3", "30", "300", "3000"], answer: 1, topic: "Number and Numeration" },
+                    { question: "What is the sum of 4,567 and 2,389?", options: ["6,856", "6,956", "7,056", "6,946"], answer: 1, topic: "Basic Operation" },
+                    { question: "Subtract 1,785 from 5,000.", options: ["3,115", "3,215", "3,315", "3,415"], answer: 1, topic: "Basic Operation" },
+                    { question: "Calculate: ¾ + ⅖", options: ["1 3/20", "23/20", "1 1/5", "7/9"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: 5½ - 2⅔", options: ["2 5/6", "3 1/6", "2 1/6", "3 5/6"], answer: 0, topic: "Basic Operation" },
+                    { question: "What is the product of ⅜ and ⁴⁄₅?", options: ["12/40", "3/10", "7/13", "8/15"], answer: 1, topic: "Basic Operation" },
+                    { question: "Divide ⁵⁄₆ by ¹⁰⁄₁₂.", options: ["1", "2", "50/72", "25/36"], answer: 0, topic: "Basic Operation" },
+                    { question: "Approximate 7.8561 to 2 decimal places.", options: ["7.85", "7.86", "7.856", "7.80"], answer: 1, topic: "Basic Operation" },
+                    { question: "Approximate 12,567 to the nearest hundred.", options: ["12,500", "12,600", "12,570", "13,000"], answer: 1, topic: "Basic Operation" },
+                    { question: "In base two, what is 101₁₀ + 11₁₀? (First convert to base 2, then add)", options: ["1000₂", "1010₂", "1100₂", "1110₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Subtract 101₁₀ from 1000₁₀ in base two.", options: ["11₂", "101₂", "111₂", "1001₂"], answer: 2, topic: "Basic Operation" },
+                    { question: "Multiply 101₂ by 11₂.", options: ["1111₂", "1001₂", "1011₂", "1110₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Divide 1100₂ by 10₂.", options: ["11₂", "100₂", "101₂", "110₂"], answer: 3, topic: "Basic Operation" },
+                    { question: "A bill for groceries was GH¢ 245.50. If you pay with GH¢ 300, what is your change?", options: ["GH¢ 44.50", "GH¢ 54.50", "GH¢ 55.50", "GH¢ 45.50"], answer: 1, topic: "Basic Operation" },
+                    { question: "An office spent GH¢ 1,200 on rent and GH¢ 850 on utilities. What was the total expenditure?", options: ["GH¢ 1,950", "GH¢ 2,050", "GH¢ 2,150", "GH¢ 1,850"], answer: 1, topic: "Basic Operation" },
+                    { question: "Calculate: (+6) × (-4)", options: ["-24", "+24", "+10", "-10"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: (-18) ÷ (-3)", options: ["+6", "-6", "+21", "-15"], answer: 0, topic: "Basic Operation" },
+                    { question: "Find the sum of -7, +12, and -5.", options: ["-24", "0", "+4", "+10"], answer: 1, topic: "Basic Operation" },
+                    { question: "What is the product of -8 and +9?", options: ["-72", "+72", "-1", "+17"], answer: 0, topic: "Basic Operation" },
+                    { question: "Simplify: 2¾ + 4½", options: ["6 1/4", "7 1/4", "6 3/4", "7 1/2"], answer: 1, topic: "Basic Operation" },
+                    { question: "Simplify: 5⅓ - 2¾", options: ["2 7/12", "3 1/12", "2 1/12", "3 7/12"], answer: 0, topic: "Basic Operation" },
+                    { question: "A trader bought 5 items at GH¢ 12.50 each. What was the total cost?", options: ["GH¢ 60.50", "GH¢ 62.00", "GH¢ 62.50", "GH¢ 65.00"], answer: 2, topic: "Basic Operation" },
+                    { question: "If 8 workers can complete a job in 6 days, how many days would it take 12 workers? (Hint: Inverse proportion)", options: ["4 days", "5 days", "6 days", "9 days"], answer: 0, topic: "Basic Operation" },
+                    { question: "Add the binary numbers: 1101₂ + 1011₂", options: ["11000₂", "10000₂", "10100₂", "11100₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Subtract 1001₂ from 11011₂.", options: ["10010₂", "1010₂", "10001₂", "1110₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Multiply 111₂ by 101₂.", options: ["100011₂", "101011₂", "110011₂", "111111₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Divide 10010₂ by 10₂.", options: ["1001₂", "101₂", "1000₂", "1010₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Approximate the product of 12.3 and 4.8 to the nearest whole number.", options: ["58", "59", "60", "57"], answer: 1, topic: "Basic Operation" },
+                    { question: "A household's water bill for the month was GH¢ 75.60. If they pay GH¢ 80.00, how much change do they get?", options: ["GH¢ 4.40", "GH¢ 5.40", "GH¢ 4.60", "GH¢ 5.60"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: (-5) - (-9)", options: ["+4", "-4", "-14", "+14"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: (+24) ÷ (-6)", options: ["-4", "+4", "-18", "+30"], answer: 0, topic: "Basic Operation" },
+                    { question: "Find ²⁄₅ of GH¢ 50.", options: ["GH¢ 10", "GH¢ 15", "GH¢ 20", "GH¢ 25"], answer: 2, topic: "Basic Operation" },
+                    { question: "If ³⁄₇ of a number is 21, what is the number?", options: ["49", "56", "42", "35"], answer: 0, topic: "Basic Operation" },
+                    { question: "What is the sum of 12.04, 8.9, and 0.76?", options: ["20.8", "21.7", "21.06", "20.96"], answer: 1, topic: "Basic Operation" },
+                    { question: "A book has 250 pages. If you read 30 pages each day, how many days will it take to finish?", options: ["8 days", "9 days", "8.33 days", "9.33 days"], answer: 1, topic: "Basic Operation" },
+                    { question: "Convert 29₁₀ to a binary number.", options: ["11101₂", "11011₂", "11100₂", "10111₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Convert 101101₂ to a base ten number.", options: ["45₁₀", "47₁₀", "43₁₀", "49₁₀"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: 7 × (-8) ÷ (+4)", options: ["-14", "+14", "-12", "+12"], answer: 0, topic: "Basic Operation" },
+                    { question: "Simplify: (-2) × (-3) × (-4)", options: ["-24", "+24", "-9", "+9"], answer: 0, topic: "Basic Operation" },
+                    { question: "A shop made a profit of GH¢ 5.50 on each of 15 items. What was the total profit?", options: ["GH¢ 77.50", "GH¢ 82.50", "GH¢ 80.00", "GH¢ 72.50"], answer: 1, topic: "Basic Operation" },
+                    { question: "A car uses 5.5 litres of fuel per 100km. How much fuel is needed for a 350km journey?", options: ["18.25 L", "19.25 L", "20.5 L", "17.5 L"], answer: 1, topic: "Basic Operation" },
+                    { question: "Add the fractions: ²⁄₃ + ⁴⁄₉", options: ["10/9", "1 1/9", "6/12", "1 2/9"], answer: 1, topic: "Basic Operation" },
+                    { question: "Subtract ¹⁄₆ from ¹⁄₂.", options: ["1/3", "1/4", "1/12", "2/3"], answer: 0, topic: "Basic Operation" },
+                    { question: "Multiply: 2¹⁄₄ × ³⁄₅", options: ["1 7/20", "27/20", "6/20", "1 1/4"], answer: 0, topic: "Basic Operation" },
+                    { question: "Divide: 4 ÷ ²⁄₃", options: ["6", "8/3", "2 2/3", "4 2/3"], answer: 0, topic: "Basic Operation" },
+                    { question: "Approximate 0.0749 to 1 significant figure.", options: ["0.07", "0.08", "0.1", "0.074"], answer: 0, topic: "Basic Operation" },
+                    { question: "The total cost of 3 pens and 2 books is GH¢ 15. If a book costs GH¢ 4.50, what is the cost of one pen?", options: ["GH¢ 1.50", "GH¢ 2.00", "GH¢ 2.50", "GH¢ 3.00"], answer: 1, topic: "Basic Operation" },
+                    { question: "Calculate: 1010₂ - 111₂", options: ["11₂", "111₂", "101₁₂", "110₁₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "Perform the binary multiplication: 110₂ × 10₂", options: ["1100₂", "1110₂", "1010₂", "1000₂"], answer: 0, topic: "Basic Operation" },
+                    { question: "A discount of 15% is applied to a item costing GH¢ 80. What is the new price?", options: ["GH¢ 68", "GH¢ 72", "GH¢ 65", "GH¢ 12"], answer: 0, topic: "Basic Operation" },
+                    { question: "Calculate: (-10) + (+15) + (-7)", options: ["-2", "-12", "+2", "+12"], answer: 0, topic: "Basic Operation" },
+                    { question: "What is the result of (-42) ÷ (+7)?", options: ["-6", "+6", "-35", "+35"], answer: 0, topic: "Basic Operation" },
+                    { question: "A triangle has angles measuring 45° and 55°. What is the measure of the third angle?", options: ["60°", "70°", "80°", "90°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the name of a polygon with five sides?", options: ["Pentagon", "Hexagon", "Heptagon", "Octagon"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "If two triangles are similar, which of the following is always true?", options: ["They are the same size", "Their corresponding angles are equal", "Their areas are equal", "They are right-angled"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "How many faces does a cube have?", options: ["4", "6", "8", "12"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "The bearing of point B from point A is 075°. What is the bearing of point A from point B?", options: ["075°", "165°", "255°", "285°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "In a right-angled triangle, if the opposite side is 3 cm and the hypotenuse is 5 cm, what is sin θ?", options: ["3/4", "3/5", "4/5", "5/3"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "What is the area of a rectangle with length 8 cm and width 5 cm?", options: ["13 cm²", "26 cm²", "40 cm²", "80 cm²"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "An angle that is less than 90° is called?", options: ["Obtuse angle", "Reflex angle", "Acute angle", "Right angle"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the perimeter of a square with a side length of 7 m?", options: ["14 m", "28 m", "42 m", "49 m"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "Which instrument is used to measure an angle?", options: ["Compass", "Divider", "Protractor", "Ruler"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the sum of the interior angles of a quadrilateral?", options: ["180°", "270°", "360°", "540°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "A shape is said to have rotational symmetry if it fits onto itself during a complete rotation of less than how many degrees?", options: ["90°", "180°", "270°", "360°"], answer: 3, topic: "Geometry and Measurement" },
+                    { question: "What is the name of a 3-dimensional shape with a circular base and a curved surface that meets at a point?", options: ["Sphere", "Cone", "Cylinder", "Pyramid"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "The area of a triangle is calculated as?", options: ["length × width", "½ × base × height", "π × radius²", "base + height"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "If the scale of a map is 1:50,000, what does 1 cm on the map represent in real life?", options: ["50 m", "500 m", "5 km", "50 km"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "What is the value of tan 45°?", options: ["0", "0.5", "1", "√3"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "A ladder leans against a wall. This is an example of a real-life application of which concept?", options: ["Area", "Bearing", "Trigonometry", "Symmetry"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the circumference of a circle with diameter 14 cm? (Take π = 22/7)", options: ["22 cm", "44 cm", "66 cm", "88 cm"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "Which of these is a pair of complementary angles?", options: ["30° and 60°", "45° and 135°", "90° and 90°", "100° and 80°"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "How many lines of symmetry does an isosceles triangle have?", options: ["0", "1", "2", "3"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "What is the volume of a cuboid with dimensions 5 cm by 4 cm by 10 cm?", options: ["19 cm³", "100 cm³", "200 cm³", "400 cm³"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "The bearing of a point P from Q is 210°. What is the compass direction of P from Q?", options: ["S30°W", "S30°E", "N30°W", "N30°E"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "In the triangle ABC, if angle A = 90°, AB = 6 cm, and AC = 8 cm, what is the length of BC?", options: ["10 cm", "12 cm", "14 cm", "16 cm"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "What is the area of a trapezium with parallel sides 6 cm and 10 cm, and height 4 cm?", options: ["16 cm²", "24 cm²", "32 cm²", "40 cm²"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "An angle of 200° is classified as a/an?", options: ["Acute angle", "Obtuse angle", "Reflex angle", "Right angle"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the name given to the longest side of a right-angled triangle?", options: ["Adjacent", "Opposite", "Hypotenuse", "Base"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "If the ratio of the corresponding sides of two similar shapes is 2:3, what is the ratio of their areas?", options: ["2:3", "4:6", "4:9", "8:27"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the name of a solid with 6 congruent square faces?", options: ["Cuboid", "Cube", "Pyramid", "Prism"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "Which construction is used to bisect an angle?", options: ["Using a ruler only", "Using a protractor only", "Using a pair of compasses and a ruler", "Using a set square"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "The point where the three medians of a triangle meet is called the?", options: ["Centroid", "Circumcenter", "Incenter", "Orthocenter"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "What is the area of a circle with radius 7 m? (Take π = 22/7)", options: ["44 m²", "154 m²", "308 m²", "616 m²"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "A man walks 5 km North and then 12 km East. How far is he from his starting point?", options: ["7 km", "13 km", "17 km", "19 km"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "What is the value of cos 60°?", options: ["0", "1/2", "√3/2", "1"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "Which of these nets can form a closed cube? (Assume diagrams are implied)", options: ["Net with 5 squares", "Net with 6 squares in a row", "Net with 6 squares in a cross shape", "Net with 7 squares"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "The interior angle of a regular hexagon is?", options: ["60°", "90°", "120°", "180°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "What is the perimeter of an equilateral triangle with side 9 cm?", options: ["9 cm", "18 cm", "27 cm", "36 cm"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "Which of the following is used to construct a perpendicular bisector of a line segment?", options: ["Protractor", "Set square", "Compasses and ruler", "Divider"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "If the scale factor for a volume enlargement is 8, what is the linear scale factor?", options: ["2", "4", "8", "64"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "What is the size of each exterior angle of a regular pentagon?", options: ["36°", "72°", "108°", "180°"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "A water tank is in the shape of a cylinder. If its radius is 1.4 m and height is 5 m, what is its volume? (Take π = 22/7)", options: ["11 m³", "22 m³", "30.8 m³", "44 m³"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "In the diagram (of parallel lines cut by a transversal), if one angle is 70°, which of the following is NOT necessarily equal to 70°?", options: ["Its vertically opposite angle", "Its corresponding angle", "Its alternate angle", "Its co-interior angle"], answer: 3, topic: "Geometry and Measurement" },
+                    { question: "What is the bearing of the North direction?", options: ["000°", "090°", "180°", "270°"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "The formula for the volume of a prism is?", options: ["area of base × height", "length × width × height", "½ × base × height × length", "πr²h"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "If sin θ = cos θ, what is the value of θ?", options: ["0°", "30°", "45°", "90°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "A kite has diagonals of lengths 12 cm and 16 cm. What is its area?", options: ["28 cm²", "48 cm²", "96 cm²", "192 cm²"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "How many edges does a triangular prism have?", options: ["6", "9", "12", "15"], answer: 1, topic: "Geometry and Measurement" },
+                    { question: "From a point on the ground, the angle of elevation to the top of a tree is 30°. If the distance to the tree is 15 m, what is the height of the tree? (Take tan 30° = 1/√3)", options: ["5 m", "5√3 m", "15 m", "15√3 m"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "What is the name of a triangle with all sides of different lengths?", options: ["Isosceles", "Equilateral", "Scalene", "Right-angled"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "The area of a parallelogram is 48 cm². If its base is 12 cm, what is its height?", options: ["4 cm", "6 cm", "8 cm", "10 cm"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "A bearing is always measured from the North direction in a?", options: ["Clockwise direction", "Anticlockwise direction", "Northwards direction", "Southwards direction"], answer: 0, topic: "Geometry and Measurement" },
+                    { question: "What is the size of an angle that is one-quarter of a full rotation?", options: ["45°", "60°", "90°", "120°"], answer: 2, topic: "Geometry and Measurement" },
+                    { question: "If a = 3 and b = 4, what is the value of 2a + 3b?", options: ["18", "17", "16", "15"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "What is the coefficient of x in the expression 5x² - 3x + 7?", options: ["5", "-3", "7", "2"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Solve for x: 2x + 5 = 13", options: ["x = 4", "x = 5", "x = 6", "x = 7"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Simplify: 3(x + 4) - 2(x - 1)", options: ["x + 10", "x + 14", "5x + 10", "5x + 14"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Which of the following represents 'three times a number added to seven'?", options: ["7x + 3", "3x - 7", "3x + 7", "3(x + 7)"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve the inequality: 4y - 7 < 5", options: ["y < 3", "y < 4", "y < 5", "y < 6"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "What is the gradient of the line represented by y = 2x - 5?", options: ["2", "-5", "5", "-2"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Factorize completely: x² - 9", options: ["(x - 3)(x - 3)", "(x + 3)(x + 3)", "(x - 3)(x + 3)", "(x - 9)(x + 1)"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve for x: (x/3) = 5", options: ["x = 15", "x = 8", "x = 5/3", "x = 3/5"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve the simultaneous equations: x + y = 10 and x - y = 2", options: ["x=6, y=4", "x=5, y=5", "x=8, y=2", "x=7, y=3"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "If p = 2 and q = -1, evaluate p² - q²", options: ["3", "4", "5", "6"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "What is the constant term in the expression 4x³ - 2x² + 5x - 8?", options: ["4", "-2", "5", "-8"], answer: 3, topic: "Algebraic Processes" },
+                    { question: "Solve for m: 3m - 8 = m + 4", options: ["m = 6", "m = 4", "m = 8", "m = 12"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Expand and simplify: (2x - 1)(x + 3)", options: ["2x² + 5x - 3", "2x² + 7x - 3", "2x² + 6x - 3", "2x² + 5x + 3"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "The expression 'twice a number subtracted from ten' is written as:", options: ["2x - 10", "10 - 2x", "2(10 - x)", "10x - 2"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Which number line represents the solution to x ≥ -2? [Imagine a number line from -5 to 5]", options: ["Closed circle at -2, arrow right", "Open circle at -2, arrow right", "Closed circle at -2, arrow left", "Open circle at -2, arrow left"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "What is the y-intercept of the line y = -3x + 7?", options: ["-3", "7", "3", "-7"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Factorize: 6x² + 9x", options: ["3x(2x + 3)", "6x(x + 9)", "3(2x² + 3x)", "x(6x + 9)"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve for n: (n/4) + 2 = 6", options: ["n = 16", "n = 12", "n = 8", "n = 4"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Find x and y if: 2x + 3y = 16 and 3x - y = 3", options: ["x=2, y=4", "x=3, y=3", "x=4, y=2", "x=5, y=2"], answer: 3, topic: "Algebraic Processes" },
+                    { question: "Simplify: 5a²b × 2ab³", options: ["10a²b³", "10a³b⁴", "7a³b⁴", "7a²b³"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "How many terms are in the expression 4x²y - 3xy + 7y - 8?", options: ["2", "3", "4", "5"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve for k: 5(k + 2) = 35", options: ["k = 5", "k = 7", "k = 9", "k = 12"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Simplify: (3x + 2y) - (x - 4y)", options: ["2x + 6y", "2x - 2y", "4x + 6y", "4x - 2y"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "If 'q' represents a number, which expression means 'the quotient of the number and 5'?", options: ["q + 5", "q - 5", "5q", "q/5"], answer: 3, topic: "Algebraic Processes" },
+                    { question: "Solve the inequality: -2x > 10", options: ["x > -5", "x < -5", "x > 5", "x < 5"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Which point lies on the line y = 2x - 1? [Imagine a graph]", options: ["(1, 1)", "(2, 3)", "(3, 5)", "(0, -1)"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Factorize completely: 4x² - 25", options: ["(2x - 5)(2x - 5)", "(4x - 5)(x + 5)", "(2x - 5)(2x + 5)", "(4x - 1)(x + 25)"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve for p: (2p/5) = 8", options: ["p = 10", "p = 15", "p = 20", "p = 25"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve simultaneously: 4a + b = 15 and 2a - b = 3", options: ["a=3, b=3", "a=2, b=7", "a=4, b=1", "a=1, b=11"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "If r = -2, what is the value of 4 - 3r?", options: ["-2", "2", "10", "12"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "What is the degree of the polynomial 3x⁴y - 2x²y³ + 7?", options: ["4", "5", "6", "7"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Find the value of x if 7x - 4 = 2x + 16", options: ["x = 2", "x = 3", "x = 4", "x = 5"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Simplify: 2a(3a - 4b) + 5ab", options: ["6a² - 3ab", "6a² + 3ab", "6a² - 8ab + 5ab", "5a² - 3ab"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "The expression for 'the product of a number and the sum of the number and 5' is:", options: ["x(x + 5)", "x + (x + 5)", "x × 5", "5(x + 5)"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Which inequality is represented by the number line with an open circle at 1 and shading to the left? [Imagine a number line]", options: ["x < 1", "x > 1", "x ≤ 1", "x ≥ 1"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Where does the graph of the equation x = 4 intersect the x-axis?", options: ["(0, 4)", "(4, 0)", "It doesn't intersect", "(0, 0)"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Factorize: x² + 7x + 12", options: ["(x+3)(x+4)", "(x+2)(x+6)", "(x+1)(x+12)", "(x-3)(x-4)"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve for t: (t/2) - 3 = 1", options: ["t = 2", "t = 4", "t = 6", "t = 8"], answer: 3, topic: "Algebraic Processes" },
+                    { question: "Find the solution to: 3x + 2y = 11 and x - y = 2", options: ["x=3, y=1", "x=4, y=2", "x=5, y=3", "x=2, y=0"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Evaluate 2x² - 3xy when x = 3 and y = 2", options: ["0", "6", "12", "18"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "In the term -5m²n, what is the literal coefficient?", options: ["-5", "5", "m²n", "-5m²n"], answer: 2, topic: "Algebraic Processes" },
+                    { question: "Solve: 4(2 - z) = 20", options: ["z = -3", "z = -2", "z = 2", "z = 3"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Simplify: (5x + 2y) + (3x - 5y) - (2x - y)", options: ["6x - 2y", "6x + 8y", "10x - 2y", "10x - 4y"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Which phrase describes the expression 10/(x - 2)?", options: ["10 divided by the difference of x and 2", "The difference of x and 2 divided by 10", "10 less than x divided by 2", "2 less than x times 10"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "List all integers that satisfy the inequality -3 ≤ n < 2", options: ["-3, -2, -1, 0, 1", "-3, -2, -1, 0, 1, 2", "-2, -1, 0, 1", "-3, -2, -1, 0"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "What is the equation of the line with a gradient of -2 passing through (0, 5)? [Imagine a graph]", options: ["y = -2x + 5", "y = 2x + 5", "y = -2x - 5", "y = 5x - 2"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Factorize: 2x² - 8x", options: ["2x(x - 4)", "2(x² - 4x)", "x(2x - 8)", "2x(x - 8)"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve for w: (w + 3)/4 = 2", options: ["w = 5", "w = 6", "w = 7", "w = 8"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve the system: y = 2x + 1 and y = x + 4", options: ["x=3, y=7", "x=2, y=5", "x=4, y=5", "x=1, y=3"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "If 2^x = 16, what is the value of x?", options: ["2", "4", "6", "8"], answer: 1, topic: "Algebraic Processes" },
+                    { question: "Simplify: (x⁵ × x³) / x²", options: ["x⁶", "x⁵", "x⁴", "x³"], answer: 0, topic: "Algebraic Processes" },
+                    { question: "Solve for the variable: 0.5x + 1.5 = 4.5", options: ["x = 3", "x = 4", "x = 5", "x = 6"], answer: 3, topic: "Algebraic Processes" }
+                ],
+                english: [
+                    {
+                        question: "Choose the correct plural form of 'child'.",
+                        options: ["childs", "children", "childes", "childern"],
+                        answer: 1,
+                        explanation: "The irregular plural of 'child' is 'children'."
+                    }
+                ],
+                science: [
+                    { question: "Which of the following is a source of water pollution?", options: ["Planting trees", "Dumping industrial waste into rivers", "Using renewable energy", "Composting organic waste"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "A diagram shows a landfill site with seagulls flying overhead. What major environmental problem is this site most associated with?", options: ["Air pollution", "Land pollution", "Water conservation", "Soil erosion"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a living thing?", options: ["Rock", "Water", "Mushroom", "Plastic bottle"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "The chemical symbol 'O' stands for which element?", options: ["Gold", "Oxygen", "Osmium", "Hydrogen"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "If both parents have a heterozygous genotype for a trait (e.g., Tt), what is the probability their child will show the recessive phenotype?", options: ["0%", "25%", "50%", "75%"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Which of the following is an example of a natural environmental hazard?", options: ["Industrial emission", "Oil spill", "Volcanic eruption", "Deforestation"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "The misuse of prescription drugs for recreational purposes is an example of what?", options: ["Drug abuse", "Medical treatment", "First aid", "Nutritional supplement"], answer: 0, topic: "Learning About Your Environment" },
+                    { question: "Which resource is obtained from a living thing?", options: ["Iron ore", "Crude oil", "Cotton", "Marble"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a non-renewable resource from non-living things?", options: ["Solar energy", "Wind energy", "Coal", "Timber"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Boiling water is a method used to prevent which category of family health issues?", options: ["Genetic disorders", "Water-borne diseases", "Respiratory infections", "Vitamin deficiencies"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "A diagram shows a factory emitting dark smoke from its chimneys. This is a primary cause of what?", options: ["Noise pollution", "Land pollution", "Air pollution", "Water pollution"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which characteristic is true for ALL living things?", options: ["They can photosynthesize", "They can move from place to place", "They respire", "They have a backbone"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "What is the common name for the chemical compound H₂O?", options: ["Hydrogen Peroxide", "Carbon Dioxide", "Water", "Table Salt"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Attached earlobes are a recessive trait. If a child has attached earlobes, but both parents have free earlobes, what must be true about the parents' genotypes?", options: ["Both are homozygous dominant", "Both are homozygous recessive", "Both are heterozygous", "One is homozygous and one is heterozygous"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "An earthquake is a sudden and violent shaking of the ground. It is classified as a...", options: ["Technological hazard", "Biological hazard", "Geological hazard", "Meteorological hazard"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Stimulants are a class of drugs that...", options: ["Slow down brain function", "Relieve pain", "Speed up brain and body functions", "Cause hallucinations"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Wood used for building furniture is a resource that comes from...", options: ["Non-living things", "Living things", "Synthetic materials", "Metallic ores"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Petroleum is a resource obtained from non-living things that is primarily used for...", options: ["Food", "Fuel", "Medicine", "Clothing"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Proper disposal of sewage is important for family health to prevent the spread of...", options: ["Airborne viruses", "Vector-borne diseases", "Genetic diseases", "Water and sanitation-related diseases"], answer: 3, topic: "Learning About Your Environment" },
+                    { question: "Which of the following activities contributes most to noise pollution?", options: ["Reading a book", "Low-flying airplanes", "Planting a garden", "Cycling"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "A diagram of a life cycle shows a seed growing into a plant. This demonstrates which characteristic of living things?", options: ["Excretion", "Reproduction", "Growth", "Irritability"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which chemical, often found in car exhaust, is a dangerous air pollutant?", options: ["Water", "Carbon monoxide", "Oxygen", "Glucose"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "In humans, having dimples is a dominant trait (D). What is the genotype of a person without dimples?", options: ["DD", "Dd", "dd", "dD"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a human-induced environmental hazard?", options: ["Hurricane", "Drought", "Chemical factory explosion", "Tornado"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Long-term alcohol abuse can severely damage which organ?", options: ["Heart", "Liver", "Skin", "Hair"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Silk is a valuable resource obtained from...", options: ["The cotton plant", "The silkworm", "Sheep", "Petroleum"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Sand and gravel are non-living resources commonly used in...", options: ["The textile industry", "Construction", "Food production", "Pharmaceuticals"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Vaccination is a key practice in preventive health that protects families from...", options: ["Inherited diseases", "Infectious diseases", "Nutritional deficiencies", "Drug abuse"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "What is the main greenhouse gas contributing to global warming?", options: ["Oxygen", "Nitrogen", "Carbon dioxide", "Helium"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a non-living thing?", options: ["Bacteria", "Virus", "Fire", "Rose bush"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "The pH scale measures how acidic or basic a substance is. A pH of 7 is considered...", options: ["Acidic", "Basic", "Neutral", "Alkaline"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "A family tree diagram shows that a certain disease appears in every generation. This pattern suggests the disease is...", options: ["Recessive", "Dominant", "Caused by environmental factors", "Non-inheritable"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Soil erosion, often caused by deforestation, is an example of...", options: ["Air pollution", "Land degradation", "Water purification", "Reforestation"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a depressant drug?", options: ["Cocaine", "Alcohol", "Caffeine", "Nicotine"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Rubber is a natural resource that originally comes from...", options: ["A tree", "A mine", "A coal deposit", "The ocean"], answer: 0, topic: "Learning About Your Environment" },
+                    { question: "Which of these is a renewable resource from non-living things?", options: ["Natural gas", "Solar energy", "Gold", "Diamonds"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Using a mosquito net protects family health by preventing...", options: ["Cholera", "Malaria", "HIV/AIDS", "Tuberculosis"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "A diagram shows a bird with a plastic ring around its beak. This is a tragic consequence of...", options: ["Air pollution", "Noise pollution", "Land pollution", "Radioactive pollution"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which process do plants use to make their own food?", options: ["Respiration", "Photosynthesis", "Transpiration", "Digestion"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Table salt has the chemical formula NaCl. What two elements does it contain?", options: ["Nitrogen and Chlorine", "Sodium and Chlorine", "Sodium and Carbon", "Nitrogen and Calcium"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "If a homozygous dominant parent (TT) and a homozygous recessive parent (tt) have children, what genotype will all the children have?", options: ["TT", "tt", "Tt", "TTtt"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "A tsunami is a giant sea wave often caused by...", options: ["Deforestation", "An earthquake under the ocean", "Industrial pollution", "Climate change"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Inhalants are dangerous substances that are...", options: ["Injected", "Breathed in through the nose or mouth", "Applied to the skin", "Taken as pills"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Leather for bags and shoes is a resource obtained from...", options: ["Plants", "Rocks", "Animals", "Synthetic processes"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which mineral resource is a primary source of aluminum?", options: ["Bauxite", "Haematite", "Copper ore", "Gold ore"], answer: 0, topic: "Learning About Your Environment" },
+                    { question: "A balanced diet is crucial for family health as it helps to prevent...", options: ["Inherited disorders", "Malnutrition", "Drug abuse", "Air pollution"], answer: 1, topic: "Learning About Your Environment" },
+                    { question: "Which of the following is a biodegradable waste?", options: ["Plastic bag", "Glass bottle", "Aluminum can", "Vegetable peel"], answer: 3, topic: "Learning About Your Environment" },
+                    { question: "A diagram shows a plant growing towards a light source. This is an example of...", options: ["Reproduction", "Growth", "Response to stimuli (Irritability)", "Excretion"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Rusting is a chemical reaction between iron and which component of air?", options: ["Nitrogen", "Carbon dioxide", "Oxygen", "Hydrogen"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which of the following is a renewable resource from living things?", options: ["Fossil fuels", "Natural gas", "Timber", "Minerals"], answer: 2, topic: "Learning About Your Environment" },
+                    { question: "Which of the following is the primary source of energy for the Earth?", options: ["Wind", "Water", "The Sun", "Coal"], answer: 2, topic: "Learning about your environment" },
+                    { question: "What type of energy is stored in a stretched spring?", options: ["Kinetic energy", "Potential energy", "Solar energy", "Electrical energy"], answer: 1, topic: "Learning about your environment" },
+                    { question: "The energy possessed by a moving object is known as?", options: ["Potential energy", "Chemical energy", "Kinetic energy", "Nuclear energy"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Which of these is a non-renewable source of energy?", options: ["Crude oil", "Wind", "Sunlight", "Biomass"], answer: 0, topic: "Learning about your environment" },
+                    { question: "Solar panels are used to convert sunlight into what form of energy?", options: ["Electrical energy", "Sound energy", "Chemical energy", "Nuclear energy"], answer: 0, topic: "Learning about your environment" },
+                    { question: "Which energy transformation occurs in a battery-powered torch?", options: ["Chemical to light", "Light to chemical", "Heat to light", "Sound to light"], answer: 0, topic: "Learning about your environment" },
+                    { question: "What is the main disadvantage of using fossil fuels for energy?", options: ["They are renewable", "They are cheap", "They cause pollution", "They are available everywhere"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Energy from the heat inside the Earth is known as?", options: ["Solar energy", "Hydroelectric energy", "Geothermal energy", "Wind energy"], answer: 2, topic: "Learning about your environment" },
+                    { question: "The diagram below shows a simple circuit with a bulb. What type of energy is the bulb producing? [Diagram: Battery connected to a bulb with wires]", options: ["Light and heat", "Sound and motion", "Chemical and nuclear", "Potential and kinetic"], answer: 0, topic: "Learning about your environment" },
+                    { question: "Which of these activities demonstrates energy conversion from chemical to mechanical energy?", options: ["A solar calculator working", "A person eating food and running", "A lamp lighting a room", "A radio playing music"], answer: 1, topic: "Learning about your environment" },
+                    { question: "What is the original source of energy for most renewable energy resources?", options: ["The Moon", "The Earth's core", "The Sun", "Fossil fuels"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Which of the following is NOT a renewable resource?", options: ["Natural gas", "Wood", "Solar power", "Wind power"], answer: 0, topic: "Learning about your environment" },
+                    { question: "In a hydroelectric power station, the energy of falling water is used to turn a turbine. This is an energy change from?", options: ["Kinetic to electrical", "Potential to kinetic to electrical", "Electrical to potential", "Chemical to electrical"], answer: 1, topic: "Learning about your environment" },
+                    { question: "The ability to do work is known as?", options: ["Force", "Power", "Energy", "Pressure"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Which device is used to convert wind energy into electrical energy?", options: ["Solar panel", "Wind turbine", "Dynamo", "Battery"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Burning a piece of wood demonstrates a change from chemical energy to?", options: ["Light and sound energy", "Heat and light energy", "Electrical and nuclear energy", "Potential and kinetic energy"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Why is it important to conserve energy?", options: ["To save money", "To reduce pollution", "To preserve non-renewable resources", "All of the above"], answer: 3, topic: "Learning about your environment" },
+                    { question: "Which of these is a form of energy that we can hear?", options: ["Light energy", "Sound energy", "Heat energy", "Electrical energy"], answer: 1, topic: "Learning about your environment" },
+                    { question: "The diagram shows a boy at the top of a slide (point A) and at the bottom (point B). At which point does he have the most gravitational potential energy? [Diagram: Simple slide with labels A at top, B at bottom]", options: ["Point A", "Point B", "Midway down the slide", "It is the same at all points"], answer: 0, topic: "Learning about your environment" },
+                    { question: "What is produced when any form of energy is converted from one form to another?", options: ["Only light", "Only heat", "Heat (and sometimes other forms)", "Nothing is produced"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Which of these is an advantage of solar energy?", options: ["It can be harnessed at night easily", "It does not produce air pollution", "It is very cheap to install", "It works efficiently in all weather conditions"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Plant materials and animal waste used as fuel are collectively known as?", options: ["Fossil fuels", "Biomass", "Geothermal matter", "Solar fuel"], answer: 1, topic: "Learning about your environment" },
+                    { question: "What is the energy change in a microphone?", options: ["Sound to electrical", "Electrical to sound", "Chemical to sound", "Light to sound"], answer: 0, topic: "Learning about your environment" },
+                    { question: "Coal, oil, and natural gas are all examples of what?", options: ["Renewable resources", "Fossil fuels", "Biomass", "Geothermal resources"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Which of these is a way to save energy at home?", options: ["Leaving lights on in empty rooms", "Taking long showers", "Using energy-efficient bulbs", "Keeping the fridge door open for long periods"], answer: 2, topic: "Learning about your environment" },
+                    { question: "The energy stored in food and fuels is known as?", options: ["Kinetic energy", "Elastic energy", "Chemical energy", "Mechanical energy"], answer: 2, topic: "Learning about your environment" },
+                    { question: "What is the main purpose of insulating a house?", options: ["To make it look nicer", "To reduce the transfer of heat", "To generate electricity", "To let in more sunlight"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Which renewable energy source uses the gravitational pull of the moon on the Earth's waters?", options: ["Tidal energy", "Wave energy", "Hydroelectric energy", "Geothermal energy"], answer: 0, topic: "Learning about your environment" },
+                    { question: "The diagram shows a simple pendulum swinging. At which point is its kinetic energy the greatest? [Diagram: Pendulum with labels: A at highest point on left, B at midpoint, C at highest point on right]", options: ["Point A", "Point B", "Point C", "Points A and C"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Nuclear energy is obtained from the?", options: ["Burning of uranium", "Splitting of atoms", "Mixing of chemicals", "Heating of water"], answer: 1, topic: "Learning about your environment" },
+                    { question: "Which of these is a non-renewable resource that is used to generate electricity in many power stations?", options: ["Wind", "Sun", "Uranium", "Flowing water"], answer: 2, topic: "Learning about your environment" },
+                    { question: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: 1, topic: "Science and Development" },
+                    { question: "What is the primary source of energy for the solar system?", options: ["The Moon", "The Earth", "The Sun", "Jupiter"], answer: 2, topic: "Science and Development" },
+                    { question: "Which of these is NOT a planet in our solar system?", options: ["Pluto", "Neptune", "Titan", "Mercury"], answer: 2, topic: "Science and Development" },
+                    { question: "What is the name of the galaxy that contains our solar system?", options: ["Andromeda Galaxy", "Milky Way Galaxy", "Sombrero Galaxy", "Triangulum Galaxy"], answer: 1, topic: "Science and Development" },
+                    { question: "The path a planet takes around the sun is called its _____.", options: ["Rotation", "Axis", "Orbit", "Gravity"], answer: 2, topic: "Science and Development" },
+                    { question: "Which planet has the most prominent rings?", options: ["Jupiter", "Saturn", "Uranus", "Neptune"], answer: 1, topic: "Science and Development" },
+                    { question: "What is the closest planet to the Sun?", options: ["Earth", "Venus", "Mercury", "Mars"], answer: 2, topic: "Science and Development" },
+                    { question: "Crude oil is an example of a _____ resource.", options: ["Renewable", "Non-renewable", "Synthetic", "Man-made"], answer: 1, topic: "Science and Development" },
+                    { question: "The process of separating crude oil into its different components is called _____.", options: ["Filtration", "Distillation", "Evaporation", "Condensation"], answer: 1, topic: "Science and Development" },
+                    { question: "Which of these is a petrochemical product?", options: ["Glass", "Plastic", "Wood", "Iron"], answer: 1, topic: "Science and Development" },
+                    { question: "Petrochemicals are derived primarily from _____.", options: ["Coal", "Natural gas and crude oil", "Solar energy", "Wind energy"], answer: 1, topic: "Science and Development" },
+                    { question: "Which fraction of crude oil is used as fuel for jet engines?", options: ["Gasoline", "Kerosene", "Diesel", "Lubricating oil"], answer: 1, topic: "Science and Development" },
+                    { question: "The main element present in all petrochemicals is _____.", options: ["Hydrogen", "Oxygen", "Carbon", "Nitrogen"], answer: 2, topic: "Science and Development" },
+                    { question: "Skill acquisition is important because it _____.", options: ["increases dependency", "limits job opportunities", "promotes self-reliance", "encourages laziness"], answer: 2, topic: "Science and Development" },
+                    { question: "Which of these is an example of a digital skill?", options: ["Carpentry", "Web design", "Bricklaying", "Hair dressing"], answer: 1, topic: "Science and Development" },
+                    { question: "Learning to repair electronic gadgets is an example of _____.", options: ["ethical misconduct", "skill acquisition", "scientific theory", "environmental pollution"], answer: 1, topic: "Science and Development" },
+                    { question: "Apprenticeship is a method of _____.", options: ["wasting time", "acquiring skills", "theorizing", "promoting illiteracy"], answer: 1, topic: "Science and Development" },
+                    { question: "Which skill is most useful for sustainable development in a community?", options: ["Gossiping", "Agriculture", "Littering", "Vandalism"], answer: 1, topic: "Science and Development" },
+                    { question: "A major ethical issue in science is _____.", options: ["cooking food", "playing football", "falsifying research data", "reading books"], answer: 2, topic: "Science and Development" },
+                    { question: "Copying someone else's work and presenting it as your own is called _____.", options: ["invention", "innovation", "plagiarism", "discovery"], answer: 2, topic: "Science and Development" },
+                    { question: "Using scientific knowledge to create harmful weapons raises questions about _____.", options: ["ethics", "profit", "distance", "speed"], answer: 0, topic: "Science and Development" },
+                    { question: "Releasing untreated industrial waste into rivers is unethical because it _____.", options: ["saves money", "promotes development", "causes pollution and harms health", "creates employment"], answer: 2, topic: "Science and Development" },
+                    { question: "Why is informed consent an important ethical principle in human experiments?", options: ["To make the experiment longer", "To protect the rights and welfare of participants", "To increase the cost", "To guarantee a specific result"], answer: 1, topic: "Science and Development" },
+                    { question: "Which of these is the largest planet in our solar system?", options: ["Earth", "Saturn", "Jupiter", "Uranus"], answer: 2, topic: "Science and Development" },
+                    { question: "What causes day and night on Earth?", options: ["The revolution of the Earth around the Sun", "The tilt of the Earth's axis", "The rotation of the Earth on its axis", "The gravitational pull of the Moon"], answer: 2, topic: "Science and Development" },
+                    { question: "Asteroids are found mainly in a belt between the orbits of _____.", options: ["Earth and Mars", "Saturn and Uranus", "Mars and Jupiter", "Mercury and Venus"], answer: 2, topic: "Science and Development" },
+                    { question: "What is a natural satellite?", options: ["A man-made object orbiting a planet", "A star", "A planet", "A moon that orbits a planet"], answer: 3, topic: "Science and Development" },
+                    { question: "Which gas is the main component of natural gas, often found with crude oil?", options: ["Oxygen", "Methane", "Carbon dioxide", "Nitrogen"], answer: 1, topic: "Science and Development" },
+                    { question: "Which fraction from crude oil distillation is used as fuel in cars?", options: ["Bitumen", "Gasoline", "Kerosene", "Diesel"], answer: 1, topic: "Science and Development" },
+                    { question: "LPG (Cooking gas) is a mixture of petroleum gases like _____.", options: ["Propane and Butane", "Methane and Ethane", "Oxygen and Nitrogen", "Carbon and Hydrogen"], answer: 0, topic: "Science and Development" },
+                    { question: "The thick, sticky fraction of crude oil used for road surfacing is _____.", options: ["Gasoline", "Naphtha", "Bitumen", "Kerosene"], answer: 2, topic: "Science and Development" },
+                    { question: "Acquiring a skill in computer programming can lead to a job as a _____.", options: ["Farmer", "Software developer", "Tailor", "Driver"], answer: 1, topic: "Science and Development" },
+                    { question: "Vocational training centers are primarily for _____.", options: ["teaching only history", "acquiring practical skills", "learning ancient languages", "studying astronomy only"], answer: 1, topic: "Science and Development" },
+                    { question: "Which of these is a transferable skill?", options: ["Problem-solving", "Eating", "Sleeping", "Watching television"], answer: 0, topic: "Science and Development" },
+                    { question: "The first step in skill acquisition is often _____.", options: ["immediate mastery", "making a lot of money", "identifying a need or interest", "buying expensive tools"], answer: 2, topic: "Science and Development" },
+                    { question: "Testing drugs on animals without proper regulations is an ethical issue concerning _____.", options: ["animal welfare", "plant growth", "mineral extraction", "weather forecasting"], answer: 0, topic: "Science and Development" },
+                    { question: "A company hiding the negative environmental impact of its new product is guilty of _____.", options: ["good marketing", "ethical behavior", "lack of transparency", "skill acquisition"], answer: 2, topic: "Science and Development" },
+                    { question: "The debate on genetically modified (GM) foods often involves ethical concerns about _____.", options: ["their color", "their long-term health effects and impact on ecosystems", "their price", "their taste"], answer: 1, topic: "Science and Development" },
+                    { question: "Why is it unethical for a scientist to ignore safety protocols in a lab?", options: ["It saves time", "It protects their colleagues from potential harm", "It makes the experiment more exciting", "It is not unethical"], answer: 1, topic: "Science and Development" },
+                    { question: "What is the name of the phenomenon where the Moon passes directly between the Earth and the Sun?", options: ["Lunar Eclipse", "Solar Eclipse", "Full Moon", "New Moon"], answer: 1, topic: "Science and Development" },
+                    { question: "Which planet is known for its extreme temperatures due to a runaway greenhouse effect?", options: ["Mercury", "Venus", "Earth", "Mars"], answer: 1, topic: "Science and Development" },
+                    { question: "Comets are often called 'dirty snowballs' because they are composed mainly of _____.", options: ["rock and metal", "ice and dust", "liquid water", "hot gas"], answer: 1, topic: "Science and Development" },
+                    { question: "Refineries are industrial plants that process _____.", options: ["agricultural products", "crude oil", "sea water", "solar energy"], answer: 1, topic: "Science and Development" },
+                    { question: "Which petrochemical is a raw material for making synthetic fibers like nylon and polyester?", options: ["Naphtha", "Bitumen", "Wax", "Sulphur"], answer: 0, topic: "Science and Development" },
+                    { question: "Polymerization is a process that uses petrochemicals to create _____.", options: ["metals", "plastics", "glass", "ceramics"], answer: 1, topic: "Science and Development" },
+                    { question: "Learning a craft like pottery or weaving helps to preserve _____.", options: ["cultural heritage", "water bodies", "fossil fuels", "the ozone layer"], answer: 0, topic: "Science and Development" },
+                    { question: "Mentorship is important in skill acquisition because it provides _____.", options: ["free food", "guidance and experience", "a lot of money", "entertainment"], answer: 1, topic: "Science and Development" },
+                    { question: "A key ethical principle in science is that experiments should be _____.", options: ["expensive", "conducted in secret", "replicable by others", "quick"], answer: 2, topic: "Science and Development" },
+                    { question: "The unequal access to scientific benefits like advanced medicine between rich and poor countries is an issue of _____.", options: ["justice and equity", "weather", "planetary orbit", "skill variety"], answer: 0, topic: "Science and Development" },
+                    { question: "A scientist who manipulates data to get a desired result is committing _____.", options: ["a great discovery", "scientific fraud", "a skillful act", "a necessary step"], answer: 1, topic: "Science and Development" },
+                    { question: "What is the primary purpose of technology?", options: ["To understand natural phenomena", "To solve human problems and make work easier", "To create complex scientific theories", "To replace all human labor"], answer: 1, topic: "Understanding Technology" },
+                    { question: "Which of the following is an example of underdeveloped technology?", options: ["A smartphone", "A solar-powered calculator", "A wooden hoe", "A jet engine"], answer: 2, topic: "Understanding Technology" },
+                    { question: "The diagram below shows a simple tool. What is its main function?\n[Image: A hammer]", options: ["For cutting", "For fastening", "For hitting or driving nails", "For measuring"], answer: 2, topic: "Understanding Technology" },
+                    { question: "Which of these is a product of information and communication technology?", options: ["A refrigerator", "A television", "A wheelbarrow", "A pair of scissors"], answer: 1, topic: "Understanding Technology" },
+                    { question: "What does ICT stand for?", options: ["International Communication Technology", "Information and Communication Technology", "Integrated Computer Techniques", "Internal Control Transmission"], answer: 1, topic: "Understanding Technology" },
+                    { question: "Which of these tools is primarily used for holding objects firmly together?", options: ["Screwdriver", "Pliers", "Chisel", "Ruler"], answer: 1, topic: "Understanding Technology" },
+                    { question: "The process of creating technological artifacts to meet human needs is known as:", options: ["Science", "Maintenance", "Production", "Innovation"], answer: 2, topic: "Understanding Technology" },
+                    { question: "Which of the following is a characteristic of developed technology?", options: ["It is often made from local materials like wood and stone.", "It requires high technical knowledge to produce and use.", "It is typically used in subsistence farming.", "It has a very simple design with few parts."], answer: 1, topic: "Understanding Technology" },
+                    { question: "The diagram below represents which simple machine?\n[Image: An inclined plane]", options: ["Lever", "Pulley", "Wedge", "Inclined Plane"], answer: 3, topic: "Understanding Technology" },
+                    { question: "Why is maintenance an important aspect of technology?", options: ["To increase the cost of the product", "To ensure tools and machines work efficiently and last longer", "To make the technology look new", "To prevent anyone else from using it"], answer: 1, topic: "Understanding Technology" },
+                    { question: "Which tool is best suited for turning a screw?", options: ["Hammer", "Spanner", "Screwdriver", "Plier"], answer: 2, topic: "Understanding Technology" },
+                    { question: "A computer is an example of technology that falls under which category?", options: ["Transportation Technology", "Construction Technology", "Information and Communication Technology", "Medical Technology"], answer: 2, topic: "Understanding Technology" },
+                    { question: "What is the main difference between science and technology?", options: ["Science is theoretical while technology is practical.", "Technology is older than science.", "Science uses tools while technology does not.", "There is no difference; they are the same."], answer: 0, topic: "Understanding Technology" },
+                    { question: "Which of these is a negative impact of technology?", options: ["Improvement in healthcare", "Environmental pollution", "Faster communication", "Easier transportation"], answer: 1, topic: "Understanding Technology" },
+                    { question: "The diagram shows a tool with two levers and sharp cutting edges. What is it?\n[Image: A pair of scissors]", options: ["Pliers", "Shears", "Scissors", "Chisel"], answer: 2, topic: "Understanding Technology" },
+                    { question: "What is the primary function of a saw?", options: ["To measure length", "To cut materials like wood and metal", "To smooth surfaces", "To join pieces of wood"], answer: 1, topic: "Understanding Technology" },
+                    { question: "The ability to use tools, materials, and knowledge to create new products to solve problems is called:", options: ["Technological skill", "Scientific method", "Creative arts", "Maintenance culture"], answer: 0, topic: "Understanding Technology" },
+                    { question: "Which of these is a product of medical technology?", options: ["A tractor", "An X-ray machine", "A radio", "A bridge"], answer: 1, topic: "Understanding Technology" },
+                    { question: "Which simple machine is a wheel with a rope or chain around it?", options: ["Lever", "Pulley", "Screw", "Wedge"], answer: 1, topic: "Understanding Technology" },
+                    { question: "The systematic application of scientific knowledge to practical tasks is known as:", options: ["Engineering", "Agriculture", "Biology", "Chemistry"], answer: 0, topic: "Understanding Technology" },
+                    { question: "Which of these is a common safety sign shape for prohibition?", options: ["Circular with a diagonal line", "Triangular", "Rectangular", "Square"], answer: 0, topic: "Safety" },
+                    { question: "What is the primary purpose of a fire extinguisher in a workshop?", options: ["To clean tools", "To put out small fires", "To cool down machines", "To store water"], answer: 1, topic: "Safety" },
+                    { question: "When operating a grinding machine, which Personal Protective Equipment (PPE) is most critical?", options: ["Safety goggles and face shield", "Ear muffs", "Safety boots", "Gloves"], answer: 0, topic: "Safety" },
+                    { question: "What should you do first if a small fire starts on a person's clothing?", options: ["Pour water on them", "Tell them to run for help", "Stop, Drop, and Roll", "Use a fire blanket"], answer: 2, topic: "Safety" },
+                    { question: "The diagram shows a person slipping on a wet floor. What does this symbol represent?", options: ["Slippery surface", "Wet paint", "Cleaning in progress", "Water hazard"], answer: 0, topic: "Safety" },
+                    { question: "What is the first step in any rescue operation?", options: ["Start CPR immediately", "Drag the victim to safety", "Ensure the scene is safe for you", "Call for help loudly"], answer: 2, topic: "Safety" },
+                    { question: "For a bleeding wound, what is the correct first aid procedure?", options: ["Apply a tourniquet immediately", "Apply direct pressure with a clean cloth", "Pour iodine on the wound", "Leave it to stop on its own"], answer: 1, topic: "Safety" },
+                    { question: "Which of these is NOT a safe workshop practice?", options: ["Wearing loose clothing around machinery", "Keeping the floor clean and dry", "Using tools only for their intended purpose", "Reporting faulty equipment to the instructor"], answer: 0, topic: "Safety" },
+                    { question: "What does this symbol, a skull and crossbones, typically indicate?", options: ["Radioactive material", "Biohazard", "Poison", "High voltage"], answer: 2, topic: "Safety" },
+                    { question: "How should you treat a minor burn initially?", options: ["Apply butter or oil", "Pop any blisters that form", "Hold under cool running water", "Wrap tightly in a bandage"], answer: 2, topic: "Safety" },
+                    { question: "In the event of an electric shock, what should you do first?", options: ["Grab the person and pull them away", "Turn off the power source at the mains", "Pour water on the person", "Start chest compressions"], answer: 1, topic: "Safety" },
+                    { question: "What is the main reason for not eating or drinking in a workshop?", options: ["To avoid making a mess", "To prevent ingestion of harmful chemicals", "It is disrespectful to the instructor", "Food attracts pests"], answer: 1, topic: "Safety" },
+                    { question: "The diagram shows a hand with a red cross over it near a moving part. What does this mean?", options: ["Do not operate with wet hands", "Do not touch", "Caution, sharp edges", "Wash hands after use"], answer: 1, topic: "Safety" },
+                    { question: "What is the recommended method for checking if a person is unconscious?", options: ["Shake them violently", "Shout loudly and tap their shoulder", "Splash water on their face", "Check their wallet for ID"], answer: 1, topic: "Safety" },
+                    { question: "Which fire extinguisher is suitable for electrical fires?", options: ["Water", "Foam", "Carbon Dioxide (CO2)", "Wet Chemical"], answer: 2, topic: "Safety" },
+                    { question: "Why is it important to have good ventilation in a workshop?", options: ["To keep the room warm", "To remove dust and harmful fumes", "To make it easier to hear instructions", "To reduce the need for lighting"], answer: 1, topic: "Safety" },
+                    { question: "What does the acronym 'ABC' stand for in first aid?", options: ["Airway, Breathing, Circulation", "Ambulance, Bandage, Care", "Alert, Bleeding, Comfort", "Arms, Back, Chest"], answer: 0, topic: "Safety" },
+                    { question: "When lifting a heavy object, you should primarily use the strength from your...?", options: ["Arms and back", "Legs and back", "Arms and legs", "Legs and core"], answer: 3, topic: "Safety" },
+                    { question: "What should you never use water to extinguish?", options: ["Paper fire", "Wood fire", "Oil or grease fire", "Cloth fire"], answer: 2, topic: "Safety" },
+                    { question: "The diagram shows a person falling from a height. Which sign warns of this hazard?", options: ["Falling objects", "Risk of explosion", "Risk of electrocution", "Danger of death"], answer: 0, topic: "Safety" },
+                    { question: "What is the purpose of a safety guard on a machine?", options: ["To make the machine look more professional", "To prevent operators from touching moving parts", "To reduce machine noise", "To keep the machine clean"], answer: 1, topic: "Safety" },
+                    { question: "How should you dispose of oily rags in a workshop?", options: ["Throw them in a regular bin", "Leave them on the workbench", "Place them in a designated metal fire-proof container", "Burn them in a safe area"], answer: 2, topic: "Safety" },
+                    { question: "For a nosebleed, what first aid action should be taken?", options: ["Tilt the head back", "Lie down flat", "Pinch the soft part of the nose and lean forward", "Place a cold cloth on the forehead"], answer: 2, topic: "Safety" },
+                    { question: "What is the universal sign for choking?", options: ["Pointing to the ear", "Clutching the chest", "Clutching the throat", "Waving arms wildly"], answer: 2, topic: "Safety" },
+                    { question: "Which of these is a rule for safe use of hand tools?", options: ["Carry sharp tools in your pocket", "Use a screwdriver as a chisel", "Keep cutting tools sharp and directed away from you", "Throw tools to a coworker to save time"], answer: 2, topic: "Safety" },
+                    { question: "What does a yellow safety sign with a black exclamation mark typically mean?", options: ["Warning or general danger", "Mandatory action", "Prohibition", "Safe condition"], answer: 0, topic: "Safety" },
+                    { question: "What is the first thing you should do if you find a person who has been poisoned?", options: ["Induce vomiting", "Give them milk to drink", "Call for medical help and identify the poison", "Have them walk around to stay awake"], answer: 2, topic: "Safety" },
+                    { question: "Why is it dangerous to wear jewelry in a workshop?", options: ["It can get lost", "It can get caught in moving machinery", "It can cause allergic reactions", "It distracts other workers"], answer: 1, topic: "Safety" },
+                    { question: "The diagram shows a person being supported in a sitting position. This is the recovery position for someone who is...?", options: ["Having a seizure", "Unconscious but breathing", "In cardiac arrest", "Bleeding heavily"], answer: 1, topic: "Safety" },
+                    { question: "What is the correct way to connect an electrical plug?", options: ["The wire colors do not matter", "Ensure the earth wire (green/yellow) is connected to the correct terminal", "Only the live and neutral wires are necessary", "Tuck any excess wire into the plug"], answer: 1, topic: "Safety" },
+                    { question: "How can you prevent tripping hazards in a workshop?", options: ["Run between workstations", "Leave tools and cables on the floor", "Keep walkways clear and tidy", "Wear shoes with long laces"], answer: 2, topic: "Safety" },
+                    { question: "What is the primary goal of first aid?", options: ["To provide definitive medical treatment", "To save life, prevent further injury, promote recovery", "To diagnose the illness or injury", "To replace the need for a doctor"], answer: 1, topic: "Safety" },
+                    { question: "Which type of fire extinguisher is identified by a cream-colored label?", options: ["Water", "Foam", "Dry Powder", "Carbon Dioxide"], answer: 1, topic: "Safety" },
+                    { question: "If a chemical splashes into your eyes, you should immediately...?", options: ["Rub your eyes vigorously", "Go to the hospital", "Flush the eyes with clean, running water for at least 15 minutes", "Put eye drops in"], answer: 2, topic: "Safety" },
+                    { question: "What does a blue circular safety sign indicate?", options: ["A hazard", "A prohibition", "A mandatory action", "Emergency information"], answer: 2, topic: "Safety" },
+                    { question: "When performing CPR on an adult, what is the correct ratio of chest compressions to rescue breaths?", options: ["5 compressions to 1 breath", "15 compressions to 2 breaths", "30 compressions to 2 breaths", "50 compressions to 5 breaths"], answer: 2, topic: "Safety" },
+                    { question: "What is the purpose of an emergency stop button on a machine?", options: ["To start the machine slowly", "To pause the machine for adjustments", "To shut down the machine quickly in an emergency", "To reset the machine's timer"], answer: 2, topic: "Safety" },
+                    { question: "How should you approach a scene where someone is being electrocuted?", options: ["Run to them and push them away", "Walk slowly and carefully to avoid sparks", "Use a non-conductive object (like a wooden broom) to separate them from the source", "Wait for the power to go out"], answer: 2, topic: "Safety" },
+                    { question: "The diagram shows a green square with a white symbol of a running man and a door. This sign means...?", options: ["No running", "Emergency exit", "This way to the toilets", "Danger, keep out"], answer: 1, topic: "Safety" },
+                    { question: "What is the most important rule in workshop safety?", options: ["Always wear a hat", "Always follow the instructor's guidelines", "Always work as fast as possible", "Always try to fix machines yourself first"], answer: 1, topic: "Safety" }
+
+                ]
+            }
         };
 
-        // Initialize Firebase (if not already initialized)
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
+        // Utility Functions
+        function getQuestions(examType, subject) {
+            if (questionBank[examType] && questionBank[examType][subject]) {
+                return questionBank[examType][subject];
+            }
+            return [];
+        }
+
+        function getSubjectsByExamType(examType) {
+            if (questionBank[examType]) {
+                return Object.keys(questionBank[examType]);
+            }
+            return [];
         }
 
         // DOM Elements
-        const accessDenied = document.getElementById('accessDenied');
-        const studentInfo = document.getElementById('studentInfo');
-        const studentNameDisplay = document.getElementById('studentNameDisplay');
-        const studentClassDisplay = document.getElementById('studentClassDisplay');
-        const practiceSection = document.getElementById('practiceSection');
-        const resultStudentName = document.getElementById('resultStudentName');
-        const resultStudentClass = document.getElementById('resultStudentClass');
-
         const setupForm = document.getElementById('setupForm');
         const examInterface = document.getElementById('examInterface');
         const resultsSection = document.getElementById('resultsSection');
@@ -967,13 +1438,9 @@
         let userAnswers = [];
         let timerInterval;
         let timeRemaining = 0;
-        let currentStudent = null;
 
-        // Check authentication state on page load
+        // Event Listeners
         document.addEventListener('DOMContentLoaded', function () {
-            checkAuthState();
-
-            // Set up event listeners for practice functionality
             practiceMode.addEventListener('change', toggleModeOptions);
             examType.addEventListener('change', toggleSubjectSelection);
             startPracticeBtn.addEventListener('click', startExam);
@@ -1002,53 +1469,10 @@
                     });
                 });
             }
+
+            // Initialize page
+            toggleModeOptions();
         });
-
-        // Check if user is authenticated
-        function checkAuthState() {
-            firebase.auth().onAuthStateChanged(user => {
-                if (user) {
-                    // User is signed in, get additional user data from Firestore
-                    const db = firebase.firestore();
-                    db.collection('students').doc(user.uid).get()
-                        .then(doc => {
-                            if (doc.exists) {
-                                currentStudent = {
-                                    uid: user.uid,
-                                    name: doc.data().name,
-                                    class: doc.data().class
-                                };
-
-                                // Display student info and show practice section
-                                studentNameDisplay.textContent = currentStudent.name;
-                                studentClassDisplay.textContent = currentStudent.class;
-                                resultStudentName.textContent = currentStudent.name;
-                                resultStudentClass.textContent = currentStudent.class;
-
-                                studentInfo.classList.remove('hidden');
-                                practiceSection.classList.remove('hidden');
-                                accessDenied.classList.add('hidden');
-                            } else {
-                                // Student document doesn't exist
-                                showAccessDenied();
-                            }
-                        })
-                        .catch(error => {
-                            console.error("Error getting student document:", error);
-                            showAccessDenied();
-                        });
-                } else {
-                    // User is not signed in
-                    showAccessDenied();
-                }
-            });
-        }
-
-        function showAccessDenied() {
-            accessDenied.classList.remove('hidden');
-            studentInfo.classList.add('hidden');
-            practiceSection.classList.add('hidden');
-        }
 
         // Toggle between standard and preferred mode options
         function toggleModeOptions() {
@@ -1081,7 +1505,13 @@
 
         // Start the exam based on user selections
         function startExam() {
+            const studentName = document.getElementById('studentName').value;
             const mode = practiceMode.value;
+
+            if (!studentName) {
+                alert('Please enter your name');
+                return;
+            }
 
             if (!mode) {
                 alert('Please select a practice mode');
@@ -1090,6 +1520,7 @@
 
             // Set up exam configuration based on mode
             examConfig = {
+                studentName,
                 mode,
                 examType: mode === 'standard' ? examType.value : document.getElementById('preferredExamType').value,
                 subjects: [],
@@ -1348,24 +1779,6 @@
             }
         }
 
-        // Create question navigation grid
-        function createQuestionGrid() {
-            questionGrid.innerHTML = '';
-
-            for (let i = 0; i < questions.length; i++) {
-                const gridItem = document.createElement('div');
-                gridItem.className = 'question-grid-item';
-                gridItem.textContent = i + 1;
-
-                gridItem.addEventListener('click', () => {
-                    showQuestion(i);
-                });
-
-                questionGrid.appendChild(gridItem);
-            }
-
-            updateQuestionGrid();
-        }
 
         // Update question grid to show current and answered questions
         function updateQuestionGrid() {
@@ -1578,6 +1991,7 @@
             setupForm.classList.remove('hidden');
 
             // Reset form values
+            document.getElementById('studentName').value = '';
             practiceMode.value = '';
             examType.value = '';
             document.getElementById('preferredExamType').value = '';
