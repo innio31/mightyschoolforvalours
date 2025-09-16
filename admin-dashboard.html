@@ -1,0 +1,1335 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Mighty School For Valours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --color-warning: #f0ad4e;
+            --color-info: #5bc0de;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --sidebar-width: 250px;
+            --header-height: 70px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-background);
+            overflow-x: hidden;
+        }
+
+        /* Dashboard Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding-top: var(--header-height);
+            transition: var(--transition);
+            z-index: 100;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+
+        .sidebar-header .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            margin-bottom: 1rem;
+        }
+
+        .sidebar-header .logo-img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .sidebar-header .logo-text {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--color-white);
+        }
+
+        .admin-info {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background-color: var(--color-primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+
+        .admin-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .admin-role {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+        }
+
+        .menu-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+        }
+
+        .menu-link:hover,
+        .menu-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--color-white);
+        }
+
+        .menu-link i {
+            margin-right: 0.8rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        .submenu {
+            list-style: none;
+            padding-left: 2.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .submenu.active {
+            max-height: 500px;
+        }
+
+        .submenu .menu-link {
+            padding: 0.6rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .has-submenu .menu-link::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            margin-left: auto;
+            transition: var(--transition);
+        }
+
+        .has-submenu.active .menu-link::after {
+            transform: rotate(180deg);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: var(--sidebar-width);
+            padding-top: var(--header-height);
+        }
+
+        /* Header */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            height: var(--header-height);
+            position: fixed;
+            top: 0;
+            right: 0;
+            left: var(--sidebar-width);
+            z-index: 90;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            transition: var(--transition);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            color: var(--color-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .notification-btn,
+        .profile-btn {
+            background: none;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--color-text);
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .notification-btn:hover,
+        .profile-btn:hover {
+            background-color: var(--color-light-gray);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+            font-size: 0.7rem;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Content Area */
+        .content {
+            padding: 1.5rem;
+        }
+
+        /* Welcome Section */
+        .welcome-section {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-dark) 100%);
+            color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-section h1 {
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .welcome-section p {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* Cards */
+        .card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            color: var(--color-dark);
+        }
+
+        .view-all {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .stat-students .stat-icon {
+            background-color: rgba(28, 56, 119, 0.1);
+            color: var(--color-primary);
+        }
+
+        .stat-exams .stat-icon {
+            background-color: rgba(226, 54, 57, 0.1);
+            color: var(--color-secondary);
+        }
+
+        .stat-performance .stat-icon {
+            background-color: rgba(34, 187, 51, 0.1);
+            color: var(--color-success);
+        }
+
+        .stat-activity .stat-icon {
+            background-color: rgba(91, 192, 222, 0.1);
+            color: var(--color-info);
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--color-text);
+            font-size: 0.9rem;
+        }
+
+        /* Performance Section */
+        .performance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .performance-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            padding: 1.5rem;
+        }
+
+        .performance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .performance-title {
+            font-size: 1.1rem;
+            color: var(--color-dark);
+        }
+
+        .performance-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .performance-chart {
+            height: 200px;
+            margin-top: 1rem;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid var(--color-light-gray);
+        }
+
+        th {
+            background-color: var(--color-background);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: var(--color-light-gray);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-dark);
+        }
+
+        .btn-success {
+            background-color: var(--color-success);
+            color: var(--color-white);
+        }
+
+        .btn-success:hover {
+            background-color: #1d9c2b;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-sm {
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--color-light-gray);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(28, 56, 119, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid var(--color-light-gray);
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1rem;
+            background-color: var(--color-white);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--color-light-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: var(--transition);
+        }
+
+        .tab.active {
+            border-bottom-color: var(--color-primary);
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .header {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .welcome-actions {
+                flex-direction: column;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Menu Toggle Button (for mobile) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        @media (max-width: 992px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="40" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <div class="admin-info">
+                    <div class="admin-avatar">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <h3 class="admin-name" id="admin-name">Admin Name</h3>
+                    <p class="admin-role">Administrator</p>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item">
+                    <a href="#dashboard" class="menu-link active">
+                        <i class="fas fa-home"></i> Dashboard
+                    </a>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a href="#student-management" class="menu-link">
+                        <i class="fas fa-user-graduate"></i> Student Management
+                    </a>
+                    <ul class="submenu">
+                        <li class="menu-item">
+                            <a href="#create-student" class="menu-link">Create Student Account</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#view-students" class="menu-link">View All Students</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#import-students" class="menu-link">Import Students</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item has-submenu">
+                    <a href="#exam-management" class="menu-link">
+                        <i class="fas fa-file-alt"></i> Exam Management
+                    </a>
+                    <ul class="submenu">
+                        <li class="menu-item">
+                            <a href="#create-exam" class="menu-link">Create Exam</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#manage-exams" class="menu-link">Manage Exams</a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#exam-results" class="menu-link">Exam Results</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-item">
+                    <a href="#performance" class="menu-link">
+                        <i class="fas fa-chart-line"></i> Performance Analytics
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#reports" class="menu-link">
+                        <i class="fas fa-file-pdf"></i> Reports
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#settings" class="menu-link">
+                        <i class="fas fa-cog"></i> System Settings
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="#" id="logout-btn" class="menu-link">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <button class="menu-toggle" id="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="page-title">Admin Dashboard</h1>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">5</span>
+                    </button>
+                    <button class="profile-btn">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content">
+                <!-- Welcome Section -->
+                <section id="dashboard" class="welcome-section">
+                    <h1>Welcome, <span id="welcome-name">Administrator</span>!</h1>
+                    <p>Manage students, create exams, and monitor performance from your admin dashboard.</p>
+                    <div class="welcome-actions">
+                        <a href="#create-student" class="btn btn-primary">Create Student Account</a>
+                        <a href="#create-exam" class="btn btn-secondary">Create New Exam</a>
+                        <a href="#performance" class="btn btn-outline">View Performance Reports</a>
+                    </div>
+                </section>
+
+                <!-- Stats Overview -->
+                <section>
+                    <div class="stats-grid">
+                        <div class="stat-card stat-students">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-value" id="total-students">0</div>
+                            <div class="stat-label">Total Students</div>
+                        </div>
+                        <div class="stat-card stat-exams">
+                            <div class="stat-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="stat-value" id="total-exams">0</div>
+                            <div class="stat-label">Active Exams</div>
+                        </div>
+                        <div class="stat-card stat-performance">
+                            <div class="stat-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="stat-value" id="avg-performance">0%</div>
+                            <div class="stat-label">Average Performance</div>
+                        </div>
+                        <div class="stat-card stat-activity">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-value" id="recent-activity">0</div>
+                            <div class="stat-label">Recent Exam Attempts</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Student Account -->
+                <section id="create-student" class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Create Student Account</h2>
+                    </div>
+                    <form id="create-student-form">
+                        <div class="form-group">
+                            <label for="student-fullname" class="form-label">Full Name</label>
+                            <input type="text" id="student-fullname" class="form-input"
+                                placeholder="Enter student's full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-admission" class="form-label">Admission Number</label>
+                            <input type="text" id="student-admission" class="form-input"
+                                placeholder="Enter admission number" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-email" class="form-label">Email Address</label>
+                            <input type="email" id="student-email" class="form-input" placeholder="Enter email address"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-password" class="form-label">Password</label>
+                            <input type="password" id="student-password" class="form-input" placeholder="Enter password"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="student-class" class="form-label">Class/Grade</label>
+                            <select id="student-class" class="form-select" required>
+                                <option value="">Select Class</option>
+                                <option value="jss1">JSS 1</option>
+                                <option value="jss2">JSS 2</option>
+                                <option value="jss3">JSS 3</option>
+                                <option value="ss1">SS 1</option>
+                                <option value="ss2">SS 2</option>
+                                <option value="ss3">SS 3</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Student Account</button>
+                    </form>
+                </section>
+
+                <!-- Recent Students -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recently Added Students</h2>
+                        <a href="#view-students" class="view-all">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Admission No.</th>
+                                    <th>Class</th>
+                                    <th>Date Added</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-students-table">
+                                <!-- Student data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Create Exam -->
+                <section id="create-exam" class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Create New Exam</h2>
+                    </div>
+                    <form id="create-exam-form">
+                        <div class="form-group">
+                            <label for="exam-title" class="form-label">Exam Title</label>
+                            <input type="text" id="exam-title" class="form-input" placeholder="Enter exam title"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-subject" class="form-label">Subject</label>
+                            <select id="exam-subject" class="form-select" required>
+                                <option value="">Select Subject</option>
+                                <option value="mathematics">Mathematics</option>
+                                <option value="english">English Language</option>
+                                <option value="physics">Physics</option>
+                                <option value="chemistry">Chemistry</option>
+                                <option value="biology">Biology</option>
+                                <option value="economics">Economics</option>
+                                <option value="government">Government</option>
+                                <option value="history">History</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-class" class="form-label">For Class</label>
+                            <select id="exam-class" class="form-select" required>
+                                <option value="">Select Class</option>
+                                <option value="jss1">JSS 1</option>
+                                <option value="jss2">JSS 2</option>
+                                <option value="jss3">JSS 3</option>
+                                <option value="ss1">SS 1</option>
+                                <option value="ss2">SS 2</option>
+                                <option value="ss3">SS 3</option>
+                                <option value="all">All Classes</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-duration" class="form-label">Duration (minutes)</label>
+                            <input type="number" id="exam-duration" class="form-input"
+                                placeholder="Enter duration in minutes" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exam-questions" class="form-label">Number of Questions</label>
+                            <input type="number" id="exam-questions" class="form-input"
+                                placeholder="Enter number of questions" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Exam Type</label>
+                            <div>
+                                <input type="radio" id="exam-type-practice" name="exam-type" value="practice" checked>
+                                <label for="exam-type-practice">Practice Mode</label>
+                                <input type="radio" id="exam-type-actual" name="exam-type" value="actual"
+                                    style="margin-left: 1rem;">
+                                <label for="exam-type-actual">Exam Mode</label>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Exam</button>
+                    </form>
+                </section>
+
+                <!-- Performance Analytics -->
+                <section id="performance" class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Performance Analytics</h2>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" data-tab="overall">Overall Performance</div>
+                        <div class="tab" data-tab="subject">By Subject</div>
+                        <div class="tab" data-tab="class">By Class</div>
+                    </div>
+                    <div class="tab-content active" id="overall-tab">
+                        <div class="performance-chart">
+                            <canvas id="overallPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="subject-tab">
+                        <div class="performance-chart">
+                            <canvas id="subjectPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="tab-content" id="class-tab">
+                        <div class="performance-chart">
+                            <canvas id="classPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Recent Exam Activity -->
+                <section class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Exam Activity</h2>
+                        <a href="#exam-results" class="view-all">View All</a>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Exam</th>
+                                    <th>Score</th>
+                                    <th>Date/Time</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-exams-table">
+                                <!-- Exam activity data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Firebase App (core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Firebase Firestore -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration - You'll need to replace this with your actual config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
+            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
+            projectId: "mightyschoolforvalours-91aa4",
+            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
+            messagingSenderId: "778024125256",
+            appId: "1:778024125256:web:31d482406bf06a2125a97d",
+            measurementId: "G-C2NY58GRFT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const menuToggle = document.getElementById('menu-toggle');
+        const sidebar = document.getElementById('sidebar');
+        const logoutBtn = document.getElementById('logout-btn');
+        const adminName = document.getElementById('admin-name');
+        const welcomeName = document.getElementById('welcome-name');
+        const createStudentForm = document.getElementById('create-student-form');
+        const createExamForm = document.getElementById('create-exam-form');
+        const totalStudents = document.getElementById('total-students');
+        const totalExams = document.getElementById('total-exams');
+        const avgPerformance = document.getElementById('avg-performance');
+        const recentActivity = document.getElementById('recent-activity');
+
+        // Toggle sidebar on mobile
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+
+        // Handle submenu toggle
+        document.querySelectorAll('.has-submenu').forEach(item => {
+            item.addEventListener('click', function (e) {
+                if (e.target.tagName === 'A') {
+                    this.classList.toggle('active');
+                    const submenu = this.querySelector('.submenu');
+                    submenu.classList.toggle('active');
+                }
+            });
+        });
+
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                this.classList.add('active');
+
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+
+                // Show the corresponding tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+
+        // Check if user is logged in and load data
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in, get admin data
+                db.collection('admins').doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists) {
+                            const adminData = doc.data();
+                            // Update UI with admin data
+                            adminName.textContent = adminData.fullName || 'Administrator';
+                            welcomeName.textContent = adminData.fullName || 'Administrator';
+                        }
+                    })
+                    .catch((error) => {
+                        console.error('Error getting admin document:', error);
+                    });
+
+                // Load dashboard statistics
+                loadDashboardStats();
+                loadRecentStudents();
+                loadRecentExams();
+            } else {
+                // User is not signed in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            auth.signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Error signing out:', error);
+            });
+        });
+
+        // Create student account
+        createStudentForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById('student-fullname').value;
+            const admissionNumber = document.getElementById('student-admission').value;
+            const email = document.getElementById('student-email').value;
+            const password = document.getElementById('student-password').value;
+            const studentClass = document.getElementById('student-class').value;
+
+            // Create user with email and password
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User created, now add to Firestore
+                    const user = userCredential.user;
+
+                    return db.collection('students').doc(user.uid).set({
+                        fullName: fullName,
+                        admissionNumber: admissionNumber,
+                        email: email,
+                        class: studentClass,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        // Also create a user record in the users collection for role management
+                        return db.collection('users').doc(user.uid).set({
+                            role: 'student',
+                            email: email
+                        });
+                    });
+                })
+                .then(() => {
+                    alert('Student account created successfully!');
+                    createStudentForm.reset();
+                    loadDashboardStats();
+                    loadRecentStudents();
+                })
+                .catch((error) => {
+                    console.error('Error creating student account:', error);
+                    alert('Error creating student account: ' + error.message);
+                });
+        });
+
+        // Create exam
+        createExamForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const examTitle = document.getElementById('exam-title').value;
+            const subject = document.getElementById('exam-subject').value;
+            const examClass = document.getElementById('exam-class').value;
+            const duration = document.getElementById('exam-duration').value;
+            const questions = document.getElementById('exam-questions').value;
+            const examType = document.querySelector('input[name="exam-type"]:checked').value;
+
+            // Add exam to Firestore
+            db.collection('exams').add({
+                title: examTitle,
+                subject: subject,
+                class: examClass,
+                duration: parseInt(duration),
+                questions: parseInt(questions),
+                type: examType,
+                status: 'draft',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                createdBy: auth.currentUser.uid
+            })
+                .then(() => {
+                    alert('Exam created successfully!');
+                    createExamForm.reset();
+                    loadDashboardStats();
+                })
+                .catch((error) => {
+                    console.error('Error creating exam:', error);
+                    alert('Error creating exam: ' + error.message);
+                });
+        });
+
+        // Load dashboard statistics
+        function loadDashboardStats() {
+            // Get total students count
+            db.collection('students').get().then((snapshot) => {
+                totalStudents.textContent = snapshot.size;
+            });
+
+            // Get active exams count
+            db.collection('exams').where('status', '==', 'active').get().then((snapshot) => {
+                totalExams.textContent = snapshot.size;
+            });
+
+            // Get average performance (this would need more complex logic based on exam results)
+            // For demo purposes, we'll use a random value
+            const randomPerformance = Math.floor(Math.random() * 30) + 60; // Between 60-90%
+            avgPerformance.textContent = `${randomPerformance}%`;
+
+            // Get recent exam activity count (last 24 hours)
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            db.collection('exam_results')
+                .where('completedAt', '>', yesterday)
+                .get()
+                .then((snapshot) => {
+                    recentActivity.textContent = snapshot.size;
+                });
+        }
+
+        // Load recent students
+        function loadRecentStudents() {
+            const recentStudentsTable = document.getElementById('recent-students-table');
+            recentStudentsTable.innerHTML = '';
+
+            db.collection('students')
+                .orderBy('createdAt', 'desc')
+                .limit(5)
+                .get()
+                .then((snapshot) => {
+                    if (snapshot.empty) {
+                        recentStudentsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">No students found</td></tr>';
+                        return;
+                    }
+
+                    snapshot.forEach((doc) => {
+                        const student = doc.data();
+                        const row = document.createElement('tr');
+
+                        row.innerHTML = `
+                            <td>${student.fullName || 'N/A'}</td>
+                            <td>${student.admissionNumber || 'N/A'}</td>
+                            <td>${student.class || 'N/A'}</td>
+                            <td>${student.createdAt ? student.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline">View</button>
+                            </td>
+                        `;
+
+                        recentStudentsTable.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error loading recent students:', error);
+                });
+        }
+
+        // Load recent exam activity
+        function loadRecentExams() {
+            const recentExamsTable = document.getElementById('recent-exams-table');
+            recentExamsTable.innerHTML = '';
+
+            db.collection('exam_results')
+                .orderBy('completedAt', 'desc')
+                .limit(5)
+                .get()
+                .then((snapshot) => {
+                    if (snapshot.empty) {
+                        recentExamsTable.innerHTML = '<tr><td colspan="5" style="text-align: center;">No exam activity found</td></tr>';
+                        return;
+                    }
+
+                    snapshot.forEach((doc) => {
+                        const result = doc.data();
+                        const row = document.createElement('tr');
+
+                        // Get student name
+                        const studentName = result.studentName || 'Unknown Student';
+
+                        row.innerHTML = `
+                            <td>${studentName}</td>
+                            <td>${result.examTitle || 'Unknown Exam'}</td>
+                            <td>${result.score !== undefined ? `${result.score}%` : 'N/A'}</td>
+                            <td>${result.completedAt ? result.completedAt.toDate().toLocaleString() : 'N/A'}</td>
+                            <td>
+                                <span class="badge ${result.score >= 70 ? 'badge-success' : result.score >= 50 ? 'badge-warning' : 'badge-danger'}">
+                                    ${result.score >= 70 ? 'Excellent' : result.score >= 50 ? 'Average' : 'Poor'}
+                                </span>
+                            </td>
+                        `;
+
+                        recentExamsTable.appendChild(row);
+                    });
+                })
+                .catch((error) => {
+                    console.error('Error loading recent exams:', error);
+                });
+        }
+
+        // Initialize performance charts
+        document.addEventListener('DOMContentLoaded', function () {
+            // Overall Performance Chart
+            const overallCtx = document.getElementById('overallPerformanceChart').getContext('2d');
+            new Chart(overallCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Average Performance',
+                        data: [65, 72, 68, 74, 78, 75],
+                        borderColor: '#1c3877',
+                        backgroundColor: 'rgba(28, 56, 119, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            min: 50,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Subject Performance Chart
+            const subjectCtx = document.getElementById('subjectPerformanceChart').getContext('2d');
+            new Chart(subjectCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Math', 'English', 'Science', 'History', 'Geography'],
+                    datasets: [{
+                        label: 'Average Score',
+                        data: [82, 78, 65, 72, 68],
+                        backgroundColor: '#1c3877'
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+
+            // Class Performance Chart
+            const classCtx = document.getElementById('classPerformanceChart').getContext('2d');
+            new Chart(classCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['JSS 1', 'JSS 2', 'JSS 3', 'SS 1', 'SS 2', 'SS 3'],
+                    datasets: [{
+                        label: 'Average Performance',
+                        data: [75, 68, 72, 78, 80, 76],
+                        backgroundColor: [
+                            '#1c3877', '#2a4a8f', '#385ca7',
+                            '#466ebf', '#5480d7', '#6292ef'
+                        ]
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        });
+
+        // Smooth scrolling for sidebar links
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Update active class
+                document.querySelectorAll('.sidebar-menu a').forEach(item => {
+                    item.classList.remove('active');
+                });
+                this.classList.add('active');
+
+                // Close sidebar on mobile after selection
+                if (window.innerWidth < 992) {
+                    sidebar.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
