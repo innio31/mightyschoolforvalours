@@ -404,7 +404,7 @@
 
         /* Login Modal Styles */
         .login-modal {
-            display: none;
+            display: flex;
             position: fixed;
             top: 0;
             left: 0;
@@ -414,10 +414,6 @@
             z-index: 2000;
             justify-content: center;
             align-items: center;
-        }
-
-        .login-modal.active {
-            display: flex;
         }
 
         .login-container {
@@ -649,16 +645,16 @@
 
 <body>
     <!-- Login Modal -->
-    <div class="login-modal active" id="loginModal">
+    <div class="login-modal" id="loginModal">
         <div class="login-container">
             <div class="login-header">
                 <h2>Login Required</h2>
-                <p>Please sign in to access the CBT Portal</p>
+                <p>Please enter your admission number to access the CBT Portal</p>
             </div>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <label for="admissionNumber">Admission Number</label>
+                    <input type="text" id="admissionNumber" placeholder="Enter your admission number" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Password</label>
@@ -666,7 +662,7 @@
                 </div>
                 <button type="submit" class="login-btn">Sign In</button>
                 <div class="login-error" id="loginError">
-                    Invalid email or password. Please try again.
+                    Invalid admission number or password. Please try again.
                 </div>
             </form>
             <div class="login-footer">
@@ -687,7 +683,7 @@
                 <li><a href="index.html#contact">Contact</a></li>
             </ul>
             <div class="user-info" id="userInfo">
-                <span class="user-email" id="userEmail"></span>
+                <span class="user-email" id="userAdmission"></span>
                 <button class="logout-btn" id="logoutBtn">Logout</button>
             </div>
             <div class="hamburger">
@@ -725,7 +721,7 @@
                             <li><i class="fas fa-check-circle"></i> No time limits</li>
                             <li><i class="fas fa-check-circle"></i> Topic-based practice tests</li>
                         </ul>
-                        <a href="practice.html" class="btn btn-outline">Start Practice</a>
+                        <a href="#" class="btn btn-outline" id="practiceLink">Start Practice</a>
                     </div>
 
                     <div class="mode-card">
@@ -740,7 +736,7 @@
                             <li><i class="fas fa-check-circle"></i> Proctored environment</li>
                             <li><i class="fas fa-check-circle"></i> One-time attempt</li>
                         </ul>
-                        <a href="exam.html" class="btn">Start Exam</a>
+                        <a href="#" class="btn" id="examLink">Start Exam</a>
                     </div>
                 </div>
             </div>
@@ -855,51 +851,110 @@
         const loginForm = document.getElementById('loginForm');
         const loginError = document.getElementById('loginError');
         const userInfo = document.getElementById('userInfo');
-        const userEmail = document.getElementById('userEmail');
+        const userAdmission = document.getElementById('userAdmission');
         const logoutBtn = document.getElementById('logoutBtn');
+        const practiceLink = document.getElementById('practiceLink');
+        const examLink = document.getElementById('examLink');
 
-        // Check authentication status on page load
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                // User is signed in
-                loginModal.classList.remove('active');
-                userInfo.style.display = 'flex';
-                userEmail.textContent = user.email;
-            } else {
-                // User is not signed in
-                loginModal.classList.add('active');
-                userInfo.style.display = 'none';
-            }
+        // Show login modal on page load (always require login)
+        window.addEventListener('load', () => {
+            // Clear any existing authentication
+            localStorage.removeItem('cbtAuthToken');
+            localStorage.removeItem('admissionNumber');
+
+            // Show login modal
+            loginModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
         });
 
         // Handle login form submission
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const admissionNumber = document.getElementById('admissionNumber').value;
             const password = document.getElementById('password').value;
 
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed in successfully
-                    loginError.style.display = 'none';
-                })
-                .catch((error) => {
-                    // Handle errors
-                    loginError.style.display = 'block';
-                    console.error('Login error:', error);
-                });
+            // Simple authentication (replace with your actual authentication logic)
+            if (authenticateUser(admissionNumber, password)) {
+                // Store authentication token and admission number
+                const authToken = generateAuthToken();
+                localStorage.setItem('cbtAuthToken', authToken);
+                localStorage.setItem('admissionNumber', admissionNumber);
+
+                // Hide login modal
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+
+                // Update UI
+                userInfo.style.display = 'flex';
+                userAdmission.textContent = admissionNumber;
+
+                // Enable practice and exam links
+                practiceLink.href = "practice.html";
+                examLink.href = "exam.html";
+
+                // Hide error message
+                loginError.style.display = 'none';
+            } else {
+                // Show error message
+                loginError.style.display = 'block';
+            }
         });
 
         // Handle logout
         logoutBtn.addEventListener('click', () => {
-            firebase.auth().signOut().then(() => {
-                // Sign-out successful
-                userInfo.style.display = 'none';
-                loginModal.classList.add('active');
-            }).catch((error) => {
-                console.error('Logout error:', error);
-            });
+            // Clear authentication data
+            localStorage.removeItem('cbtAuthToken');
+            localStorage.removeItem('admissionNumber');
+
+            // Update UI
+            userInfo.style.display = 'none';
+            loginModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Disable practice and exam links
+            practiceLink.href = "#";
+            examLink.href = "#";
+
+            // Clear form
+            document.getElementById('admissionNumber').value = "";
+            document.getElementById('password').value = "";
+        });
+
+        // Simple authentication function (replace with your actual authentication)
+        function authenticateUser(admissionNumber, password) {
+            // This is a simple example - replace with your actual authentication logic
+            // You might want to validate against a database or predefined list of users
+            const validUsers = {
+                "MSV2023001": "password1",
+                "MSV2023002": "password2",
+                "MSV2023003": "password3"
+                // Add more users as needed
+            };
+
+            return validUsers[admissionNumber] === password;
+        }
+
+        // Generate a simple authentication token
+        function generateAuthToken() {
+            return 'token-' + Math.random().toString(36).substr(2) + '-' + Date.now().toString(36);
+        }
+
+        // Intercept clicks on practice and exam links to check authentication
+        practiceLink.addEventListener('click', (e) => {
+            if (!localStorage.getItem('cbtAuthToken')) {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
+        });
+
+        examLink.addEventListener('click', (e) => {
+            if (!localStorage.getItem('cbtAuthToken')) {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+            }
         });
     </script>
 </body>
