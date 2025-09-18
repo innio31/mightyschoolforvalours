@@ -402,126 +402,6 @@
             opacity: 0.7;
         }
 
-        /* Login Modal Styles */
-        .login-modal {
-            display: flex;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .login-container {
-            background-color: white;
-            padding: 40px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .login-header h2 {
-            color: var(--primary);
-            margin-bottom: 10px;
-        }
-
-        .login-header p {
-            color: #666;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--dark);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-btn:hover {
-            background-color: #e06e1d;
-        }
-
-        .login-footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-
-        .login-footer a {
-            color: var(--secondary);
-            text-decoration: none;
-        }
-
-        .login-error {
-            color: #e74c3c;
-            margin-top: 10px;
-            text-align: center;
-            display: none;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
-        }
-
-        .user-email {
-            margin-right: 15px;
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .logout-btn {
-            background-color: transparent;
-            border: 1px solid var(--secondary);
-            color: var(--secondary);
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-
-        .logout-btn:hover {
-            background-color: var(--secondary);
-            color: white;
-        }
-
         /* Responsive Design */
         @media (max-width: 992px) {
             .cbt-hero-content h1 {
@@ -588,10 +468,6 @@
             .instructions {
                 padding: 30px 20px;
             }
-
-            .user-info {
-                display: none;
-            }
         }
 
         @media (max-width: 480px) {
@@ -618,59 +494,14 @@
             .mode-icon {
                 font-size: 2.8rem;
             }
-
-            .login-container {
-                padding: 25px;
-            }
         }
     </style>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script>
-        // Firebase configuration - Replace with your actual config
-        const firebaseConfig = {
-            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
-            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
-            projectId: "mightyschoolforvalours-91aa4",
-            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
-            messagingSenderId: "778024125256",
-            appId: "1:778024125256:web:31d482406bf06a2125a97d",
-            measurementId: "G-C2NY58GRFT"
-        };
 
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-    </script>
 </head>
 
 <body>
-    <!-- Login Modal -->
-    <div class="login-modal" id="loginModal">
-        <div class="login-container">
-            <div class="login-header">
-                <h2>Login Required</h2>
-                <p>Please enter your admission number to access the CBT Portal</p>
-            </div>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label for="admissionNumber">Admission Number</label>
-                    <input type="text" id="admissionNumber" placeholder="Enter your admission number" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Enter your password" required>
-                </div>
-                <button type="submit" class="login-btn">Sign In</button>
-                <div class="login-error" id="loginError">
-                    Invalid admission number or password. Please try again.
-                </div>
-            </form>
-            <div class="login-footer">
-                <p>Don't have an account? <a href="#" id="signupLink">Contact administrator</a></p>
-            </div>
-        </div>
-    </div>
-
     <header>
         <div class="container header-container">
             <div class="logo">
@@ -682,10 +513,6 @@
                 <li><a href="#instructions">CBT Portal</a></li>
                 <li><a href="index.html#contact">Contact</a></li>
             </ul>
-            <div class="user-info" id="userInfo">
-                <span class="user-email" id="userAdmission"></span>
-                <button class="logout-btn" id="logoutBtn">Logout</button>
-            </div>
             <div class="hamburger">
                 <i class="fas fa-bars"></i>
             </div>
@@ -721,7 +548,7 @@
                             <li><i class="fas fa-check-circle"></i> No time limits</li>
                             <li><i class="fas fa-check-circle"></i> Topic-based practice tests</li>
                         </ul>
-                        <a href="#" class="btn btn-outline" id="practiceLink">Start Practice</a>
+                        <a href="practice.html" class="btn btn-outline">Start Practice</a>
                     </div>
 
                     <div class="mode-card">
@@ -736,7 +563,7 @@
                             <li><i class="fas fa-check-circle"></i> Proctored environment</li>
                             <li><i class="fas fa-check-circle"></i> One-time attempt</li>
                         </ul>
-                        <a href="#" class="btn" id="examLink">Start Exam</a>
+                        <a href="exam.html" class="btn">Start Exam</a>
                     </div>
                 </div>
             </div>
@@ -844,117 +671,6 @@
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             observer.observe(el);
-        });
-
-        // Authentication Logic
-        const loginModal = document.getElementById('loginModal');
-        const loginForm = document.getElementById('loginForm');
-        const loginError = document.getElementById('loginError');
-        const userInfo = document.getElementById('userInfo');
-        const userAdmission = document.getElementById('userAdmission');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const practiceLink = document.getElementById('practiceLink');
-        const examLink = document.getElementById('examLink');
-
-        // Show login modal on page load (always require login)
-        window.addEventListener('load', () => {
-            // Clear any existing authentication
-            localStorage.removeItem('cbtAuthToken');
-            localStorage.removeItem('admissionNumber');
-
-            // Show login modal
-            loginModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        });
-
-        // Handle login form submission
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-
-            const admissionNumber = document.getElementById('admissionNumber').value;
-            const password = document.getElementById('password').value;
-
-            // Simple authentication (replace with your actual authentication logic)
-            if (authenticateUser(admissionNumber, password)) {
-                // Store authentication token and admission number
-                const authToken = generateAuthToken();
-                localStorage.setItem('cbtAuthToken', authToken);
-                localStorage.setItem('admissionNumber', admissionNumber);
-
-                // Hide login modal
-                loginModal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-
-                // Update UI
-                userInfo.style.display = 'flex';
-                userAdmission.textContent = admissionNumber;
-
-                // Enable practice and exam links
-                practiceLink.href = "practice.html";
-                examLink.href = "exam.html";
-
-                // Hide error message
-                loginError.style.display = 'none';
-            } else {
-                // Show error message
-                loginError.style.display = 'block';
-            }
-        });
-
-        // Handle logout
-        logoutBtn.addEventListener('click', () => {
-            // Clear authentication data
-            localStorage.removeItem('cbtAuthToken');
-            localStorage.removeItem('admissionNumber');
-
-            // Update UI
-            userInfo.style.display = 'none';
-            loginModal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-
-            // Disable practice and exam links
-            practiceLink.href = "#";
-            examLink.href = "#";
-
-            // Clear form
-            document.getElementById('admissionNumber').value = "";
-            document.getElementById('password').value = "";
-        });
-
-        // Simple authentication function (replace with your actual authentication)
-        function authenticateUser(admissionNumber, password) {
-            // This is a simple example - replace with your actual authentication logic
-            // You might want to validate against a database or predefined list of users
-            const validUsers = {
-                "MSV2023001": "password1",
-                "MSV2023002": "password2",
-                "MSV2023003": "password3"
-                // Add more users as needed
-            };
-
-            return validUsers[admissionNumber] === password;
-        }
-
-        // Generate a simple authentication token
-        function generateAuthToken() {
-            return 'token-' + Math.random().toString(36).substr(2) + '-' + Date.now().toString(36);
-        }
-
-        // Intercept clicks on practice and exam links to check authentication
-        practiceLink.addEventListener('click', (e) => {
-            if (!localStorage.getItem('cbtAuthToken')) {
-                e.preventDefault();
-                loginModal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        });
-
-        examLink.addEventListener('click', (e) => {
-            if (!localStorage.getItem('cbtAuthToken')) {
-                e.preventDefault();
-                loginModal.style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
         });
     </script>
 </body>
