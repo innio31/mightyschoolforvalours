@@ -140,18 +140,6 @@
             opacity: 1;
         }
 
-        .slide-1 {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-        }
-
-        .slide-2 {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-        }
-
-        .slide-3 {
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1560785496-3c9d27877182?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
-        }
-
         .hero-content {
             max-width: 800px;
             padding: 2rem;
@@ -285,46 +273,79 @@
             color: var(--color-primary);
         }
 
-        /* News & Events */
-        .news-highlights {
+        /* Quotes Section */
+        .quotes-section {
+            background-color: var(--color-background);
+        }
+
+        .quotes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
 
-        .news-card {
+        .quote-card {
             background-color: var(--color-white);
+            padding: 2rem;
             border-radius: 8px;
-            overflow: hidden;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .quote-author {
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Why Choose Us Section */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: 8px;
             box-shadow: var(--shadow);
             transition: var(--transition);
         }
 
-        .news-card:hover {
+        .feature-card:hover {
             transform: translateY(-5px);
         }
 
-        .news-image {
-            height: 200px;
-            background-color: var(--color-light-gray);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .news-image i {
-            font-size: 3rem;
+        .feature-icon {
+            font-size: 2.5rem;
             color: var(--color-primary);
+            margin-bottom: 1rem;
         }
 
-        .news-content {
+        .feature-title {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--color-dark);
+        }
+
+        /* Strategic Focus Section */
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .focus-item {
+            background-color: var(--color-white);
             padding: 1.5rem;
-        }
-
-        .news-date {
-            color: var(--color-primary);
-            font-weight: 500;
-            margin: 0.5rem 0;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--color-secondary);
         }
 
         /* Footer */
@@ -489,7 +510,6 @@
                         <li><a href="about.html" class="nav-link">About Us</a></li>
                         <li><a href="academics.html" class="nav-link">Academics</a></li>
                         <li><a href="admissions.html" class="nav-link">Admissions</a></li>
-                        <li><a href="news.html" class="nav-link">News & Events</a></li>
                     </ul>
                 </nav>
             </div>
@@ -499,19 +519,20 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-slider">
-            <div class="slide">
-                <img src="images/slide1.jpg" alt="Slide 1" style="width:100%; height:100%; object-fit: cover;">
+            <div>
+                <img src="images/slide1.jpg" alt="School Budiling">
             </div>
-            <div class="slide">
-                <img src="images/slide2.jpg" alt="Slide 2" style="width:100%; height:100%; object-fit: cover;">
+            <div>
+                <img src="images/slide2.jpg" alt="School Budiling">
+
             </div>
         </div>
         <div class="hero-content">
-            <h1 class="hero-title">Welcome to <br>Mighty School For Valours</h1>
-            <p class="hero-subtitle">Broad and Balanced Education</p>
+            <h1 class="hero-title">Mighty School For Valours</h1>
+            <p class="hero-subtitle">Building Strong Foundations for Lifelong Success</p>
             <div class="hero-cta">
                 <a href="admissions.html#apply" class="btn btn-primary">Apply Now</a>
-                <a href="schoolportal.html" target="_blank" class="btn btn-secondary">School Portal</a>
+                <a href="cbt.html" target="_blank" class="btn btn-primary">CBT Portal</a>
             </div>
         </div>
     </section>
@@ -522,20 +543,20 @@
             <h2 class="section-title">Why Choose Us?</h2>
             <div class="quick-facts">
                 <div class="fact">
-                    <div class="fact-number">Since 2003</div>
+                    <div class="fact-number">Since 2013</div>
                     <p>Years of Educational Excellence</p>
                 </div>
                 <div class="fact">
-                    <div class="fact-number">500+</div>
-                    <p>Successful Alumni</p>
+                    <div class="fact-number">100%</div>
+                    <p>SSCE Pass Rate (Last 4 Years)</p>
                 </div>
                 <div class="fact">
-                    <div class="fact-number">10+</div>
-                    <p>Clubs & Societies</p>
+                    <div class="fact-number">Award</div>
+                    <p>Ogun State Governor's Essay Competition 2018</p>
                 </div>
                 <div class="fact">
-                    <div class="fact-number">98%</div>
-                    <p>University Acceptance</p>
+                    <div class="fact-number">21st</div>
+                    <p>Century Curriculum & Facilities</p>
                 </div>
             </div>
         </div>
@@ -546,75 +567,148 @@
         <div class="container">
             <div class="welcome-container">
                 <div class="director-image">
-                    <img src="images/director.png" alt="director" width="auto" height="auto">
-                    </i>
+                    <img src="images/director.png" alt="Director of Schools" width="100%" height="auto">
                 </div>
                 <div>
-                    <h2 class="section-title" style="text-align: center;">A Message from Our Director</h2>
-                    <p>At Mighty School For Valours, we believe in nurturing not just academic excellence, but also
-                        character, leadership, and a sense of social responsibility. Our dedicated faculty and
-                        state-of-the-art facilities provide an environment where students can discover their passions
-                        and develop their unique talents.</p>
-                    <p>We take pride in our holistic approach to education, combining rigorous academics with a wide
-                        range of extracurricular activities that help students become well-rounded individuals ready to
-                        face the challenges of the future.</p>
-                    <a href="about.html#leadership" class="btn btn-primary" style="margin-top: 1.5rem;">Meet Our
-                        Leadership</a>
+                    <h2 class="section-title">From the Desk of the Director of Schools</h2>
+                    <p><strong>THE STRENGTH OF EVERY HIGH-RISE BUILDING IS IN ITS FOUNDATION</strong></p>
+                    <p>No one half-baked ever gets to the pinnacle of success in life. We live in an increasingly
+                        competitive world where the best choices are reserved for the brightest and best.</p>
+                    <p>Furthermore, as the saying goes, a journey of a thousand miles begins with the first right step.
+                        That right step for today's child is being given the best possible education and training as a
+                        springboard to a future of distinction. Commitment to the best standards in education has been
+                        our watchword at MIGHTY SCHOOL FOR VALOURS since we registered our first pupil in 2013.</p>
+                    <p>For close to a decade now, MIGHTY SCHOOL FOR VALOURS has remained focused on the pursuit of its
+                        vision -- that of producing good citizens who will be literate, disciplined, hardworking, and
+                        God-fearing through the help of the divine creator/counselor.</p>
+                    <a href="about.html#leadership" class="btn btn-primary" style="margin-top: 1.5rem;">Learn More About
+                        Our Vision</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- News & Events Highlights -->
-    <section class="section" style="background-color: var(--color-background);">
+    <!-- Quotes Section -->
+    <section class="section quotes-section">
         <div class="container">
-            <h2 class="section-title">Latest News & Events</h2>
-            <div class="news-highlights">
-                <div class="news-card">
-                    <div class="news-image">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="news-content">
-                        <h3>Annual Graduation Ceremony</h3>
-                        <div class="news-date">June 15, 2023</div>
-                        <p>Our annual graduation ceremony will be held on June 15th. All parents and guardians are
-                            invited to celebrate our students' achievements.</p>
-                        <a href="news.html#graduation" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
-                            More</a>
-                    </div>
+            <h2 class="section-title">Inspiring Quotes</h2>
+            <div class="quotes-grid">
+                <div class="quote-card">
+                    <p class="quote-text">"You are never given a wish without also being given the power to make it come
+                        true. You may have to work for it, however."</p>
+                    <p class="quote-author">- Richard Bach</p>
                 </div>
-                <div class="news-card">
-                    <div class="news-image">
-                        <i class="fas fa-medal"></i>
-                    </div>
-                    <div class="news-content">
-                        <h3>Science Olympiad Winners</h3>
-                        <div class="news-date">May 28, 2023</div>
-                        <p>Our students have once again excelled in the National Science Olympiad, bringing home three
-                            gold medals and the overall championship trophy.</p>
-                        <a href="news.html#olympiad" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
-                            More</a>
-                    </div>
+                <div class="quote-card">
+                    <p class="quote-text">"Education is not just a preparation for life, Education is life itself"</p>
                 </div>
-                <div class="news-card">
-                    <div class="news-image">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="news-content">
-                        <h3>Open Day Announcement</h3>
-                        <div class="news-date">July 10, 2023</div>
-                        <p>We are excited to announce our annual Open Day on July 10th. Prospective students and parents
-                            are welcome to tour our campus and meet our faculty.</p>
-                        <a href="news.html#open-day" class="btn btn-outline"
-                            style="color: var(--color-primary); border-color: var(--color-primary);">Read
-                            More</a>
-                    </div>
+                <div class="quote-card">
+                    <p class="quote-text">"The price of discipline is always less than the pain of regrets"</p>
+                    <p class="quote-author">- Nido Qubein</p>
+                </div>
+                <div class="quote-card">
+                    <p class="quote-text">"A child mis-educated is a child lost"</p>
+                    <p class="quote-author">- John F. Kennedy</p>
+                </div>
+                <div class="quote-card">
+                    <p class="quote-text">"There is a brilliant child locked inside every student"</p>
+                    <p class="quote-author">- Marva Collins</p>
+                </div>
+                <div class="quote-card">
+                    <p class="quote-text">"Imagination is more important than knowledge. For knowledge is limited to all
+                        we now know and understand, while imagination embraces the entire world, and all there ever will
+                        be to know and understand."</p>
+                    <p class="quote-author">- Albert Einstein</p>
                 </div>
             </div>
-            <div style="text-align: center; margin-top: 3rem;">
-                <a href="news.html" class="btn btn-primary">View All News & Events</a>
+        </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Why Choose Mighty School For Valours</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-award"></i>
+                    </div>
+                    <h3 class="feature-title">Full Accreditations</h3>
+                    <p>Our school maintains full accreditation with all relevant educational bodies, ensuring the
+                        highest standards of education.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3 class="feature-title">Regularly Updated Curriculum</h3>
+                    <p>We continuously update our curriculum to meet 21st-century educational standards and prepare
+                        students for future challenges.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-futbol"></i>
+                    </div>
+                    <h3 class="feature-title">Strength in Co-curricular Activities</h3>
+                    <p>We offer a wide range of co-curricular activities to develop well-rounded individuals with
+                        diverse interests and talents.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="feature-title">Vocational & Technological Training</h3>
+                    <p>Our programs include vocational, technological, and construction training to equip students with
+                        practical skills.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Strategic Focus Section -->
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Our Strategic Focus</h2>
+            <div class="focus-grid">
+                <div class="focus-item">Developing and improving the creative and innovative abilities of students and
+                    teachers.</div>
+                <div class="focus-item">Expanding the level of science and mathematics teaching and learning.</div>
+                <div class="focus-item">Implementing an information science and technology culture.</div>
+                <div class="focus-item">Emphasizing scientific sport development.</div>
+                <div class="focus-item">Fostering an entrepreneurship culture.</div>
+                <div class="focus-item">Instilling positive cultural life values and discipline in the teaching and
+                    learning programme.</div>
+                <div class="focus-item">Raising the academic excellence and performance of students.</div>
+                <div class="focus-item">Developing the level of human capital (via knowledge, skills and attitude
+                    training) of students and teachers.</div>
+                <div class="focus-item">Managing the quality of the teaching and learning programmes in the schools.
+                </div>
+                <div class="focus-item">Contributing to a culture of life-long learning amongst students and teachers.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission & Vision Section -->
+    <section class="section">
+        <div class="container">
+            <div class="welcome-container">
+                <div>
+                    <h2 class="section-title">Our Mission & Vision</h2>
+                    <div class="feature-card" style="margin-bottom: 2rem;">
+                        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">OUR MISSION</h3>
+                        <p>TO DELIVER EXCELLENT AND ALL ROUND EDUCATION TO HAPPY, SOUND AND ASSERTIVE INTELLECTUALS BY
+                            WHICH THEY WILL BE FIT TO TAKE UP ANY DISCIPLINED ROLE IN LIFE AND FACE THE CHALLENGES OF
+                            LIFE BOLDLY.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">OUR VISION</h3>
+                        <p>TO PRODUCE GOOD CITIZENS WHO WILL BE LITERATE, DISCIPLINED, HARDWORKING AND GOD FEARING
+                            THROUGH THE HELP OF THE DIVINE CREATOR/COUNSELLOR.</p>
+                    </div>
+                </div>
+                <div class="director-image">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
             </div>
         </div>
     </section>
@@ -625,7 +719,7 @@
             <div class="footer-grid">
                 <div>
                     <h3 class="footer-heading">Mighty School For Valours</h3>
-                    <p>Excellence in Education Since 2003</p>
+                    <p>Excellence in Education Since 2013</p>
                     <div class="social-icons">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
@@ -657,7 +751,6 @@
                 <p>&copy; 2025 Mighty School For Valours. All Rights Reserved.</p>
                 <p>Powered by <a href="https://digskills.netlify.app" target="_blank"
                         rel="noopener noreferrer">DigSkills</a></p>
-
             </div>
         </div>
     </footer>
