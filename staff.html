@@ -555,12 +555,12 @@
         <div class="login-container">
             <div class="login-header">
                 <h2>Staff Login</h2>
-                <p>Enter your staff credentials</p>
+                <p>Enter your Staff ID and password</p>
             </div>
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="loginEmail">Email</label>
-                    <input type="email" id="loginEmail" class="form-control" placeholder="teacher@mightyschool.edu.ng"
+                    <label for="loginStaffId">Staff ID</label>
+                    <input type="text" id="loginStaffId" class="form-control" placeholder="Enter your Staff ID"
                         required>
                 </div>
                 <div class="form-group">
@@ -570,7 +570,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
                 <div id="loginError" class="login-error">
-                    Invalid email or password
+                    Invalid Staff ID or password
                 </div>
             </form>
         </div>
@@ -1278,13 +1278,13 @@
         async function handleLogin(e) {
             e.preventDefault();
 
-            const email = document.getElementById('loginEmail').value;
+            const staffId = document.getElementById('loginStaffId').value;
             const password = document.getElementById('loginPassword').value;
 
             try {
-                // Check if user exists in Firestore
+                // Check if user exists in Firestore using staffId
                 const usersSnapshot = await db.collection('users')
-                    .where('email', '==', email)
+                    .where('staffId', '==', staffId)
                     .where('password', '==', password)
                     .where('role', '==', 'staff')
                     .get();

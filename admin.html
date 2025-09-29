@@ -660,7 +660,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Email</th>
+                                        <th>Staff Id</th>
                                         <th>Subjects</th>
                                         <th>Classes</th>
                                         <th>Status</th>
@@ -1037,8 +1037,8 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="staffEmail">Email</label>
-                        <input type="email" id="staffEmail" class="form-control" required>
+                        <label for="staffId">Staff ID</label>
+                        <input type="text" id="staffId" class="form-control" placeholder="Enter Staff ID" required>
                     </div>
                     <div class="form-group">
                         <label for="staffSubjects">Assign Subjects</label>
@@ -1776,7 +1776,7 @@
                 const row = document.createElement('tr');
                 row.innerHTML = `
             <td>${staff.firstName} ${staff.lastName}</td>
-            <td>${staff.email}</td>
+            <td>${staff.staffId}</td>
             <td>${subjectNames}</td>
             <td>${classNames}</td>
             <td>
@@ -1870,13 +1870,29 @@
         }
 
         async function saveStaff() {
-            const form = document.getElementById('addStaffForm');
-            const formData = new FormData(form);
+            const staffId = document.getElementById('staffId').value.trim();
+
+            // Validate Staff ID
+            if (!staffId) {
+                showNotification('Please enter a Staff ID', 'error');
+                return;
+            }
+
+            // Check if Staff ID already exists
+            const existingStaff = await db.collection('users')
+                .where('staffId', '==', staffId)
+                .where('role', '==', 'staff')
+                .get();
+
+            if (!existingStaff.empty) {
+                showNotification('Staff ID already exists. Please use a different Staff ID.', 'error');
+                return;
+            }
 
             const staffData = {
                 firstName: document.getElementById('staffFirstName').value,
                 lastName: document.getElementById('staffLastName').value,
-                email: document.getElementById('staffEmail').value,
+                staffId: staffId,
                 password: 'staff123',
                 role: 'staff',
                 subjects: Array.from(document.getElementById('staffSubjects').selectedOptions).map(opt => opt.value),
@@ -1889,9 +1905,9 @@
             try {
                 await db.collection('users').add(staffData);
                 hideModal('addStaffModal');
-                form.reset();
+                document.getElementById('addStaffForm').reset();
                 loadUsersData();
-                showNotification('Staff account created successfully! Default password: staff123', 'success');
+                showNotification('Staff account created successfully! Staff ID: ' + staffId + ', Default password: staff123', 'success');
             } catch (error) {
                 console.error('Error saving staff:', error);
                 showNotification('Error creating staff account. Please try again.', 'error');
@@ -2378,7 +2394,7 @@
             });
         }
 
-        // Bulk Upload Functions
+        // Bulk Upload Functions - UPDATED & FIXED
         function populateUploadForm() {
             const uploadSubject = document.getElementById('uploadSubject');
             const uploadClass = document.getElementById('uploadClass');
@@ -2399,6 +2415,9 @@
                 option.textContent = cls.className;
                 uploadClass.appendChild(option);
             });
+
+            // Reset uploaded questions
+            uploadedQuestions = [];
         }
 
         function handleDragOver(e) {
@@ -2426,35 +2445,96 @@
         }
 
         function handleExcelFile(file) {
+            // Validate file type
+            const validTypes = [
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-excel'
+            ];
+
+            if (!validTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls)$/)) {
+                showNotification('Please upload a valid Excel file (.xlsx or .xls)', 'error');
+                return;
+            }
+
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
 
-                // Assuming first sheet
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet);
+                    // Check if workbook has sheets
+                    if (workbook.SheetNames.length === 0) {
+                        showNotification('The Excel file is empty or corrupted', 'error');
+                        return;
+                    }
 
-                processExcelData(jsonData);
+                    // Assuming first sheet
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+                    if (jsonData.length === 0) {
+                        showNotification('No data found in the Excel sheet', 'error');
+                        return;
+                    }
+
+                    processExcelData(jsonData);
+                } catch (error) {
+                    console.error('Error processing Excel file:', error);
+                    showNotification('Error reading Excel file. Please check the format.', 'error');
+                }
+            };
+
+            reader.onerror = function () {
+                showNotification('Error reading file. Please try again.', 'error');
             };
 
             reader.readAsArrayBuffer(file);
         }
 
         function processExcelData(data) {
-            uploadedQuestions = data.map((row, index) => {
-                return {
-                    questionText: row.Question || row.question || '',
-                    options: {
-                        A: row['Option A'] || row.optionA || '',
-                        B: row['Option B'] || row.optionB || '',
-                        C: row['Option C'] || row.optionC || '',
-                        D: row['Option D'] || row.optionD || ''
-                    },
-                    correctAnswer: row['Correct Answer'] || row.correctAnswer || 'A'
-                };
-            }).filter(q => q.questionText && q.options.A && q.options.B && q.options.C && q.options.D);
+            uploadedQuestions = [];
+
+            data.forEach((row, index) => {
+                // Check for required columns with multiple possible header names
+                const questionText = row.Question || row.question || row['Question Text'] || '';
+                const optionA = row.Option_A || row.optionA || row['Choice A'] || row['Option A'] || '';
+                const optionB = row.Option_B || row.optionB || row['Choice B'] || row['Option B'] || '';
+                const optionC = row.Option_C || row.optionC || row['Choice C'] || row['Option C'] || '';
+                const optionD = row.Option_D || row.optionD || row['Choice D'] || row['Option D'] || '';
+                const correctAnswer = row.Correct_Answer || row.correctAnswer || row['Correct Option'] || row['Correct Answer'] || '';
+
+                // Validate required fields
+                if (questionText && optionA && optionB && optionC && optionD && correctAnswer) {
+                    // Validate correct answer format
+                    const validAnswers = ['A', 'B', 'C', 'D'];
+                    const cleanCorrectAnswer = correctAnswer.toString().toUpperCase().trim();
+
+                    if (validAnswers.includes(cleanCorrectAnswer)) {
+                        uploadedQuestions.push({
+                            questionText: questionText.toString().trim(),
+                            options: {
+                                A: optionA.toString().trim(),
+                                B: optionB.toString().trim(),
+                                C: optionC.toString().trim(),
+                                D: optionD.toString().trim()
+                            },
+                            correctAnswer: cleanCorrectAnswer,
+                            difficulty: row.Difficulty || row.difficulty || 'medium',
+                            marks: parseInt(row.Marks || row.marks || 1)
+                        });
+                    } else {
+                        console.warn(`Row ${index + 2}: Invalid correct answer "${correctAnswer}". Must be A, B, C, or D.`);
+                    }
+                } else {
+                    console.warn(`Row ${index + 2}: Missing required fields. Skipping.`);
+                }
+            });
+
+            if (uploadedQuestions.length === 0) {
+                showNotification('No valid questions found in the file. Please check the format.', 'error');
+                return;
+            }
 
             // Show preview
             showUploadPreview();
@@ -2475,11 +2555,11 @@
             uploadedQuestions.slice(0, 5).forEach((question, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-            <td>${question.questionText.substring(0, 50)}...</td>
-            <td>${question.options.A.substring(0, 20)}...</td>
-            <td>${question.options.B.substring(0, 20)}...</td>
-            <td>${question.options.C.substring(0, 20)}...</td>
-            <td>${question.options.D.substring(0, 20)}...</td>
+            <td>${question.questionText.substring(0, 50)}${question.questionText.length > 50 ? '...' : ''}</td>
+            <td>${question.options.A.substring(0, 20)}${question.options.A.length > 20 ? '...' : ''}</td>
+            <td>${question.options.B.substring(0, 20)}${question.options.B.length > 20 ? '...' : ''}</td>
+            <td>${question.options.C.substring(0, 20)}${question.options.C.length > 20 ? '...' : ''}</td>
+            <td>${question.options.D.substring(0, 20)}${question.options.D.length > 20 ? '...' : ''}</td>
             <td>${question.correctAnswer}</td>
         `;
                 previewTableBody.appendChild(row);
@@ -2493,6 +2573,8 @@
 
             filePreview.style.display = 'block';
             processBtn.disabled = false;
+
+            showNotification(`Successfully loaded ${uploadedQuestions.length} questions from the file`, 'success');
         }
 
         async function processBulkUpload() {
@@ -2505,23 +2587,25 @@
             }
 
             const processBtn = document.getElementById('processUploadBtn');
+            const originalText = processBtn.innerHTML;
             processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
             processBtn.disabled = true;
 
             try {
                 let successCount = 0;
                 let errorCount = 0;
+                const errors = [];
 
-                for (const questionData of uploadedQuestions) {
+                for (const [index, questionData] of uploadedQuestions.entries()) {
                     try {
                         const fullQuestionData = {
                             ...questionData,
                             questionType: 'multiple_choice',
                             subjectId: subjectId,
                             classId: classId,
-                            marks: 1,
-                            difficulty: 'medium',
-                            createdBy: currentAdmin.userId,
+                            marks: questionData.marks || 1,
+                            difficulty: questionData.difficulty || 'medium',
+                            createdBy: currentAdmin ? currentAdmin.userId : currentStaff.userId,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                             isActive: true
                         };
@@ -2529,22 +2613,85 @@
                         await db.collection('questions').add(fullQuestionData);
                         successCount++;
                     } catch (error) {
-                        console.error('Error saving question:', error);
+                        console.error(`Error saving question ${index + 1}:`, error);
                         errorCount++;
+                        errors.push(`Question ${index + 1}: ${error.message}`);
                     }
                 }
 
                 hideModal('bulkUploadModal');
-                showNotification(`Successfully uploaded ${successCount} questions. ${errorCount} failed.`, 'success');
-                loadQuestionsData();
+
+                if (errorCount === 0) {
+                    showNotification(`Successfully uploaded ${successCount} questions!`, 'success');
+                } else {
+                    showNotification(`Uploaded ${successCount} questions. ${errorCount} failed.`, 'warning');
+                    if (errors.length > 0) {
+                        console.error('Upload errors:', errors);
+                    }
+                }
+
+                // Reload questions data
+                if (currentAdmin) {
+                    loadQuestionsData();
+                } else {
+                    loadQuestionsData();
+                }
+
             } catch (error) {
                 console.error('Error in bulk upload:', error);
-                showNotification('Error processing bulk upload.', 'error');
+                showNotification('Error processing bulk upload. Please try again.', 'error');
             } finally {
-                processBtn.innerHTML = 'Process Upload';
+                processBtn.innerHTML = originalText;
                 processBtn.disabled = false;
             }
         }
+
+        // Updated event listeners setup
+        function setupBulkUploadEventListeners() {
+            // File input change event
+            const excelFileInput = document.getElementById('excelFile');
+            if (excelFileInput) {
+                excelFileInput.addEventListener('change', handleFileUpload);
+            }
+
+            // Drag and drop events
+            const fileUploadArea = document.getElementById('fileUploadArea');
+            if (fileUploadArea) {
+                fileUploadArea.addEventListener('dragover', handleDragOver);
+                fileUploadArea.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    fileUploadArea.classList.remove('active');
+                });
+                fileUploadArea.addEventListener('drop', handleFileDrop);
+
+                // Click to browse
+                fileUploadArea.addEventListener('click', () => {
+                    document.getElementById('excelFile').click();
+                });
+            }
+
+            // Process upload button
+            const processUploadBtn = document.getElementById('processUploadBtn');
+            if (processUploadBtn) {
+                processUploadBtn.addEventListener('click', processBulkUpload);
+            }
+
+            // Cancel upload button
+            const cancelUploadBtn = document.getElementById('cancelUploadBtn');
+            if (cancelUploadBtn) {
+                cancelUploadBtn.addEventListener('click', () => {
+                    hideModal('bulkUploadModal');
+                    // Reset file input
+                    const excelFileInput = document.getElementById('excelFile');
+                    if (excelFileInput) {
+                        excelFileInput.value = '';
+                    }
+                    uploadedQuestions = [];
+                });
+            }
+        }
+
 
         // Exams Functions
         async function loadExamsData() {
