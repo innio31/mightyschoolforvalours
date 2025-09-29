@@ -2866,6 +2866,12 @@
         }
 
         async function generateReport() {
+            const generateBtn = document.getElementById('generateReportBtn');
+            const originalText = generateBtn.innerHTML;
+            generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+            generateBtn.disabled = true;
+
+
             const examId = document.getElementById('resultsExam').value;
             const classId = document.getElementById('resultsClass').value;
 
@@ -2875,8 +2881,11 @@
             }
 
             try {
-                let query = db.collection('results').where('examId', '==', examId);
+                // First, get all results for the selected exam
+                let resultsSnapshot = await db.collection('results').where('examId', '==', examId).get();
+                let allResults = resultsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
+                // If a specific class is selected, filter results by students in that class
                 if (classId) {
                     // Get students in the selected class
                     const studentsSnapshot = await db.collection('users')
@@ -2885,21 +2894,31 @@
                         .get();
 
                     const studentIds = studentsSnapshot.docs.map(doc => doc.id);
-                    query = query.where('studentId', 'in', studentIds);
+
+                    // Filter results to only include students from the selected class
+                    allResults = allResults.filter(result => studentIds.includes(result.studentId));
                 }
 
-                const resultsSnapshot = await query.get();
-                results = resultsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
+                results = allResults;
                 displayResultsReport(results);
                 generatePerformanceChart(results);
+
+                if (results.length === 0) {
+                    showNotification('No results found for the selected criteria.', 'info');
+                } else {
+                    showNotification(`Report generated: ${results.length} results found`, 'success');
+                }
             } catch (error) {
                 console.error('Error generating report:', error);
                 showNotification('Error generating report. Please try again.', 'error');
             }
+            finally {
+                generateBtn.innerHTML = originalText;
+                generateBtn.disabled = false;
+            }
         }
 
-        function displayResultsReport(results) {
+        async function displayResultsReport(results) {
             const resultsTableBody = document.getElementById('resultsTableBody');
 
             if (results.length === 0) {
@@ -2907,18 +2926,53 @@
                 return;
             }
 
-            resultsTableBody.innerHTML = '';
+            resultsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">Loading results...</td></tr>';
 
             // Sort by percentage (descending)
             results.sort((a, b) => b.percentage - a.percentage);
 
-            results.forEach(async (result, index) => {
-                // Get student details
-                const studentSnapshot = await db.collection('users').doc(result.studentId).get();
-                const student = studentSnapshot.data();
+            let tableHTML = '';
 
-                const row = document.createElement('tr');
-                row.innerHTML = `
+            for (const result of results) {
+                try {
+                    // Get student details
+                    const studentSnapshot = await db.collection('users').doc(result.studentId).get();
+                    const student = studentSnapshot.exists ? studentSnapshot.data() : null;
+
+                    tableHTML += `
+                <tr>
+                    <td>${student ? `${student.firstName} ${student.lastName}` : 'Student Not Found'}</td>
+                    <td>${student?.admissionNumber || 'N/A'}</td>
+                    <td>${result.score}/${result.totalQuestions}</td>
+                    <td>${result.percentage}%</td>
+                    <td>${calculateGrade(result.percentage)}</td>
+                    <td>${Math.floor(result.timeSpent / 60)}:${(result.timeSpent % 60).toString().padStart(2, '0')}</td>
+                    <td>${result.submittedAt?.toDate().toLocaleDateString()}</td>
+                </tr>
+            `;
+                } catch (error) {
+                    console.error('Error loading student data:', error);
+                    tableHTML += `
+                <tr>
+                    <td colspan="7" style="text-align: center; color: #dc3545;">Error loading student data</td>
+                </tr>
+            `;
+                }
+            }
+
+            resultsTableBody.innerHTML = tableHTML;
+        }
+
+        // Sort by percentage (descending)
+        results.sort((a, b) => b.percentage - a.percentage);
+
+        results.forEach(async (result, index) => {
+            // Get student details
+            const studentSnapshot = await db.collection('users').doc(result.studentId).get();
+            const student = studentSnapshot.data();
+
+            const row = document.createElement('tr');
+            row.innerHTML = `
             <td>${student?.firstName} ${student?.lastName}</td>
             <td>${student?.admissionNumber}</td>
             <td>${result.score}/${result.totalQuestions}</td>
@@ -2927,9 +2981,9 @@
             <td>${Math.floor(result.timeSpent / 60)}:${(result.timeSpent % 60).toString().padStart(2, '0')}</td>
             <td>${result.submittedAt?.toDate().toLocaleDateString()}</td>
         `;
-                resultsTableBody.appendChild(row);
-            });
-        }
+            resultsTableBody.appendChild(row);
+        });
+
 
         function generatePerformanceChart(results) {
             const chartContainer = document.getElementById('performanceChart');
