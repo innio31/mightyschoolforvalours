@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CBT Portal - Mighty School For Valours</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a4b8c;
+            --secondary: #f37b21;
+            --accent: #34a853;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --success: #28a745;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            color: white;
+        }
+
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .role-selection {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .role-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: var(--primary);
+        }
+
+        .role-card.student::before {
+            background: var(--accent);
+        }
+
+        .role-card.staff::before {
+            background: var(--secondary);
+        }
+
+        .role-card.admin::before {
+            background: var(--primary);
+        }
+
+        .role-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .role-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .student .role-icon {
+            background: var(--accent);
+        }
+
+        .staff .role-icon {
+            background: var(--secondary);
+        }
+
+        .admin .role-icon {
+            background: var(--primary);
+        }
+
+        .role-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .role-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .btn-student {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-student:hover {
+            background: #2c9440;
+            transform: translateY(-2px);
+        }
+
+        .btn-staff {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .btn-staff:hover {
+            background: #e06e1d;
+            transform: translateY(-2px);
+        }
+
+        .btn-admin {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-admin:hover {
+            background: #153a75;
+            transform: translateY(-2px);
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 50px;
+            color: white;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            color: white;
+            opacity: 0.8;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 4rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+
+        .modal-description {
+            color: #666;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .role-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .logo-text {
+                font-size: 2rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                margin-bottom: 30px;
+            }
+
+            .logo {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .logo-text {
+                font-size: 1.8rem;
+            }
+
+            .role-card {
+                padding: 30px 20px;
+            }
+
+            .features {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .role-card,
+        .features {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .role-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .role-card:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .role-card:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <div class="logo-text">Mighty School For Valours</div>
+            </div>
+            <p class="tagline">
+                Welcome to our Computer-Based Testing Portal. Select your role to access the appropriate login page and
+                begin your educational journey.
+            </p>
+        </div>
+
+        <div class="role-selection">
+            <!-- Student Card -->
+            <div class="role-card student" onclick="selectRole('student')">
+                <div class="role-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 class="role-title">Student</h2>
+                <p class="role-description">
+                    Access your exams, view results, and track your academic progress. Take scheduled tests and review
+                    your performance.
+                </p>
+                <a href="student.html" class="btn btn-student" onclick="selectRole('student'); return false;">
+                    <i class="fas fa-sign-in-alt"></i> Student Login
+                </a>
+            </div>
+
+            <!-- Staff Card -->
+            <div class="role-card staff" onclick="selectRole('staff')">
+                <div class="role-icon">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </div>
+                <h2 class="role-title">Staff</h2>
+                <p class="role-description">
+                    Create and manage exams, questions, and view student results. Monitor academic performance and
+                    generate reports.
+                </p>
+                <a href="staff.html" class="btn btn-staff" onclick="selectRole('staff'); return false;">
+                    <i class="fas fa-sign-in-alt"></i> Staff Login
+                </a>
+            </div>
+
+            <!-- Admin Card -->
+            <div class="role-card admin" onclick="selectRole('admin')">
+                <div class="role-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 class="role-title">Administrator</h2>
+                <p class="role-description">
+                    Manage users, system settings, and oversee the entire CBT platform. Configure subjects, classes, and
+                    user permissions.
+                </p>
+                <a href="admin.html" class="btn btn-admin" onclick="selectRole('admin'); return false;">
+                    <i class="fas fa-sign-in-alt"></i> Admin Login
+                </a>
+            </div>
+        </div>
+
+        <div class="features">
+            <h2 class="features-title">Platform Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <i class="fas fa-laptop-code feature-icon"></i>
+                    <h3 class="feature-title">Computer-Based Testing</h3>
+                    <p class="feature-description">Take exams online with our intuitive and secure testing platform</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h3 class="feature-title">Real-time Analytics</h3>
+                    <p class="feature-description">Get instant results and performance analytics after exam completion
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <h3 class="feature-title">Secure & Reliable</h3>
+                    <p class="feature-description">Enterprise-grade security to protect your data and ensure exam
+                        integrity</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-mobile-alt feature-icon"></i>
+                    <h3 class="feature-title">Mobile Friendly</h3>
+                    <p class="feature-description">Access the platform from any device with responsive design</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
+        </div>
+    </div>
+
+    <!-- Role Selection Modal -->
+    <div id="roleModal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-info-circle modal-icon"></i>
+            <h2 class="modal-title" id="modalTitle">Redirecting to Login</h2>
+            <p class="modal-description" id="modalDescription">
+                You are being redirected to the login page. Please use your credentials to access the system.
+            </p>
+            <div class="modal-buttons">
+                <button class="btn btn-primary" id="confirmRedirect">Continue</button>
+                <button class="btn btn-outline" onclick="hideModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Role selection function
+        function selectRole(role) {
+            const modal = document.getElementById('roleModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDescription = document.getElementById('modalDescription');
+            const confirmBtn = document.getElementById('confirmRedirect');
+
+            // Set modal content based on selected role
+            switch (role) {
+                case 'student':
+                    modalTitle.textContent = 'Student Portal';
+                    modalDescription.textContent = 'You are being redirected to the Student Login page. Please use your admission number and password to access your account.';
+                    confirmBtn.className = 'btn btn-student';
+                    confirmBtn.innerHTML = '<i class="fas fa-user-graduate"></i> Continue to Student Login';
+                    confirmBtn.onclick = () => redirectToPage('student.html');
+                    break;
+
+                case 'staff':
+                    modalTitle.textContent = 'Staff Portal';
+                    modalDescription.textContent = 'You are being redirected to the Staff Login page. Please use your staff email and password to access the system.';
+                    confirmBtn.className = 'btn btn-staff';
+                    confirmBtn.innerHTML = '<i class="fas fa-chalkboard-teacher"></i> Continue to Staff Login';
+                    confirmBtn.onclick = () => redirectToPage('staff.html');
+                    break;
+
+                case 'admin':
+                    modalTitle.textContent = 'Admin Portal';
+                    modalDescription.textContent = 'You are being redirected to the Admin Login page. Please use your administrator credentials to access the system.';
+                    confirmBtn.className = 'btn btn-admin';
+                    confirmBtn.innerHTML = '<i class="fas fa-user-shield"></i> Continue to Admin Login';
+                    confirmBtn.onclick = () => redirectToPage('admin.html');
+                    break;
+            }
+
+            // Show modal
+            modal.classList.add('active');
+        }
+
+        // Redirect to specific page
+        function redirectToPage(page) {
+            // Hide the modal first
+            hideModal();
+
+            // Actually redirect to the specified page
+            window.location.href = page;
+        }
+
+        // Hide modal
+        function hideModal() {
+            document.getElementById('roleModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('roleModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                hideModal();
+            }
+        });
+
+        // Add hover effects to role cards
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateY(-10px)';
+            });
+
+            card.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                hideModal();
+            }
+        });
+
+        // Add click handlers to role cards and buttons
+        document.querySelectorAll('.role-card').forEach(card => {
+            card.addEventListener('click', function () {
+                const role = this.classList.contains('student') ? 'student' :
+                    this.classList.contains('staff') ? 'staff' : 'admin';
+                selectRole(role);
+            });
+        });
+
+        // Add loading animation to buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+                this.disabled = true;
+
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+
+</html>
