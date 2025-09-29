@@ -403,6 +403,43 @@
             width: 100%;
         }
 
+        /* Info Cards */
+        .info-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background-color: var(--color-white);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .info-card-title {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary-light);
+            padding-bottom: 0.5rem;
+        }
+
+        .info-card-content ul {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-card-content li {
+            margin-bottom: 0.5rem;
+        }
+
         /* Footer */
         .footer {
             background-color: var(--color-dark);
@@ -635,8 +672,65 @@
         </div>
     </section>
 
-    <!-- Requirements Section -->
+    <!-- Detailed Admission Process Section -->
     <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Detailed Admission Process</h2>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3 class="info-card-title">Primary School Admission</h3>
+                    <div class="info-card-content">
+                        <p>All children to be admitted shall have their application forms completed by their
+                            parents/guardians.</p>
+                        <ul>
+                            <li>Children admitted are usually between the ages of two and five for the Pre-school and
+                                Reception classes</li>
+                            <li>Primary classes are for children between five and six years</li>
+                            <li>The selection process depends largely on scores obtained from I.Q. tests and other types
+                                of tests/interviews administered by the school</li>
+                            <li>Offer of admission is on a first come, first served basis</li>
+                        </ul>
+                        <p>Application forms and prospectus are obtained from the school office on payment of the
+                            application fee.</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3 class="info-card-title">Secondary School Admission</h3>
+                    <div class="info-card-content">
+                        <p>Requirements for Secondary School Admission:</p>
+                        <ul>
+                            <li>The prospective candidate must have completed at least year 5 (or its equivalent) in a
+                                recognized primary school within or outside the country</li>
+                            <li>The child must also be at least 10 years old by September of the year of admission</li>
+                            <li>An application form is obtained, after which a prospective student writes an entrance
+                                examination</li>
+                            <li>This is followed by a comprehensive interview conducted on the school premises</li>
+                        </ul>
+                        <p>Admission is restricted to years 7, 8, 10 and 11, subject to vacancies in any of these
+                            classes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-card" style="max-width: 800px; margin: 0 auto;">
+                <h3 class="info-card-title">Important Notes</h3>
+                <div class="info-card-content">
+                    <ul>
+                        <li>Students seeking admission into any of the classes must follow the same procedure</li>
+                        <li>A letter of admission and requisite administrative charges are rendered void after the
+                            expiry date specified on the admission letter</li>
+                        <li>It is important that both parents meet the Principal/Head of schools before a student is
+                            finally admitted into any of our Secondary Schools</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Requirements Section -->
+    <section class="section">
         <div class="container">
             <h2 class="section-title">Admission Requirements</h2>
 
@@ -687,6 +781,47 @@
                     </div>
                     <h3 class="requirement-title">Identification</h3>
                     <p>Copy of parents' or guardians' identification documents.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fees Information Section -->
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Fees Information</h2>
+
+            <div class="info-cards">
+                <div class="info-card">
+                    <h3 class="info-card-title">Payment Information</h3>
+                    <div class="info-card-content">
+                        <ul>
+                            <li>Details of fees and levies can be obtained from the accounts department of the school
+                            </li>
+                            <li>All fees and charges are paid through bank drafts</li>
+                            <li>The fees for each term should be paid on or before the first day of the term</li>
+                            <li>Fees are subject to review from time to time</li>
+                            <li>Notice of an increase in fees is usually given a considerable time beforehand</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3 class="info-card-title">Payment Options & Discounts</h3>
+                    <div class="info-card-content">
+                        <ul>
+                            <li>School fees are paid annually or termly, but are due on or before the first day of
+                                school</li>
+                            <li>Fees include Registration, Tuition, Deposit, Accommodation and Feeding, as well as
+                                Caution</li>
+                            <li>Overall best students in the exit classes have automatic bursary for the one in the next
+                                class</li>
+                            <li>There are annual discounts for children of the same families, family with special needs,
+                                etc.</li>
+                        </ul>
+                        <p><strong>Mode of payment:</strong> Only certified bank drafts made payable to MIGHTY SCHOOL
+                            FOR VALOURS, Lagos, are acceptable.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -743,7 +878,7 @@
             <div class="footer-grid">
                 <div>
                     <h3 class="footer-heading">Mighty School For Valours</h3>
-                    <p>Nurturing excellence and character since 2003. Our mission is to provide a holistic education
+                    <p>Nurturing excellence and character since 2013. Our mission is to provide a holistic education
                         that prepares students for the challenges of tomorrow.</p>
                     <div class="social-icons">
                         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
@@ -760,7 +895,6 @@
                         <li class="footer-link"><a href="about.html">About Us</a></li>
                         <li class="footer-link"><a href="academics.html">Academics</a></li>
                         <li class="footer-link"><a href="admissions.html">Admissions</a></li>
-                        <li class="footer-link"><a href="news.html">News & Events</a></li>
                     </ul>
                 </div>
                 <div>
@@ -794,19 +928,6 @@
                 icon.classList.remove('fa-times');
                 icon.classList.add('fa-bars');
             }
-        });
-
-        // Form Submission
-        document.getElementById('admission-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            alert('Thank you for submitting your application. We will contact you shortly.');
-            this.reset();
-        });
-
-        document.getElementById('tour-form').addEventListener('submit', function (e) {
-            e.preventDefault();
-            alert('Thank you for scheduling a tour. We will confirm your visit via email shortly.');
-            this.reset();
         });
 
         // Close mobile nav when clicking on a link

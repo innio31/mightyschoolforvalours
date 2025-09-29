@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Mighty School For Valours</title>
+    <meta name="author" content="Emmanuel Ademuyiwa">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 5rem 0;
+            text-align: center;
+            color: var(--color-white);
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            margin: 0 0.5rem;
+        }
+
+        .breadcrumb-item a {
+            color: var(--color-white);
+            text-decoration: none;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--color-primary-light);
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: ">";
+            margin-left: 1rem;
+            color: var(--color-white);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--color-dark);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--color-primary);
+            margin: 0.5rem auto;
+        }
+
+        /* Gallery Filter */
+        .gallery-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .filter-btn {
+            padding: 0.7rem 1.5rem;
+            background: var(--color-white);
+            border: 2px solid var(--color-primary);
+            border-radius: 30px;
+            color: var(--color-primary);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* Gallery Grid */
+        .gallery-container {
+            margin-bottom: 3rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            aspect-ratio: 4/3;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-text {
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .modal-image {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--color-white);
+            font-size: 2rem;
+            cursor: pointer;
+        }
+
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: var(--color-white);
+            font-size: 1.5rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-nav:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-prev {
+            left: 20px;
+        }
+
+        .modal-next {
+            right: 20px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .footer-heading:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: var(--color-light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--color-white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--color-light-gray);
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .gallery-overlay {
+                opacity: 1;
+            }
+
+            .modal-nav {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+
+            .modal-prev {
+                left: 10px;
+            }
+
+            .modal-next {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-filter {
+                gap: 0.5rem;
+            }
+
+            .filter-btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <button class="mobile-nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="academics.html" class="nav-link">Academics</a></li>
+                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                        <li><a href="gallery.html" class="nav-link active">Gallery</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1 class="page-title">School Gallery</h1>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item active">Gallery</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Explore Our School Life</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
+                Discover the vibrant life at Mighty School For Valours through our collection of photographs showcasing
+                academic activities, sports events, cultural celebrations, and campus life.
+            </p>
+
+            <!-- Gallery Filter -->
+            <div class="gallery-filter">
+                <button class="filter-btn active" data-filter="all">All Photos</button>
+                <button class="filter-btn" data-filter="campus">Campus</button>
+                <button class="filter-btn" data-filter="academics">Academics</button>
+                <button class="filter-btn" data-filter="sports">Sports</button>
+                <button class="filter-btn" data-filter="events">Events</button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-container">
+                <div class="gallery-grid">
+                    <!-- Campus Images -->
+                    <div class="gallery-item" data-category="campus">
+                        <img src="images/slide1.jpg" alt="School Building" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Main School Building</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="campus">
+                        <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="School Library" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">School Library</div>
+                        </div>
+                    </div>
+
+                    <!-- Academics Images -->
+                    <div class="gallery-item" data-category="academics">
+                        <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Science Class" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Science Laboratory</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="academics">
+                        <img src="https://images.unsplash.com/photo-1588072432836-e100327e50ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Computer Class" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Computer Lab</div>
+                        </div>
+                    </div>
+
+                    <!-- Sports Images -->
+                    <div class="gallery-item" data-category="sports">
+                        <img src="https://images.unsplash.com/photo-1541336032412-2048a678540d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Sports Day" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Annual Sports Day</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="sports">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Basketball Team" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Basketball Team</div>
+                        </div>
+                    </div>
+
+                    <!-- Events Images -->
+                    <div class="gallery-item" data-category="events">
+                        <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Cultural Festival" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Cultural Festival</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="events">
+                        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Graduation Ceremony" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Graduation Ceremony</div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Images -->
+                    <div class="gallery-item" data-category="academics">
+                        <img src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Art Class" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Art Exhibition</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="sports">
+                        <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Swimming" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Swimming Competition</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="events">
+                        <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="School Play" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Annual School Play</div>
+                        </div>
+                    </div>
+
+                    <div class="gallery-item" data-category="campus">
+                        <img src="https://images.unsplash.com/photo-1591123120675-6f7f1aae0e5b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80"
+                            alt="Playground" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Playground Area</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div class="modal" id="imageModal">
+        <button class="modal-close" id="modalClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="modal-nav modal-prev" id="modalPrev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button class="modal-nav modal-next" id="modalNext">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+        <div class="modal-content">
+            <img src="" alt="" class="modal-image" id="modalImage">
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-heading">Mighty School For Valours</h3>
+                    <p>Nurturing excellence and character since 2003. Our mission is to provide a holistic education
+                        that prepares students for the challenges of tomorrow.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="academics.html">Academics</a></li>
+                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
+                        <li class="footer-link"><a href="gallery.html">Gallery</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Info</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
+                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mighty School For Valours. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const nav = document.querySelector('.nav');
+
+        mobileNavToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileNavToggle.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+
+        // Close mobile nav when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                mobileNavToggle.querySelector('i').classList.remove('fa-times');
+                mobileNavToggle.querySelector('i').classList.add('fa-bars');
+            });
+        });
+
+        // Gallery Filter Functionality
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const galleryItems = document.querySelectorAll('.gallery-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+
+                const filter = btn.getAttribute('data-filter');
+
+                galleryItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Modal Functionality
+        const modal = document.getElementById('imageModal');
+        const modalImage = document.getElementById('modalImage');
+        const modalClose = document.getElementById('modalClose');
+        const modalPrev = document.getElementById('modalPrev');
+        const modalNext = document.getElementById('modalNext');
+
+        let currentImageIndex = 0;
+        const galleryImages = Array.from(document.querySelectorAll('.gallery-image'));
+
+        // Open modal when clicking on gallery images
+        galleryItems.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentImageIndex = index;
+                const imgSrc = galleryImages[index].getAttribute('src');
+                modalImage.setAttribute('src', imgSrc);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Navigate through images
+        modalPrev.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            const imgSrc = galleryImages[currentImageIndex].getAttribute('src');
+            modalImage.setAttribute('src', imgSrc);
+        });
+
+        modalNext.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            const imgSrc = galleryImages[currentImageIndex].getAttribute('src');
+            modalImage.setAttribute('src', imgSrc);
+        });
+
+        // Close modal when clicking outside the image
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+
+            if (e.key === 'Escape') {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            } else if (e.key === 'ArrowLeft') {
+                modalPrev.click();
+            } else if (e.key === 'ArrowRight') {
+                modalNext.click();
+            }
+        });
+    </script>
+</body>
+
+</html>

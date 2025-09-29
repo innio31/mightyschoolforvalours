@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Initialize CBT Database - Mighty School For Valours</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #1a4b8c;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .init-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .section-title {
+            color: #1a4b8c;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #f37b21;
+        }
+
+        .data-preview {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            background: #f37b21;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #e06e1d;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .status.info {
+            background: #cce7ff;
+            color: #004085;
+            border: 1px solid #b3d7ff;
+        }
+
+        .progress {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #f37b21;
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .credentials {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 25px;
+        }
+
+        .credential-item {
+            margin: 10px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #f37b21;
+        }
+
+        .step-number {
+            background: #f37b21;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #f37b21;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">Mighty School For Valours</div>
+            <div class="subtitle">CBT System Database Initialization</div>
+        </div>
+
+        <div class="init-section">
+            <h3 class="section-title">
+                <i class="fas fa-database"></i> Database Structure Overview
+            </h3>
+            <p>This will create the following collections in your Firebase Firestore:</p>
+
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>
+                    <strong>users</strong> - Admin, staff, and student accounts
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>
+                    <strong>subjects</strong> - Academic subjects (Math, English, etc.)
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>
+                    <strong>classes</strong> - School classes (JSS1, SS1 Science, etc.)
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>
+                    <strong>questions</strong> - CBT questions bank
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">5</div>
+                <div>
+                    <strong>exams</strong> - Examination configurations
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-number">6</div>
+                <div>
+                    <strong>settings</strong> - School and system settings
+                </div>
+            </div>
+        </div>
+
+        <div class="init-section">
+            <h3 class="section-title">
+                <i class="fas fa-cogs"></i> Sample Data Preview
+            </h3>
+            <div class="data-preview">
+                // Sample Admin Account
+                email: mforvalours@gmail.com
+                password: admin123
+                role: admin
+
+                // Sample Subjects
+                Mathematics, English, Physics, Chemistry, Biology
+
+                // Sample Classes
+                JSS 1, JSS 2, JSS 3, SS1 Science, SS1 Arts, SS1 Commercial
+            </div>
+        </div>
+
+        <button class="btn" id="initBtn" onclick="initializeDatabase()">
+            <i class="fas fa-play"></i> Initialize Database
+        </button>
+
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div id="status" class="status info">
+            Ready to initialize database. Click the button above to start.
+        </div>
+
+        <div class="credentials" id="credentialsSection" style="display: none;">
+            <h3 class="section-title">
+                <i class="fas fa-key"></i> Default Login Credentials
+            </h3>
+            <div class="credential-item">
+                <strong>Admin Account:</strong><br>
+                Email: <code>mforvalours@gmail.com</code><br>
+                Password: <code>admin123</code>
+            </div>
+            <div class="credential-item">
+                <strong>Sample Student:</strong><br>
+                Admission No: <code>MSV2024001</code><br>
+                Password: <code>adekunle</code> (surname in lowercase)
+            </div>
+            <div class="credential-item">
+                <strong>Sample Staff:</strong><br>
+                Email: <code>teacher.math@mightyschool.edu.ng</code><br>
+                Password: <code>staff123</code>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
+            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
+            projectId: "mightyschoolforvalours-91aa4",
+            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
+            messagingSenderId: "778024125256",
+            appId: "1:778024125256:web:31d482406bf06a2125a97d",
+            measurementId: "G-C2NY58GRFT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Update progress bar
+        function updateProgress(percent) {
+            document.getElementById('progressBar').style.width = percent + '%';
+        }
+
+        // Update status message
+        function updateStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.innerHTML = message;
+            status.className = 'status ' + type;
+        }
+
+        // Add loading animation to status
+        function addLoadingToStatus() {
+            const status = document.getElementById('status');
+            status.innerHTML = '<div class="loading"></div>' + status.innerHTML;
+        }
+
+        async function initializeDatabase() {
+            const initBtn = document.getElementById('initBtn');
+            initBtn.disabled = true;
+            initBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Initializing...';
+
+            try {
+                updateProgress(10);
+                updateStatus('Starting database initialization...', 'info');
+                addLoadingToStatus();
+
+                // Step 1: Create Admin User
+                updateProgress(20);
+                updateStatus('Creating admin account...');
+
+                await db.collection('users').doc('admin001').set({
+                    userId: 'admin001',
+                    email: 'mforvalours@gmail.com',
+                    password: 'admin123', // In production, this should be hashed
+                    role: 'admin',
+                    firstName: 'School',
+                    lastName: 'Admin',
+                    isActive: true,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: null,
+                    mustChangePassword: false
+                });
+
+                // Step 2: Create Sample Staff
+                updateProgress(30);
+                updateStatus('Creating staff accounts...');
+
+                const staffMembers = [
+                    {
+                        id: 'staff001',
+                        email: 'teacher.math@mightyschoolforvalours.com',
+                        password: 'staff123',
+                        firstName: 'Mathematics',
+                        lastName: 'Teacher',
+                        subjects: ['math001'],
+                        assignedClasses: ['jss1', 'jss2', 'jss3', 'ss1_sci', 'ss2_sci', 'ss3_sci']
+                    },
+                    {
+                        id: 'staff002',
+                        email: 'teacher.english@mightyschoolforvalours.com',
+                        password: 'staff123',
+                        firstName: 'English',
+                        lastName: 'Teacher',
+                        subjects: ['eng001'],
+                        assignedClasses: ['jss1', 'jss2', 'jss3', 'ss1_sci', 'ss1_art', 'ss1_com']
+                    }
+                ];
+
+                for (const staff of staffMembers) {
+                    await db.collection('users').doc(staff.id).set({
+                        userId: staff.id,
+                        email: staff.email,
+                        password: staff.password,
+                        role: 'staff',
+                        firstName: staff.firstName,
+                        lastName: staff.lastName,
+                        subjects: staff.subjects,
+                        assignedClasses: staff.assignedClasses,
+                        isActive: true,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        mustChangePassword: true
+                    });
+                }
+
+                // Step 3: Create Sample Students
+                updateProgress(40);
+                updateStatus('Creating student accounts...');
+
+                const students = [
+                    { id: 'student001', admissionNumber: '836C', firstName: 'Ebosetale', lastName: 'Abiode', class: 'ss3_art', password: 'adekunle' },
+                    { id: 'student002', admissionNumber: '1164C', firstName: 'Adeleke Farian', lastName: 'Okonkwo', class: 'ss3_sci', password: 'okonkwo' },
+                    { id: 'student003', admissionNumber: 'MSV2024003', firstName: 'Emmanuel', lastName: 'Ademuyiwa', class: 'ss3_com', password: 'ademuyiwa' }
+                ];
+
+                for (const student of students) {
+                    await db.collection('users').doc(student.id).set({
+                        userId: student.id,
+                        admissionNumber: student.admissionNumber,
+                        password: student.password,
+                        role: 'student',
+                        firstName: student.firstName,
+                        lastName: student.lastName,
+                        class: student.class,
+                        isActive: true,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        mustChangePassword: false
+                    });
+                }
+
+                // Step 4: Create Subjects - DEBUGGING VERSION
+                updateProgress(50);
+                updateStatus('Creating subjects...');
+
+                const subjects = [
+                    [
+                        { id: 'math001', name: 'Mathematics', code: 'MATH' },
+                        { id: 'eng001', name: 'English Language', code: 'ENG' },
+                        { id: 'phy001', name: 'Physics', code: 'PHY' },
+                        { id: 'chem001', name: 'Chemistry', code: 'CHEM' },
+                        { id: 'bio001', name: 'Biology', code: 'BIO' },
+                        { id: 'genmath001', name: 'General Mathematics', code: 'GMATH' },
+                        { id: 'digitech001', name: 'Digital Technology', code: 'DIGIT' },
+                        { id: 'agrisci001', name: 'Agricultural Science', code: 'AGRIS' },
+                        { id: 'furthermath001', name: 'Further Mathematics', code: 'FMATH' },
+                        { id: 'foodnut001', name: 'Food and Nutrition', code: 'FNUTR' },
+                        { id: 'geo001', name: 'Geography', code: 'GEO' },
+                        { id: 'gov001', name: 'Government', code: 'GOVT' },
+                        { id: 'crs001', name: 'CRS', code: 'CRS' },
+                        { id: 'yoruba001', name: 'Yoruba', code: 'YOR' },
+                        { id: 'french001', name: 'French', code: 'FREN' },
+                        { id: 'lit001', name: 'Literature', code: 'LIT' },
+                        { id: 'comm001', name: 'Commerce', code: 'COMM' },
+                        { id: 'mkt001', name: 'Marketing', code: 'MKT' },
+                        { id: 'econ001', name: 'Economics', code: 'ECON' },
+                        { id: 'dataproc001', name: 'Data Processing', code: 'DATAP' },
+                        { id: 'techdraw001', name: 'Technical Drawing', code: 'TECHD' },
+                        { id: 'insurance001', name: 'Insurance', code: 'INSU' },
+                        { id: 'finacc001', name: 'Financial Accounting', code: 'FINAC' },
+                        { id: 'irs001', name: 'IRS', code: 'IRS' }
+                    ]
+                ];
+
+                for (const subject of subjects) {
+                    const subjectData = {
+                        subjectId: subject.id,
+                        subjectName: subject.name,
+                        subjectCode: subject.code,
+                        description: `${subject.name} subject`,
+                        createdBy: 'admin001',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    };
+
+                    console.log('Creating subject with data:', subjectData);
+
+                    try {
+                        await db.collection('subjects').doc(subject.id).set(subjectData);
+                        console.log(`✅ Successfully created subject: ${subject.name}`);
+                    } catch (error) {
+                        console.error(`❌ Error creating subject ${subject.name}:`, error);
+                        throw error; // Re-throw to stop the process
+                    }
+                }
+
+                // Step 5: Create Classes
+                updateProgress(60);
+                updateStatus('Creating classes...');
+
+                const classes = [
+                    { id: 'jss1', name: 'JSS 1', code: 'JSS1' },
+                    { id: 'jss2', name: 'JSS 2', code: 'JSS2' },
+                    { id: 'jss3', name: 'JSS 3', code: 'JSS3' },
+                    { id: 'ss1_sci', name: 'SS 1 Science', code: 'SS1SCI' },
+                    { id: 'ss1_art', name: 'SS 1 Humanity', code: 'SS1ART' },
+                    { id: 'ss1_com', name: 'SS 1 Business', code: 'SS1COM' },
+                    { id: 'ss2_sci', name: 'SS 2 Science', code: 'SS2SCI' },
+                    { id: 'ss2_art', name: 'SS 2 Humanity', code: 'SS2ART' },
+                    { id: 'ss2_com', name: 'SS 2 Business', code: 'SS2COM' },
+                    { id: 'ss3_sci', name: 'SS 3 Science', code: 'SS3SCI' },
+                    { id: 'ss3_art', name: 'SS 3 Humanity', code: 'SS3ART' },
+                    { id: 'ss3_com', name: 'SS 3 Business', code: 'SS3COM' }
+                ];
+
+                for (const cls of classes) {
+                    await db.collection('classes').doc(cls.id).set({
+                        classId: cls.id,
+                        className: cls.name,
+                        classCode: cls.code,
+                        description: cls.name,
+                        createdBy: 'admin001',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                }
+
+                // Step 6: Create Sample Questions
+                updateProgress(70);
+                updateStatus('Creating sample questions...');
+
+                const sampleQuestions = [
+                    {
+                        id: 'math_q1',
+                        questionText: 'What is the value of π (pi) approximately?',
+                        questionType: 'multiple_choice',
+                        options: {
+                            A: '3.14',
+                            B: '2.71',
+                            C: '1.62',
+                            D: '4.13'
+                        },
+                        correctAnswer: 'A',
+                        subjectId: 'math001',
+                        classId: 'jss1',
+                        marks: 2,
+                        difficulty: 'easy'
+                    },
+                    {
+                        id: 'eng_q1',
+                        questionText: 'Choose the correct sentence:',
+                        questionType: 'multiple_choice',
+                        options: {
+                            A: 'She go to school everyday',
+                            B: 'She goes to school everyday',
+                            C: 'She going to school everyday',
+                            D: 'She gone to school everyday'
+                        },
+                        correctAnswer: 'B',
+                        subjectId: 'eng001',
+                        classId: 'jss1',
+                        marks: 2,
+                        difficulty: 'easy'
+                    }
+                ];
+
+                for (const question of sampleQuestions) {
+                    await db.collection('questions').doc(question.id).set({
+                        questionId: question.id,
+                        questionText: question.questionText,
+                        questionType: question.questionType,
+                        options: question.options,
+                        correctAnswer: question.correctAnswer,
+                        subjectId: question.subjectId,
+                        classId: question.classId,
+                        marks: question.marks,
+                        difficulty: question.difficulty,
+                        createdBy: 'admin001',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        isActive: true
+                    });
+                }
+
+                // Step 7: Create Sample Exam
+                updateProgress(80);
+                updateStatus('Creating sample exam...');
+
+                await db.collection('exams').doc('sample_math_jss1').set({
+                    examId: 'sample_math_jss1',
+                    examTitle: 'JSS 1 Mathematics First Term Examination',
+                    description: 'First term examination for JSS 1 Mathematics',
+                    subjectId: 'genmath001',
+                    classId: 'jss1',
+                    questions: ['math_q1'],
+                    totalQuestions: 1,
+                    duration: 30,
+                    totalMarks: 2,
+                    shuffleQuestions: true,
+                    allowMultipleAttempts: false,
+                    maxAttempts: 1,
+                    availableFrom: firebase.firestore.Timestamp.fromDate(new Date('2024-10-01')),
+                    availableUntil: firebase.firestore.Timestamp.fromDate(new Date('2024-12-31')),
+                    isActive: true,
+                    createdBy: 'admin001',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Step 8: Create Settings
+                updateProgress(90);
+                updateStatus('Creating system settings...');
+
+                await db.collection('settings').doc('school_settings').set({
+                    settingId: 'school_settings',
+                    schoolName: 'Mighty School For Valours',
+                    academicTerm: 'First Term',
+                    academicYear: '2025/2026',
+                    gradingSystem: {
+                        A: { min: 75, max: 100 },
+                        B: { min: 60, max: 74 },
+                        C: { min: 50, max: 59 },
+                        D: { min: 40, max: 49 },
+                        F: { min: 0, max: 39 }
+                    }
+                });
+
+                // Final Step
+                updateProgress(100);
+                updateStatus('✅ Database initialized successfully!', 'success');
+
+                // Show credentials
+                document.getElementById('credentialsSection').style.display = 'block';
+
+                initBtn.innerHTML = '<i class="fas fa-check"></i> Database Initialized';
+
+            } catch (error) {
+                console.error('Initialization error:', error);
+                updateStatus('❌ Error: ' + error.message, 'error');
+                initBtn.disabled = false;
+                initBtn.innerHTML = '<i class="fas fa-play"></i> Try Again';
+            }
+        }
+
+        // Add Font Awesome icons
+        const faLink = document.createElement('link');
+        faLink.rel = 'stylesheet';
+        faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        document.head.appendChild(faLink);
+    </script>
+</body>
+
+</html>

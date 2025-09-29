@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Director's Message - Mighty School For Valours</title>
+    <meta name="author" content="Emmanuel Ademuyiwa">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #1c3877;
+            --color-primary-dark: #152a5f;
+            --color-primary-light: #d1e0ff;
+            --color-secondary: #e23639;
+            --color-secondary-dark: #c21f22;
+            --color-dark: #0f1f3d;
+            --color-text: #333333;
+            --color-background: #f8f9fa;
+            --color-light-gray: #e9ecef;
+            --color-white: #ffffff;
+            --color-success: #22bb33;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--color-text);
+            background-color: var(--color-white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* Header & Navigation */
+        .header {
+            background-color: var(--color-white);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--color-text);
+            padding: 0.5rem 1rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--color-primary);
+        }
+
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-primary);
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .btn-primary {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-white);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--color-secondary-dark);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+
+        /* Section Styles */
+        .section {
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--color-dark);
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--color-primary);
+            margin: 0.5rem auto;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            background-color: var(--color-background);
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb-list {
+            display: flex;
+            list-style: none;
+        }
+
+        .breadcrumb-item {
+            margin-right: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb-item:not(:last-child):after {
+            content: '/';
+            margin-left: 0.5rem;
+            color: var(--color-text);
+        }
+
+        .breadcrumb-link {
+            color: var(--color-primary);
+            text-decoration: none;
+        }
+
+        .breadcrumb-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Director Profile */
+        .director-profile {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+        }
+
+        .director-image-container {
+            text-align: center;
+        }
+
+        .director-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 1rem;
+        }
+
+        .director-name {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .director-title {
+            font-size: 1.1rem;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .director-qualifications {
+            background-color: var(--color-background);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .qualifications-title {
+            font-size: 1.2rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .qualifications-list {
+            list-style-type: none;
+        }
+
+        .qualifications-list li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .qualifications-list li:before {
+            content: '•';
+            color: var(--color-secondary);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Director Speech */
+        .director-speech {
+            background-color: var(--color-white);
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            margin-bottom: 4rem;
+        }
+
+        .speech-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--color-light-gray);
+        }
+
+        .speech-title {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .speech-subtitle {
+            font-size: 1.2rem;
+            color: var(--color-text);
+            font-style: italic;
+        }
+
+        .speech-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .speech-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .speech-content blockquote {
+            border-left: 4px solid var(--color-primary);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: var(--color-dark);
+        }
+
+        .speech-content strong {
+            color: var(--color-primary);
+        }
+
+        /* Philosophy Section */
+        .philosophy-section {
+            background-color: var(--color-background);
+            padding: 3rem;
+            border-radius: 8px;
+            margin-bottom: 4rem;
+        }
+
+        .philosophy-title {
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .philosophy-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .philosophy-item {
+            background-color: var(--color-white);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .philosophy-item h3 {
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .philosophy-item h3 i {
+            margin-right: 0.5rem;
+            color: var(--color-secondary);
+        }
+
+        /* Call to Action */
+        .cta-section {
+            text-align: center;
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 4rem 2rem;
+            border-radius: 8px;
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-heading {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .footer-heading:after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 3px;
+            background: var(--color-primary);
+            margin-top: 0.5rem;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-link a {
+            color: var(--color-light-gray);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--color-primary);
+            padding-left: 5px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--color-white);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background-color: var(--color-primary);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .director-profile {
+                grid-template-columns: 1fr;
+            }
+
+            .director-image-container {
+                text-align: center;
+            }
+
+            .director-image {
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-nav-toggle {
+                display: block;
+            }
+
+            .nav {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 80%;
+                height: calc(100vh - 70px);
+                background-color: var(--color-white);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav.active {
+                right: 0;
+            }
+
+            .nav-list {
+                flex-direction: column;
+            }
+
+            .nav-link {
+                display: block;
+                padding: 1rem 0;
+                border-bottom: 1px solid var(--color-light-gray);
+            }
+
+            .director-speech {
+                padding: 2rem;
+            }
+
+            .philosophy-section {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .director-speech {
+                padding: 1.5rem;
+            }
+
+            .speech-title {
+                font-size: 1.7rem;
+            }
+
+            .philosophy-section {
+                padding: 1.5rem;
+            }
+
+            .cta-section {
+                padding: 3rem 1.5rem;
+            }
+
+            .cta-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="index.html" class="logo">
+                    <div class="logo-img">
+                        <img src="images/logo.png" alt="school-logo" width="50" height="auto">
+                    </div>
+                    <div class="logo-text">Mighty School For Valours</div>
+                </a>
+                <button class="mobile-nav-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <nav class="nav">
+                    <ul class="nav-list">
+                        <li><a href="index.html" class="nav-link">Home</a></li>
+                        <li><a href="about.html" class="nav-link">About Us</a></li>
+                        <li><a href="academics.html" class="nav-link">Academics</a></li>
+                        <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <div class="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb-list">
+                <li class="breadcrumb-item"><a href="index.html" class="breadcrumb-link">Home</a></li>
+                <li class="breadcrumb-item"><a href="about.html" class="breadcrumb-link">About Us</a></li>
+                <li class="breadcrumb-item">Director's Message</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Director Profile Section -->
+        <section class="section">
+            <h1 class="section-title">Director's Message</h1>
+
+            <div class="director-profile">
+                <div class="director-image-container">
+                    <img src="images/director1.png" alt="Director of Schools" class="director-image">
+                    <h2 class="director-name">Mr. Moyosola Soetan</h2>
+                    <p class="director-title">Director</p>
+
+                    <div class="director-qualifications">
+                        <h3 class="qualifications-title">Qualifications</h3>
+                        <ul class="qualifications-list">
+                            <li>Certified School Administrator</li>
+                            <li>20+ Years in Education</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="director-info">
+                    <h2>About the Director</h2>
+                    <p>Dr. Adebayo Johnson is a visionary educational leader with over two decades of experience in
+                        transforming educational institutions. His passion for holistic education and student
+                        development has been the driving force behind the success of Mighty School For Valours.</p>
+
+                    <p>Before joining Mighty School For Valours, Dr. Johnson served as Principal of three prestigious
+                        secondary schools where he implemented innovative educational reforms that significantly
+                        improved student outcomes. His research on "21st Century Learning Models in Nigerian Secondary
+                        Education" has been published in several academic journals.</p>
+
+                    <p>Dr. Johnson believes that education should not only focus on academic excellence but also on
+                        character building, leadership development, and preparing students for the challenges of a
+                        rapidly changing world. Under his leadership, Mighty School For Valours has consistently
+                        maintained its position as one of Nigeria's leading private educational institutions.</p>
+
+                    <p>He is a frequent speaker at educational conferences and serves on the board of several
+                        educational organizations dedicated to improving the quality of education in Nigeria.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Director's Full Speech -->
+        <section class="director-speech">
+            <div class="speech-header">
+                <h1 class="speech-title">From the Desk of the Director of Schools</h1>
+                <p class="speech-subtitle">Building Strong Foundations for Lifelong Success</p>
+            </div>
+
+            <div class="speech-content">
+                <p><strong>THE STRENGTH OF EVERY HIGH-RISE BUILDING IS IN ITS FOUNDATION</strong></p>
+
+                <p>No one half-baked ever gets to the pinnacle of success in life. We live in an increasingly
+                    competitive world where the best choices are reserved for the brightest and best.</p>
+
+                <p>Furthermore, as the saying goes, a journey of a thousand miles begins with the first right step. That
+                    right step for today's child is being given the best possible education and training as a
+                    springboard to a future of distinction. Commitment to the best standards in education has been our
+                    watchword at MIGHTY SCHOOL FOR VALOURS since we registered our first pupil in 2013.</p>
+
+                <p>For close to a decade now, MIGHTY SCHOOL FOR VALOURS has remained focused on the pursuit of its
+                    vision -- that of producing good citizens who will be literate, disciplined, hardworking, and
+                    God-fearing through the help of the divine creator/counselor.</p>
+
+                <p>Consistent and continuous improvement over the years has earned our schools a well-deserved
+                    reputation as one of Nigeria's leading private institutions. We are fully equipped with the latest
+                    technology in teaching and learning, and able to provide an all-embracing education that is of
+                    21st-century standard.</p>
+
+                <h2>BE A STAR ILLUMINATING THE WORLD</h2>
+
+                <blockquote>
+                    "Somewhere, something incredible is waiting to be known." - Carl Sagan
+                </blockquote>
+
+                <p>There is never any point in the life of a person when he can sit back and say. "There is nothing more
+                    to learn, I can relax with the comforting thought that the universe around me is an open book. I
+                    know it all."</p>
+
+                <p>Education is not just about the subjects that are learnt and taught in school. Becoming educated is
+                    not restricted to being in school and then in college, gathering certificates and feeling proud of
+                    oneself. It is a lifelong exercise that can be unbelievably exciting if only we wish to jump onto
+                    the train of experience and take a trip to every conceivable place on the earth. Now we know that
+                    this cannot be done literally, so how do we manage it, first in school and then as we go on through
+                    the journey of life?</p>
+
+                <p>First, we all have to be on the same page: children, teachers and parents have to understand that
+                    education is not restricted to lessons taught in the classroom from text books. Parents and teachers
+                    must encourage children to ask as many questions as they can. For it is in wanting to know that will
+                    result in actually getting to know.</p>
+
+                <p>The thirst for knowledge is not restricted to the child. It is also essential for a parent and a
+                    teacher to keep adding to their own knowledge bank by keeping their eyes and ears open and by
+                    reading as much as possible and ensuring that children develop these habits as well.</p>
+
+                <p>We received the fundamentals of our education in school, but that was not enough. our real education,
+                    the superstructure, the details, the true architecture, many of us got it out of the library --
+                    reading books. For an impoverished child whose family could not afford to buy books, the library was
+                    the open door to wonder and achievements.</p>
+
+                <p>Besides all of the above, that add to children becoming truly educated, schools and teachers must
+                    ensure that children have a society of enriching experiences.</p>
+
+                <p>Surprisingly, these experiences develop a child's creativity and imagination and lead to something
+                    that is often thought to be more important than knowledge. Creativity and imagination make children
+                    grow up to be productive adults who then arrive as citizens of the world ready to make their own
+                    great contribution to mankind.</p>
+
+                <blockquote>
+                    "Imagination is more important than knowledge. For knowledge is limited to all we now know and
+                    understand, while imagination embraces the entire world, and all there ever will be to know and
+                    understand." - Albert Einstein
+                </blockquote>
+
+                <p>Let us together with our children be passionate about going the extra miles to light the world around
+                    us. No excuse will be good enough why your foundation is not strong enough to carry the societal
+                    expectation of you and while someone else in your age class and even school has the correct approach
+                    to success given the same circumstance.</p>
+
+                <p>At Mighty School For Valours, we are committed to providing this strong foundation through our
+                    holistic approach to education. We believe in nurturing not just academic excellence, but also
+                    character, creativity, and a lifelong love for learning.</p>
+
+                <p>Our dedicated team of educators works tirelessly to create an environment where every child can
+                    discover their unique talents and develop the skills needed to thrive in the 21st century. We
+                    integrate technology with traditional values, ensuring our students are well-prepared for the
+                    challenges and opportunities of the future.</p>
+
+                <p>I invite you to join us in this noble mission of shaping the leaders of tomorrow. Together, we can
+                    build a brighter future for our children and our nation.</p>
+            </div>
+        </section>
+
+        <!-- Educational Philosophy -->
+        <section class="philosophy-section">
+            <h2 class="philosophy-title">Educational Philosophy</h2>
+
+            <div class="philosophy-content">
+                <div class="philosophy-item">
+                    <h3><i class="fas fa-graduation-cap"></i> Holistic Development</h3>
+                    <p>We believe in educating the whole child - academically, emotionally, socially, and spiritually.
+                        Our curriculum is designed to develop well-rounded individuals who excel in all aspects of life.
+                    </p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3><i class="fas fa-lightbulb"></i> Innovation in Learning</h3>
+                    <p>We embrace innovative teaching methods and technologies to make learning engaging and relevant.
+                        Our classrooms are dynamic spaces where curiosity is encouraged and creativity flourishes.</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3><i class="fas fa-heart"></i> Character Building</h3>
+                    <p>Beyond academic knowledge, we focus on building strong character. Our values of discipline,
+                        honesty, respect, and hard work are integrated into every aspect of school life.</p>
+                </div>
+
+                <div class="philosophy-item">
+                    <h3><i class="fas fa-handshake"></i> Partnership with Parents</h3>
+                    <p>We recognize that education is a collaborative effort between school and home. We maintain open
+                        communication with parents and involve them in their children's educational journey.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta-section">
+            <h2 class="cta-title">Join Our Educational Community</h2>
+            <p class="cta-text">Discover how Mighty School For Valours can provide your child with the strong foundation
+                needed for lifelong success. Schedule a visit to our campus or contact us for more information.</p>
+            <a href="admissions.html" class="btn btn-secondary">Apply for Admission</a>
+            <a href="contact.html" class="btn btn-outline" style="margin-left: 1rem;">Contact Us</a>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 class="footer-heading">Mighty School For Valours</h3>
+                    <p>Excellence in Education Since 2013</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="index.html">Home</a></li>
+                        <li class="footer-link"><a href="about.html">About Us</a></li>
+                        <li class="footer-link"><a href="academics.html">Academics</a></li>
+                        <li class="footer-link"><a href="admissions.html">Admissions</a></li>
+                        <li class="footer-link"><a href="news.html">News & Events</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Info</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour
+                            Land Estate, Iyesi-Osuke Road, Ota, Ogun State.</li>
+                        <li class="footer-link"><i class="fas fa-phone"></i> 08125088948; 08120493299; 08143399779</li>
+                        <li class="footer-link"><i class="fas fa-envelope"></i> mforvalour@gmail.com</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mighty School For Valours. All Rights Reserved.</p>
+                <p>Powered by <a href="https://digskills.netlify.app" target="_blank"
+                        rel="noopener noreferrer">DigSkills</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Navigation Toggle
+        const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+        const nav = document.querySelector('.nav');
+
+        mobileNavToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+            const icon = mobileNavToggle.querySelector('i');
+            if (nav.classList.contains('active')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
+        });
+    </script>
+</body>
+
+</html>

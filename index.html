@@ -140,6 +140,18 @@
             opacity: 1;
         }
 
+        .slide-1 {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+        }
+
+        .slide-2 {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+        }
+
+        .slide-3 {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://images.unsplash.com/photo-1560785496-3c9d27877182?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+        }
+
         .hero-content {
             max-width: 800px;
             padding: 2rem;
@@ -190,9 +202,9 @@
         }
 
         .btn-outline {
-            background-color: transparent;
+            background-color: red;
             color: var(--color-white);
-            border: 2px solid var(--color-white);
+            border: 2px solid var(--color-blue);
         }
 
         .btn-outline:hover {
@@ -348,6 +360,125 @@
             border-left: 4px solid var(--color-secondary);
         }
 
+        /* Achievement Section */
+        .achievement-section {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .achievement-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .achievement-content {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        .achievement-highlight {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        /* Curriculum Section */
+        .curriculum-section {
+            background-color: var(--color-background);
+        }
+
+        .curriculum-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .curriculum-image {
+            width: 100%;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .curriculum-points {
+            list-style-type: none;
+        }
+
+        .curriculum-points li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .curriculum-points li:before {
+            content: '✓';
+            color: var(--color-success);
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+
+        /* Educators Section */
+        .educators-section {
+            background-color: var(--color-white);
+        }
+
+        .educators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .educator-role {
+            background-color: var(--color-background);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            text-align: center;
+        }
+
+        .educator-icon {
+            font-size: 3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        /* Value Added Programs */
+        .programs-section {
+            background-color: var(--color-background);
+        }
+
+        .programs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .program-card {
+            background-color: var(--color-white);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .program-title {
+            font-size: 1.3rem;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .program-title i {
+            margin-right: 0.5rem;
+            color: var(--color-secondary);
+        }
+
         /* Footer */
         .footer {
             background-color: var(--color-dark);
@@ -435,6 +566,10 @@
             .welcome-container {
                 grid-template-columns: 1fr;
             }
+
+            .curriculum-container {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -486,6 +621,80 @@
             .btn {
                 width: 100%;
             }
+
+            .achievement-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Gallery Preview Styles */
+        .gallery-preview {
+            margin-bottom: 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            aspect-ratio: 1;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+
+        .gallery-text {
+            color: var(--color-white);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .gallery-overlay {
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -510,6 +719,7 @@
                         <li><a href="about.html" class="nav-link">About Us</a></li>
                         <li><a href="academics.html" class="nav-link">Academics</a></li>
                         <li><a href="admissions.html" class="nav-link">Admissions</a></li>
+                        <li><a href="cbt.html" class="nav-link">CBT Portal</a></li>
                     </ul>
                 </nav>
             </div>
@@ -519,20 +729,15 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-slider">
-            <div>
-                <img src="images/slide1.jpg" alt="School Budiling">
-            </div>
-            <div>
-                <img src="images/slide2.jpg" alt="School Budiling">
-
-            </div>
+            <img src="images/slide1.jpg" alt="Slide 1">
+            <img src="images/slide2.jpg" alt="Slide 2">
         </div>
         <div class="hero-content">
             <h1 class="hero-title">Mighty School For Valours</h1>
             <p class="hero-subtitle">Building Strong Foundations for Lifelong Success</p>
             <div class="hero-cta">
                 <a href="admissions.html#apply" class="btn btn-primary">Apply Now</a>
-                <a href="cbt.html" target="_blank" class="btn btn-primary">CBT Portal</a>
+                <a href="cbt.html" class="btn btn-outline">CBT Portal</a>
             </div>
         </div>
     </section>
@@ -567,7 +772,7 @@
         <div class="container">
             <div class="welcome-container">
                 <div class="director-image">
-                    <img src="images/director.png" alt="Director of Schools" width="100%" height="auto">
+                    <img src="images/director1.png" alt="Director of Schools" width="100%" height="auto">
                 </div>
                 <div>
                     <h2 class="section-title">From the Desk of the Director of Schools</h2>
@@ -581,44 +786,29 @@
                     <p>For close to a decade now, MIGHTY SCHOOL FOR VALOURS has remained focused on the pursuit of its
                         vision -- that of producing good citizens who will be literate, disciplined, hardworking, and
                         God-fearing through the help of the divine creator/counselor.</p>
-                    <a href="about.html#leadership" class="btn btn-primary" style="margin-top: 1.5rem;">Learn More About
-                        Our Vision</a>
+                    <a href="directors-page.html" class="btn btn-primary" style="margin-top: 1.5rem;">Read More...</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Quotes Section -->
-    <section class="section quotes-section">
+    <!-- Achievement Section -->
+    <section class="achievement-section">
         <div class="container">
-            <h2 class="section-title">Inspiring Quotes</h2>
-            <div class="quotes-grid">
-                <div class="quote-card">
-                    <p class="quote-text">"You are never given a wish without also being given the power to make it come
-                        true. You may have to work for it, however."</p>
-                    <p class="quote-author">- Richard Bach</p>
+            <h2 class="achievement-title">Outstanding Student Achievements</h2>
+            <div class="achievement-content">
+                <p>The achievements of MIGHTY SCHOOL FOR VALOURS College cannot be over-emphasized. Academically, our
+                    students have recorded a 100% pass rate in the last four years in SSCE Examinations.</p>
+
+                <div class="achievement-highlight">
+                    <p><strong>MIGHTY SCHOOL FOR VALOURS Nursery and Primary School City won the Ogun State Governor's
+                            Essay Competition in 2018</strong> and was awarded the Merit Award presented by the
+                        Commissioner for Education at the 2018 Children Day Event at M.K.O Abiola Stadium, Abeokuta,
+                        Ogun State.</p>
                 </div>
-                <div class="quote-card">
-                    <p class="quote-text">"Education is not just a preparation for life, Education is life itself"</p>
-                </div>
-                <div class="quote-card">
-                    <p class="quote-text">"The price of discipline is always less than the pain of regrets"</p>
-                    <p class="quote-author">- Nido Qubein</p>
-                </div>
-                <div class="quote-card">
-                    <p class="quote-text">"A child mis-educated is a child lost"</p>
-                    <p class="quote-author">- John F. Kennedy</p>
-                </div>
-                <div class="quote-card">
-                    <p class="quote-text">"There is a brilliant child locked inside every student"</p>
-                    <p class="quote-author">- Marva Collins</p>
-                </div>
-                <div class="quote-card">
-                    <p class="quote-text">"Imagination is more important than knowledge. For knowledge is limited to all
-                        we now know and understand, while imagination embraces the entire world, and all there ever will
-                        be to know and understand."</p>
-                    <p class="quote-author">- Albert Einstein</p>
-                </div>
+
+                <p>Awards have also been won in co-curricular activities within and outside Lagos, and the college is
+                    well known to have won awards in sporting activities.</p>
             </div>
         </div>
     </section>
@@ -664,6 +854,37 @@
         </div>
     </section>
 
+    <!-- Curriculum Section -->
+    <section class="section curriculum-section">
+        <div class="container">
+            <h2 class="section-title">Our Progressive Curriculum</h2>
+            <div class="curriculum-container">
+                <div>
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                        alt="Students Learning" class="curriculum-image">
+                </div>
+                <div>
+                    <p>The curriculum for MIGHTY SCHOOL FOR VALOURS Secondary Schools is modern and challenges and
+                        inspires learners to be adaptable and flexible. The Curriculum is coherent with the needs of
+                        learners, Nigeria and the broader international society.</p>
+
+                    <p>The curriculum is not static and prepares learners to create their own future and to adapt to the
+                        needs of the society. It promotes an all-round education, focusing on the total well-being of
+                        the learners (cognitive, emotional and psycho-motor). In short: It prepares learners for the
+                        opportunities and experiences of a highly competitive environment and society.</p>
+
+                    <ul class="curriculum-points">
+                        <li>Encourages broad, in-depth and balanced learning</li>
+                        <li>Fosters creativity and innovation</li>
+                        <li>Based on higher cognitive domains of learning</li>
+                        <li>Outcomes last a lifetime and encourage lifelong learning</li>
+                        <li>Integrates Experiential Learning (learning by experience)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Strategic Focus Section -->
     <section class="section" style="background-color: var(--color-background);">
         <div class="container">
@@ -688,27 +909,146 @@
         </div>
     </section>
 
-    <!-- Mission & Vision Section -->
-    <section class="section">
+    <!-- Educators Section -->
+    <section class="section educators-section">
         <div class="container">
-            <div class="welcome-container">
-                <div>
-                    <h2 class="section-title">Our Mission & Vision</h2>
-                    <div class="feature-card" style="margin-bottom: 2rem;">
-                        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">OUR MISSION</h3>
-                        <p>TO DELIVER EXCELLENT AND ALL ROUND EDUCATION TO HAPPY, SOUND AND ASSERTIVE INTELLECTUALS BY
-                            WHICH THEY WILL BE FIT TO TAKE UP ANY DISCIPLINED ROLE IN LIFE AND FACE THE CHALLENGES OF
-                            LIFE BOLDLY.</p>
+            <h2 class="section-title">Our 21st Century Educators</h2>
+            <p
+                style="text-align: center; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                In the execution of a progressive 21st century curriculum in MIGHTY SCHOOL FOR VALOURS Secondary
+                Schools, we have educators that are:
+            </p>
+            <div class="educators-grid">
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
                     </div>
-                    <div class="feature-card">
-                        <h3 style="color: var(--color-primary); margin-bottom: 1rem;">OUR VISION</h3>
-                        <p>TO PRODUCE GOOD CITIZENS WHO WILL BE LITERATE, DISCIPLINED, HARDWORKING AND GOD FEARING
-                            THROUGH THE HELP OF THE DIVINE CREATOR/COUNSELLOR.</p>
+                    <h3>Facilitators of Learning</h3>
+                    <p>Guiding students to discover knowledge rather than just delivering content</p>
+                </div>
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3>Providers of Learning Opportunities</h3>
+                    <p>Creating diverse and engaging learning experiences for all students</p>
+                </div>
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Evaluators of Learning</h3>
+                    <p>Assessing student progress with multiple methods and providing meaningful feedback</p>
+                </div>
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h3>Assessors of Progress</h3>
+                    <p>Monitoring and supporting each student's academic journey</p>
+                </div>
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </div>
+                    <h3>Reflexive Educational Professionals</h3>
+                    <p>Continuously improving their practice through reflection and professional development</p>
+                </div>
+                <div class="educator-role">
+                    <div class="educator-icon">
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h3>Inspirational Leaders</h3>
+                    <p>Motivating students to achieve their full potential and become lifelong learners</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem; font-style: italic;">
+                Curriculum Development in MIGHTY SCHOOL FOR VALOURS is a dynamic process that is always based on the
+                results, findings, outcomes and suggestions of action research projects.
+            </p>
+        </div>
+    </section>
+
+    <!-- Value Added Programs Section -->
+    <section class="section programs-section">
+        <div class="container">
+            <h2 class="section-title">Value Added Programs</h2>
+            <p
+                style="text-align: center; margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Programs being presented by approved service providers include:
+            </p>
+            <div class="programs-grid">
+                <div class="program-card">
+                    <h3 class="program-title"><i class="fas fa-book-reader"></i> Reading and Creative Writing Programme
+                    </h3>
+                    <p>The focus of this programme is to improve the reading skills and comprehension of a learner in
+                        English and French. The creative writing component develops the writing style and proficiency of
+                        a learner in grammar and the use of language in these subjects.</p>
+                </div>
+                <div class="program-card">
+                    <h3 class="program-title"><i class="fas fa-calculator"></i> Mathematics Development Programme</h3>
+                    <p>This programme addresses remedial aspects in mathematics and support learners to apply
+                        mathematical knowledge and skills in today's technically oriented work environment.</p>
+                </div>
+                <div class="program-card">
+                    <h3 class="program-title"><i class="fas fa-comments"></i> Speech Improvement Programme</h3>
+                    <p>This highly popular programme, conducted in modern language studios, assists learners to become
+                        confident conversants in English and French.</p>
+                </div>
+                <div class="program-card">
+                    <h3 class="program-title"><i class="fas fa-laptop-code"></i> Computer Skills Programme</h3>
+                    <p>This programme provides a learner the opportunity to keep abreast with the latest international
+                        developments in information technology and to qualify for an international certificate in
+                        computer science.</p>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 2rem;">
+                <strong>The relevance and quality of the programmes are being assured and controlled by the Quality
+                    Control Unit of MIGHTY SCHOOL FOR VALOURS Limited. The aims of these programmes are aligned with the
+                    outcome of the Nigerian/British Curriculum.</strong>
+            </p>
+        </div>
+    </section>
+
+    <section class="section" style="background-color: var(--color-background);">
+        <div class="container">
+            <h2 class="section-title">Explore Our Pictures</h2>
+            <p style="text-align: center; max-width: 800px; margin: 0 auto 3rem auto;">
+                Take a visual journey through our vibrant campus life, academic activities, and memorable events at
+                Mighty School For Valours.
+            </p>
+
+            <div class="gallery-preview">
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img src="images/graduating_student.jpeg" alt="School Campus" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Campus Life</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/director_with_students.jpeg" alt="Classroom Activities" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Direector with students</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/director_and_directormrs.jpeg" alt="Sports Events" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Director & Director Mrs</div>
+                        </div>
+                    </div>
+                    <div class="gallery-item">
+                        <img src="images/graduating_student.jpeg" alt="Cultural Events" class="gallery-image">
+                        <div class="gallery-overlay">
+                            <div class="gallery-text">Cultural Events</div>
+                        </div>
                     </div>
                 </div>
-                <div class="director-image">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <a href="gallery.html" class="btn btn-primary btn-large">View Full Gallery</a>
             </div>
         </div>
     </section>
@@ -734,7 +1074,7 @@
                         <li class="footer-link"><a href="about.html">About Us</a></li>
                         <li class="footer-link"><a href="academics.html">Academics</a></li>
                         <li class="footer-link"><a href="admissions.html">Admissions</a></li>
-                        <li class="footer-link"><a href="news.html">News & Events</a></li>
+                        <li class="footer-link"><a href="cbt.html">CBT Portal</a></li>
                     </ul>
                 </div>
                 <div>
