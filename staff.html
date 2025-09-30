@@ -1321,13 +1321,18 @@
 
         // Data Loading Functions
         async function loadInitialData() {
-            await loadSubjectsAndClasses();
-            await loadSettings();
-            loadDashboardData();
+            try {
+                // Set staff assigned subjects and classes first
+                staffSubjects = currentStaff.subjects || [];
+                staffClasses = currentStaff.assignedClasses || [];
 
-            // Set staff assigned subjects and classes
-            staffSubjects = currentStaff.subjects || [];
-            staffClasses = currentStaff.assignedClasses || [];
+                await loadSubjectsAndClasses();
+                await loadSettings();
+                await loadDashboardData();
+            } catch (error) {
+                console.error('Error in loadInitialData:', error);
+                showNotification('Error loading initial data', 'error');
+            }
         }
 
         async function loadSubjectsAndClasses() {
@@ -1337,21 +1342,28 @@
                     db.collection('classes').get()
                 ]);
 
-                subjects = subjectsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                classes = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                let allSubjects = subjectsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                let allClasses = classesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
 
                 // Filter subjects and classes based on staff assignments
-                if (staffSubjects.length > 0) {
-                    subjects = subjects.filter(subject => staffSubjects.includes(subject.id));
+                if (staffSubjects && staffSubjects.length > 0) {
+                    subjects = allSubjects.filter(subject => staffSubjects.includes(subject.id));
+                } else {
+                    subjects = []; // No subjects assigned
                 }
-                if (staffClasses.length > 0) {
-                    classes = classes.filter(cls => staffClasses.includes(cls.id));
+
+                if (staffClasses && staffClasses.length > 0) {
+                    classes = allClasses.filter(cls => staffClasses.includes(cls.id));
+                } else {
+                    classes = []; // No classes assigned
                 }
 
                 // Update filter dropdowns
                 updateFilterDropdowns();
             } catch (error) {
                 console.error('Error loading subjects and classes:', error);
+                subjects = [];
+                classes = [];
             }
         }
 
@@ -1388,56 +1400,81 @@
 
         async function loadDashboardData() {
             try {
-                const [
-                    questionsSnapshot,
-                    examsSnapshot,
-                    studentsSnapshot,
-                    resultsSnapshot
-                ] = await Promise.all([
+                // First, get questions and exams independently
+                const [questionsSnapshot, examsSnapshot] = await Promise.all([
                     db.collection('questions')
                         .where('createdBy', '==', currentStaff.userId)
                         .get(),
                     db.collection('exams')
                         .where('createdBy', '==', currentStaff.userId)
-                        .get(),
-                    db.collection('users')
-                        .where('role', '==', 'student')
-                        .where('class', 'in', staffClasses)
-                        .get(),
-                    db.collection('results')
-                        .where('examId', 'in', examsSnapshot.docs.map(doc => doc.id))
-                        .limit(5)
                         .get()
                 ]);
+
+                // Get student count - handle empty staffClasses array
+                let studentsCount = 0;
+                if (staffClasses && staffClasses.length > 0) {
+                    // For multiple classes, we need to query each class separately due to Firestore limitations
+                    const studentPromises = staffClasses.map(classId =>
+                        db.collection('users')
+                            .where('role', '==', 'student')
+                            .where('class', '==', classId)
+                            .get()
+                    );
+
+                    const studentSnapshots = await Promise.all(studentPromises);
+                    studentsCount = studentSnapshots.reduce((total, snapshot) => total + snapshot.size, 0);
+                }
+
+                // Get recent results using the exams we fetched
+                const examIds = examsSnapshot.docs.map(doc => doc.id);
+                let resultsSnapshot;
+                if (examIds.length > 0) {
+                    resultsSnapshot = await db.collection('results')
+                        .where('examId', 'in', examIds.slice(0, 10)) // Firestore 'in' limit is 10
+                        .orderBy('submittedAt', 'desc')
+                        .limit(5)
+                        .get();
+                } else {
+                    resultsSnapshot = { empty: true, forEach: () => { } }; // Empty results
+                }
 
                 // Update counts
                 document.getElementById('totalQuestions').textContent = questionsSnapshot.size;
                 document.getElementById('totalExams').textContent = examsSnapshot.size;
 
+                // Calculate active exams
+                const now = new Date();
                 const activeExams = examsSnapshot.docs.filter(doc => {
                     const exam = doc.data();
-                    const now = new Date();
                     const availableUntil = exam.availableUntil?.toDate();
-                    return now <= availableUntil;
+                    return availableUntil && now <= availableUntil;
                 }).length;
 
                 document.getElementById('activeExams').textContent = activeExams;
-                document.getElementById('totalStudents').textContent = studentsSnapshot.size;
+                document.getElementById('totalStudents').textContent = studentsCount;
 
                 // Load recent activity
                 loadRecentActivity(resultsSnapshot);
 
                 // Load assigned information
                 loadAssignedInformation();
+
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
+                showNotification('Error loading dashboard data', 'error');
+
+                // Set default values on error
+                document.getElementById('totalQuestions').textContent = '0';
+                document.getElementById('totalExams').textContent = '0';
+                document.getElementById('activeExams').textContent = '0';
+                document.getElementById('totalStudents').textContent = '0';
             }
         }
 
         function loadRecentActivity(resultsSnapshot) {
             const activityContainer = document.getElementById('recentActivity');
 
-            if (resultsSnapshot.empty) {
+            if (!resultsSnapshot || resultsSnapshot.empty) {
                 activityContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No recent activity</p>';
                 return;
             }
@@ -1445,15 +1482,19 @@
             let activityHTML = '';
             resultsSnapshot.forEach(doc => {
                 const result = doc.data();
+                const submittedDate = result.submittedAt?.toDate
+                    ? new Date(result.submittedAt.toDate()).toLocaleString()
+                    : 'Unknown date';
+
                 activityHTML += `
-                    <div style="padding: 10px; border-left: 4px solid var(--secondary); background: #f8f9fa; margin-bottom: 10px;">
-                        <strong>Exam Completed</strong>
-                        <p style="margin: 5px 0 0 0; color: #666;">
-                            Student scored ${result.percentage}% in ${result.examTitle}
-                        </p>
-                        <small style="color: #999;">${new Date(result.submittedAt?.toDate()).toLocaleString()}</small>
-                    </div>
-                `;
+            <div style="padding: 10px; border-left: 4px solid var(--secondary); background: #f8f9fa; margin-bottom: 10px;">
+                <strong>Exam Completed</strong>
+                <p style="margin: 5px 0 0 0; color: #666;">
+                    Student scored ${result.percentage || 0}% in ${result.examTitle || 'Unknown Exam'}
+                </p>
+                <small style="color: #999;">${submittedDate}</small>
+            </div>
+        `;
             });
 
             activityContainer.innerHTML = activityHTML;

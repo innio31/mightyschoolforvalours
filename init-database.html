@@ -385,12 +385,31 @@
                 const staffMembers = [
                     {
                         id: 'staff001',
-                        staffId: 'teacher.math@mightyschoolforvalours.com',
+                        staffId: 'MSV00049CO',
                         password: 'staff123',
                         firstName: 'Mathematics',
                         lastName: 'Teacher',
-                        subjects: ['math001'],
-                        assignedClasses: ['jss1', 'jss2', 'jss3', 'ss1_sci', 'ss2_sci', 'ss3_sci']
+                        email: 'MSV00049CO@mightyschool.edu.ng',
+                        role: 'staff',
+                        roles: {
+                            isSubjectTeacher: true,
+                            isClassTeacher: true
+                        },
+                        permissions: {
+                            canManageExams: true,
+                            canManageStudents: true,
+                            canViewResults: true
+                        },
+                        subjectTeacher: {
+                            subjects: ['math001'],
+                            assignedClasses: ['jss1', 'jss2', 'jss3', 'ss1_sci', 'ss2_sci', 'ss3_sci']
+                        },
+                        classTeacher: {
+                            assignedClasses: ['jss1'] // Only classes they are class teacher for
+                        },
+                        isActive: true,
+                        createdAt: timestamp,
+                        mustChangePassword: true
                     },
                     {
                         id: 'staff002',
@@ -424,9 +443,13 @@
                 updateStatus('Creating student accounts...');
 
                 const students = [
-                    { id: 'student001', admissionNumber: '836C', firstName: 'Ebosetale', lastName: 'Abiode', class: 'ss3_art', password: 'adekunle' },
-                    { id: 'student002', admissionNumber: '1164C', firstName: 'Adeleke Farian', lastName: 'Okonkwo', class: 'ss3_sci', password: 'okonkwo' },
-                    { id: 'student003', admissionNumber: 'MSV2024003', firstName: 'Emmanuel', lastName: 'Ademuyiwa', class: 'ss3_com', password: 'ademuyiwa' }
+                    [
+                        { id: 'student001', admissionNumber: 'MSV836C', firstName: 'EBOSETALE AMOS', lastName: 'ABODE', class: 'ss3_art', password: 'abIode' },
+                        { id: 'student002', admissionNumber: 'MSV1164C', firstName: 'OREOLUWA FARIAN', lastName: 'ADELERE', class: 'ss3_art', password: 'adeleKe' },
+                        { id: 'student003', admissionNumber: 'MSV438C', firstName: 'SARAH OVINKANSOLA', lastName: 'ADEOSUN', class: 'ss3_art', password: 'adeosun' },
+                        { id: 'student004', admissionNumber: 'MSV845C', firstName: 'OLUWAFERAMMI MERÇO', lastName: 'AFOLAYAN', class: 'ss3_art', password: 'afolayan' },
+                        { id: 'student005', admissionNumber: 'MSV1089C', firstName: 'OLAMIDE AYOMIDE', lastName: 'AJAYI', class: 'ss3_art', password: 'ajayi' }
+                    ]
                 ];
 
                 for (const student of students) {
