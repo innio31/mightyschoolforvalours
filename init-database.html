@@ -366,12 +366,12 @@
                 updateStatus('Creating admin account...');
 
                 await db.collection('users').doc('admin001').set({
-                    userId: 'admin001',
-                    email: 'mforvalours@gmail.com',
+                    userId: 'admin002',
+                    email: 'samadeimmanuel@yahoo.com',
                     password: 'admin123', // In production, this should be hashed
                     role: 'admin',
-                    firstName: 'School',
-                    lastName: 'Admin',
+                    firstName: 'Emmanuel',
+                    lastName: 'Ademuyiwa',
                     isActive: true,
                     createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                     lastLogin: null,
@@ -408,7 +408,7 @@
                             assignedClasses: ['jss1'] // Only classes they are class teacher for
                         },
                         isActive: true,
-                        createdAt: timestamp,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                         mustChangePassword: true
                     },
                     {
@@ -444,13 +444,53 @@
 
                 const students = [
                     [
-                        { id: 'student001', admissionNumber: 'MSV836C', firstName: 'EBOSETALE AMOS', lastName: 'ABODE', class: 'ss3_art', password: 'abIode' },
-                        { id: 'student002', admissionNumber: 'MSV1164C', firstName: 'OREOLUWA FARIAN', lastName: 'ADELERE', class: 'ss3_art', password: 'adeleKe' },
-                        { id: 'student003', admissionNumber: 'MSV438C', firstName: 'SARAH OVINKANSOLA', lastName: 'ADEOSUN', class: 'ss3_art', password: 'adeosun' },
-                        { id: 'student004', admissionNumber: 'MSV845C', firstName: 'OLUWAFERAMMI MERÇO', lastName: 'AFOLAYAN', class: 'ss3_art', password: 'afolayan' },
-                        { id: 'student005', admissionNumber: 'MSV1089C', firstName: 'OLAMIDE AYOMIDE', lastName: 'AJAYI', class: 'ss3_art', password: 'ajayi' }
+                        { "id": "student003", "admissionNumber": "MSV838C", "firstName": "Oyinkansola", "lastName": "Adeosun", "class": "ss3_art", "password": "Adeosun" },
+                        { "id": "student004", "admissionNumber": "MSV845C", "firstName": "Mercy Oluwaferanmi", "lastName": "Afolayan", "class": "ss3_art", "password": "Afolayan" },
+                        { "id": "student005", "admissionNumber": "MSV1089C", "firstName": "Ayomide Olamide", "lastName": "Ajayi", "class": "ss3_art", "password": "Ajayi" },
+                        { "id": "student006", "admissionNumber": "MSV1152C", "firstName": "Gbenga Oluwasegun", "lastName": "Awolusi", "class": "ss3_art", "password": "Awolusi" },
+                        { "id": "student007", "admissionNumber": "MSV1236C", "firstName": "Samuel Oluwasegun", "lastName": "Ayegbo", "class": "ss3_art", "password": "Ayegbo" },
+                        { "id": "student008", "admissionNumber": "MSV884C", "firstName": "Ireoluwa Gabriel", "lastName": "Bada", "class": "ss3_art", "password": "Bada" },
+                        { "id": "student009", "admissionNumber": "MSV1172C", "firstName": "Yetunde Deborah", "lastName": "Bolarinde", "class": "ss3_art", "password": "Bolarinde" },
+                        { "id": "student010", "admissionNumber": "MSV850C", "firstName": "Mustapha Inioluwa", "lastName": "Durajaiye", "class": "ss3_art", "password": "Durajaiye" },
+                        { "id": "student011", "admissionNumber": "MSV857C", "firstName": "Omotolashe Hikimat", "lastName": "Eletu", "class": "ss3_art", "password": "Eletu" },
+                        { "id": "student012", "admissionNumber": "MSV853C", "firstName": "Uyiosa Harrison", "lastName": "Enotiemwonmwam", "class": "ss3_art", "password": "Enotiemwonmwam" },
+                        { "id": "student013", "admissionNumber": "MSV877C", "firstName": "Eric Efosa", "lastName": "Fidelis", "class": "ss3_art", "password": "Fidelis" },
+                        { "id": "student014", "admissionNumber": "MSV1179C", "firstName": "Testimony Oluwadamilola", "lastName": "Folaranmi", "class": "ss3_art", "password": "Folaranmi" },
+                        { "id": "student015", "admissionNumber": "MSV1174C", "firstName": "Islamiyat Oyinkansola", "lastName": "Giwa", "class": "ss3_art", "password": "Giwa" },
+                        { "id": "student016", "admissionNumber": "MSV897C", "firstName": "Halimot Morayo", "lastName": "Hassan", "class": "ss3_art", "password": "Hassan" },
+                        { "id": "student017", "admissionNumber": "MSV789C", "firstName": "Selim Opeyemi", "lastName": "Hassan", "class": "ss3_art", "password": "Hassan" },
+                        { "id": "student018", "admissionNumber": "MSV975C", "firstName": "Goodluck Emmanuel", "lastName": "Idibia", "class": "ss3_art", "password": "Idibia" },
+                        { "id": "student019", "admissionNumber": "MSV919C", "firstName": "Peculiar Chineyenwa", "lastName": "Ifeanyi", "class": "ss3_art", "password": "Ifeanyi" },
+                        { "id": "student020", "admissionNumber": "MSV895C", "firstName": "Treasure Chidiebube", "lastName": "Ikechukwu", "class": "ss3_art", "password": "Ikechukwu" },
+                        { "id": "student021", "admissionNumber": "MSV1087C", "firstName": "Ameerah Iseoluwa", "lastName": "Issa", "class": "ss3_art", "password": "Issa" },
+                        { "id": "student022", "admissionNumber": "MSV858C", "firstName": "Fathia Pelumi", "lastName": "Jimoh", "class": "ss3_art", "password": "Jimoh" },
+                        { "id": "student023", "admissionNumber": "MSV091C", "firstName": "Success Elizabeth", "lastName": "Kayode", "class": "ss3_art", "password": "Kayode" },
+                        { "id": "student024", "admissionNumber": "MSV1102C", "firstName": "Gilama Peniel", "lastName": "Kulam", "class": "ss3_art", "password": "Kulam" },
+                        { "id": "student025", "admissionNumber": "MSV906C", "firstName": "Aminat Omowunmi", "lastName": "Memud", "class": "ss3_art", "password": "Memud" },
+                        { "id": "student026", "admissionNumber": "MSV956C", "firstName": "Damilola Gabriel", "lastName": "Mogaji", "class": "ss3_art", "password": "Mogaji" },
+                        { "id": "student027", "admissionNumber": "MSV863C", "firstName": "Joseph Osebhajimede", "lastName": "Nasiru", "class": "ss3_art", "password": "Nasiru" },
+                        { "id": "student028", "admissionNumber": "MSV865C", "firstName": "Elizabeth Inumidun", "lastName": "Odeyemi", "class": "ss3_art", "password": "Odeyemi" },
+                        { "id": "student029", "admissionNumber": "MSV1147C", "firstName": "David Oladele", "lastName": "Ogunseye", "class": "ss3_art", "password": "Ogunseye" },
+                        { "id": "student030", "admissionNumber": "MSV866C", "firstName": "Haabeebat Oyindamola", "lastName": "Oladejo", "class": "ss3_art", "password": "Oladejo" },
+                        { "id": "student031", "admissionNumber": "MSV867C", "firstName": "Elizabeth Oluwabunmi", "lastName": "Olafisoye", "class": "ss3_art", "password": "Olafisoye" },
+                        { "id": "student032", "admissionNumber": "MSV1156C", "firstName": "Oluwatimileyin Mary", "lastName": "Olanro", "class": "ss3_art", "password": "Olanro" },
+                        { "id": "student033", "admissionNumber": "MSV878C", "firstName": "David Olamilekan", "lastName": "Olanusi", "class": "ss3_art", "password": "Olanusi" },
+                        { "id": "student034", "admissionNumber": "MSV1166C", "firstName": "Aliyah Odunayo", "lastName": "Omotosho", "class": "ss3_art", "password": "Omotosho" },
+                        { "id": "student035", "admissionNumber": "MSV870C", "firstName": "Joseph Oluwanifemi", "lastName": "Onajobi", "class": "ss3_art", "password": "Onajobi" },
+                        { "id": "student036", "admissionNumber": "MSV871C", "firstName": "Omotola Esther", "lastName": "Oniyide", "class": "ss3_art", "password": "Oniyide" },
+                        { "id": "student037", "admissionNumber": "MSV1175C", "firstName": "Sherifah Ayodeji", "lastName": "Orolade", "class": "ss3_art", "password": "Orolade" },
+                        { "id": "student038", "admissionNumber": "MSV900C", "firstName": "Morayo Inioluwa", "lastName": "Osamo", "class": "ss3_art", "password": "Osamo" },
+                        { "id": "student039", "admissionNumber": "MSV912C", "firstName": "Israel Oluwadamilare", "lastName": "Oyewole", "class": "ss3_art", "password": "Oyewole" },
+                        { "id": "student040", "admissionNumber": "MSSV932C", "firstName": "Adijat Precious", "lastName": "Raji", "class": "ss3_art", "password": "Raji" },
+                        { "id": "student041", "admissionNumber": "MSV873C", "firstName": "Temitayo Sarah", "lastName": "Rotimi", "class": "ss3_art", "password": "Rotimi" },
+                        { "id": "student042", "admissionNumber": "MSV784C", "firstName": "Moses Oluwapelumi", "lastName": "Samuel", "class": "ss3_art", "password": "Samuel" },
+                        { "id": "student043", "admissionNumber": "MSV1182C", "firstName": "Flourish Titoluwani", "lastName": "Soetan", "class": "ss3_art", "password": "Soetan" },
+                        { "id": "student044", "admissionNumber": "MSV1169C", "firstName": "Precious Somoyeni", "lastName": "Sumanu", "class": "ss3_art", "password": "Sumanu" },
+                        { "id": "student045", "admissionNumber": "MSV872C", "firstName": "Oluwatojumi Beatrice", "lastName": "Tapere-Femi", "class": "ss3_art", "password": "Tapere-Femi" },
+                        { "id": "student046", "admissionNumber": "MSV876C", "firstName": "Moyinoluwa Soiat", "lastName": "Wahab", "class": "ss3_art", "password": "Wahab" },
+                        { "id": "student047", "admissionNumber": "MSV875C", "firstName": "Aliyah Motunrayo", "lastName": "Zakariyah", "class": "ss3_art", "password": "Zakariyah" }
                     ]
-                ];
+                ]
 
                 for (const student of students) {
                     await db.collection('users').doc(student.id).set({
@@ -624,8 +664,8 @@
                     shuffleQuestions: true,
                     allowMultipleAttempts: false,
                     maxAttempts: 1,
-                    availableFrom: firebase.firestore.Timestamp.fromDate(new Date('2024-10-01')),
-                    availableUntil: firebase.firestore.Timestamp.fromDate(new Date('2024-12-31')),
+                    availableFrom: firebase.firestore.Timestamp.fromDate(new Date('2025-10-01')),
+                    availableUntil: firebase.firestore.Timestamp.fromDate(new Date('2025-12-31')),
                     isActive: true,
                     createdBy: 'admin001',
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()

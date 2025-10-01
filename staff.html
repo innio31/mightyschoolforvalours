@@ -546,6 +546,31 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Add to your existing CSS */
+        #togglePassword {
+            background: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        #togglePassword:hover {
+            background: none !important;
+            color: var(--primary) !important;
+        }
+
+        #togglePassword:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        /* Debug styles - remove after fixing */
+        .debug-border {
+            border: 2px solid red !important;
+        }
     </style>
 </head>
 
@@ -563,10 +588,17 @@
                     <input type="text" id="loginStaffId" class="form-control" placeholder="Enter your Staff ID"
                         required>
                 </div>
+                <!-- Replace the existing password field in login form -->
                 <div class="form-group">
                     <label for="loginPassword">Password</label>
-                    <input type="password" id="loginPassword" class="form-control" placeholder="Enter password"
-                        required>
+                    <div style="position: relative;">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter password"
+                            required>
+                        <button type="button" id="togglePassword"
+                            style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #666; cursor: pointer;">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
                 <div id="loginError" class="login-error">
@@ -590,6 +622,10 @@
                 <li class="menu-item active" data-section="dashboard">
                     <i class="fas fa-tachometer-alt"></i>
                     <span>Dashboard</span>
+                </li>
+                <li class="menu-item" data-section="students">
+                    <i class="fas fa-users"></i>
+                    <span>Student Management</span>
                 </li>
                 <li class="menu-item" data-section="questions">
                     <i class="fas fa-question-circle"></i>
@@ -669,6 +705,56 @@
                         </div>
                     </div>
                 </div>
+                <!-- Student Management Section -->
+                <div id="students" class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-users"></i> Student Management
+                        </h2>
+                        <button class="btn btn-primary" id="addStudentBtn">
+                            <i class="fas fa-plus"></i> Add Student
+                        </button>
+                    </div>
+
+                    <div class="filters" style="margin-bottom: 20px;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentFilterClass">Filter by Class</label>
+                                <select id="studentFilterClass" class="form-control">
+                                    <option value="">All Classes</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="studentFilterSubject">Filter by Subject</label>
+                                <select id="studentFilterSubject" class="form-control">
+                                    <option value="">All Subjects</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Admission No</th>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th>Phone</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentsTableBody">
+                                <tr>
+                                    <td colspan="6" style="text-align: center; padding: 20px;">Loading students data...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
 
                 <!-- Questions Bank Section -->
                 <div id="questions" class="section">
@@ -677,6 +763,9 @@
                             <i class="fas fa-question-circle"></i> Questions Bank
                         </h2>
                         <div>
+                            <button class="btn btn-danger" id="deleteSelectedBtn" style="margin-right: 10px;">
+                                <i class="fas fa-trash"></i> Delete Selected
+                            </button>
                             <button class="btn btn-primary" id="addQuestionBtn">
                                 <i class="fas fa-plus"></i> Add Question
                             </button>
@@ -716,6 +805,9 @@
                         <table class="data-table">
                             <thead>
                                 <tr>
+                                    <th style="width: 40px;">
+                                        <input type="checkbox" id="selectAllQuestions" style="margin: 0;">
+                                    </th>
                                     <th>Question</th>
                                     <th>Subject</th>
                                     <th>Class</th>
@@ -1025,6 +1117,60 @@
         </div>
     </div>
 
+    <!-- Add/Edit Student Modal -->
+    <div id="addStudentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="studentModalTitle">Add Student</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentAdmissionNo">Admission Number *</label>
+                            <input type="text" id="studentAdmissionNo" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentClass">Class *</label>
+                            <select id="studentClass" class="form-control" required>
+                                <option value="">Select Class</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="studentFirstName">First Name *</label>
+                            <input type="text" id="studentFirstName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentLastName">Last Name *</label>
+                            <input type="text" id="studentLastName" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPhone">Phone Number</label>
+                        <input type="tel" id="studentPhone" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="studentPassword">Password *</label>
+                        <input type="password" id="studentPassword" class="form-control" required>
+                        <small class="form-text text-muted">Default password for new students</small>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="studentActive" checked> Active Student
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelStudentBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveStudentBtn">Save Student</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Create Exam Modal -->
     <div id="createExamModal" class="modal">
         <div class="modal-content">
@@ -1124,6 +1270,8 @@
         let currentSettings = null;
         let staffSubjects = [];
         let staffClasses = [];
+        let selectedQuestionIds = new Set();
+        let currentEditingStudentId = null;
 
         // DOM Elements
         const loginModal = document.getElementById('loginModal');
@@ -1139,23 +1287,43 @@
 
         // Initialize application
         function initApp() {
+            console.log('Initializing application...');
+
             // Check if user is already logged in
             const savedUser = localStorage.getItem('staffUser');
             if (savedUser) {
-                currentStaff = JSON.parse(savedUser);
-                showStaffInterface();
-                loadInitialData();
-            } else {
-                loginModal.style.display = 'flex';
-            }
+                try {
+                    currentStaff = JSON.parse(savedUser);
+                    console.log('Found saved user:', currentStaff);
+                    showStaffInterface();
 
-            setupEventListeners();
-            setupTabNavigation();
-            setupModalControls();
+                    // Wait a bit for DOM to be fully ready
+                    setTimeout(() => {
+                        setupEventListeners();
+                        setupModalControls();
+                        setupPasswordToggle();
+                        loadInitialData();
+                    }, 100);
+
+                } catch (error) {
+                    console.error('Error parsing saved user:', error);
+                    loginModal.style.display = 'flex';
+                }
+            } else {
+                console.log('No saved user found, showing login');
+                loginModal.style.display = 'flex';
+
+                // Setup login-related listeners
+                setTimeout(() => {
+                    setupPasswordToggle();
+                }, 100);
+            }
         }
 
         // Setup all event listeners
         function setupEventListeners() {
+            console.log('Setting up event listeners...');
+
             // Menu navigation
             document.querySelectorAll('.menu-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -1174,95 +1342,151 @@
                 });
             });
 
-            // Questions Bank
-            document.getElementById('addQuestionBtn').addEventListener('click', () => {
+            // Student Management
+            document.getElementById('addStudentBtn')?.addEventListener('click', () => {
+                loadSubjectsAndClasses().then(() => {
+                    openStudentModal();
+                });
+            });
+
+            document.getElementById('saveStudentBtn')?.addEventListener('click', saveStudent);
+            document.getElementById('cancelStudentBtn')?.addEventListener('click', () => {
+                hideModal('addStudentModal');
+                resetStudentForm();
+            });
+            // Questions Management
+            document.getElementById('addQuestionBtn')?.addEventListener('click', () => {
                 loadSubjectsAndClasses().then(() => {
                     populateQuestionForm();
                     showModal('addQuestionModal');
                 });
             });
 
-            document.getElementById('bulkUploadBtn').addEventListener('click', () => {
+            document.getElementById('bulkUploadBtn')?.addEventListener('click', () => {
                 loadSubjectsAndClasses().then(() => {
                     populateUploadForm();
                     showModal('bulkUploadModal');
                 });
             });
 
-            document.getElementById('saveQuestionBtn').addEventListener('click', saveQuestion);
-            document.getElementById('processUploadBtn').addEventListener('click', processBulkUpload);
+            document.getElementById('deleteSelectedBtn')?.addEventListener('click', deleteSelectedQuestions);
+            document.getElementById('saveQuestionBtn')?.addEventListener('click', saveQuestion);
+            document.getElementById('processUploadBtn')?.addEventListener('click', processBulkUpload);
 
-            // File upload handling
-            document.getElementById('excelFile').addEventListener('change', handleFileUpload);
-            document.getElementById('fileUploadArea').addEventListener('dragover', handleDragOver);
-            document.getElementById('fileUploadArea').addEventListener('drop', handleFileDrop);
-
-            // Exams
-            document.getElementById('createExamBtn').addEventListener('click', () => {
+            // Exams Management
+            document.getElementById('createExamBtn')?.addEventListener('click', () => {
                 loadSubjectsAndClasses().then(() => {
                     populateExamForm();
                     showModal('createExamModal');
                 });
             });
 
-            document.getElementById('saveExamBtn').addEventListener('click', saveExam);
-            document.getElementById('allowMultipleAttempts').addEventListener('change', function () {
-                document.getElementById('maxAttemptsContainer').style.display = this.checked ? 'block' : 'none';
-            });
+            document.getElementById('saveExamBtn')?.addEventListener('click', saveExam);
 
             // Results & Analytics
-            document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+            document.getElementById('generateReportBtn')?.addEventListener('click', generateReport);
 
-            // Profile
-            document.getElementById('profileForm').addEventListener('submit', updateProfile);
-            document.getElementById('passwordForm').addEventListener('submit', changePassword);
+            // Profile Management
+            document.getElementById('profileForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                updateProfile(e);
+            });
 
-            // Filter changes
-            document.getElementById('filterSubject').addEventListener('change', filterQuestions);
-            document.getElementById('filterClass').addEventListener('change', filterQuestions);
-            document.getElementById('filterDifficulty').addEventListener('change', filterQuestions);
+            document.getElementById('passwordForm')?.addEventListener('submit', (e) => {
+                e.preventDefault();
+                changePassword(e);
+            });
+
+            // Student Filters
+            document.getElementById('studentFilterClass')?.addEventListener('change', filterStudents);
+            document.getElementById('studentFilterSubject')?.addEventListener('change', filterStudents);
+
+            // Question Filters
+            const filters = ['filterSubject', 'filterClass', 'filterDifficulty'];
+            filters.forEach(filterId => {
+                const element = document.getElementById(filterId);
+                if (element) {
+                    element.addEventListener('change', filterQuestions);
+                }
+            });
+
+            // Multiple attempts toggle
+            const allowMultipleAttempts = document.getElementById('allowMultipleAttempts');
+            if (allowMultipleAttempts) {
+                allowMultipleAttempts.addEventListener('change', function () {
+                    const container = document.getElementById('maxAttemptsContainer');
+                    if (container) {
+                        container.style.display = this.checked ? 'block' : 'none';
+                    }
+                });
+            }
+
+            // File upload handling
+            const excelFile = document.getElementById('excelFile');
+            const fileUploadArea = document.getElementById('fileUploadArea');
+
+            if (excelFile) excelFile.addEventListener('change', handleFileUpload);
+            if (fileUploadArea) {
+                fileUploadArea.addEventListener('dragover', handleDragOver);
+                fileUploadArea.addEventListener('drop', handleFileDrop);
+            }
+
+            console.log('Event listeners setup completed');
         }
 
-        // Setup tab navigation
-        function setupTabNavigation() {
-            // Tab buttons
-            document.querySelectorAll('.tab-btn').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    const tabId = tab.getAttribute('data-tab');
-                    const container = tab.closest('.tabs').nextElementSibling;
+        // Setup password toggle
+        function setupPasswordToggle() {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('loginPassword');
 
-                    // Update active tab button
-                    tab.parentElement.querySelectorAll('.tab-btn').forEach(t => {
-                        t.classList.remove('active');
-                    });
-                    tab.classList.add('active');
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', function () {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
 
-                    // Show corresponding tab content
-                    container.querySelectorAll('.tab-content').forEach(content => {
-                        content.classList.remove('active');
-                    });
-                    document.getElementById(tabId).classList.add('active');
+                    // Toggle eye icon
+                    const icon = this.querySelector('i');
+                    if (type === 'text') {
+                        icon.classList.remove('fa-eye');
+                        icon.classList.add('fa-eye-slash');
+                    } else {
+                        icon.classList.remove('fa-eye-slash');
+                        icon.classList.add('fa-eye');
+                    }
                 });
-            });
+            }
         }
 
         // Setup modal controls
         function setupModalControls() {
             // Close buttons
             document.querySelectorAll('.modal-close').forEach(closeBtn => {
-                closeBtn.addEventListener('click', () => {
-                    closeBtn.closest('.modal').classList.remove('active');
+                closeBtn.addEventListener('click', (e) => {
+                    const modal = closeBtn.closest('.modal');
+                    if (modal.id === 'addStudentModal') {
+                        resetStudentForm();
+                    }
+                    modal.classList.remove('active');
                 });
             });
 
-            // Cancel buttons
-            document.querySelectorAll('[id$="Btn"]').forEach(btn => {
-                if (btn.id.includes('cancel')) {
-                    btn.addEventListener('click', () => {
-                        btn.closest('.modal').classList.remove('active');
-                    });
-                }
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        if (modal.id === 'addStudentModal') {
+                            resetStudentForm();
+                        }
+                        modal.classList.remove('active');
+                    }
+                });
             });
+
+
+            // Cancel buttons
+            document.getElementById('cancelQuestionBtn')?.addEventListener('click', () => hideModal('addQuestionModal'));
+            document.getElementById('cancelUploadBtn')?.addEventListener('click', () => hideModal('bulkUploadModal'));
+            document.getElementById('cancelExamBtn')?.addEventListener('click', () => hideModal('createExamModal'));
+            document.getElementById('cancelStudentBtn')?.addEventListener('click', () => hideModal('addStudentModal'));
 
             // Close modal when clicking outside
             document.querySelectorAll('.modal').forEach(modal => {
@@ -1313,6 +1537,15 @@
             localStorage.removeItem('staffUser');
             loginModal.style.display = 'flex';
             document.getElementById('loginForm').reset();
+
+            // Reset password visibility
+            const passwordInput = document.getElementById('loginPassword');
+            const toggleIcon = document.getElementById('togglePassword')?.querySelector('i');
+            if (passwordInput && toggleIcon) {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
         }
 
         function showStaffInterface() {
@@ -1349,13 +1582,13 @@
                 if (staffSubjects && staffSubjects.length > 0) {
                     subjects = allSubjects.filter(subject => staffSubjects.includes(subject.id));
                 } else {
-                    subjects = []; // No subjects assigned
+                    subjects = [];
                 }
 
                 if (staffClasses && staffClasses.length > 0) {
                     classes = allClasses.filter(cls => staffClasses.includes(cls.id));
                 } else {
-                    classes = []; // No classes assigned
+                    classes = [];
                 }
 
                 // Update filter dropdowns
@@ -1395,12 +1628,18 @@
                 case 'profile':
                     loadProfileData();
                     break;
+                case 'students':
+                    loadStudentsData();
+                    break;
             }
         }
 
+        // Dashboard Functions
         async function loadDashboardData() {
             try {
-                // First, get questions and exams independently
+                console.log('Loading dashboard data...');
+
+                // Get questions and exams
                 const [questionsSnapshot, examsSnapshot] = await Promise.all([
                     db.collection('questions')
                         .where('createdBy', '==', currentStaff.userId)
@@ -1410,60 +1649,99 @@
                         .get()
                 ]);
 
-                // Get student count - handle empty staffClasses array
+                console.log(`Found ${questionsSnapshot.size} questions, ${examsSnapshot.size} exams`);
+
+                // Get student count
                 let studentsCount = 0;
                 if (staffClasses && staffClasses.length > 0) {
-                    // For multiple classes, we need to query each class separately due to Firestore limitations
-                    const studentPromises = staffClasses.map(classId =>
-                        db.collection('users')
-                            .where('role', '==', 'student')
-                            .where('class', '==', classId)
-                            .get()
-                    );
+                    console.log('Fetching students for classes:', staffClasses);
 
-                    const studentSnapshots = await Promise.all(studentPromises);
-                    studentsCount = studentSnapshots.reduce((total, snapshot) => total + snapshot.size, 0);
+                    for (const classId of staffClasses) {
+                        try {
+                            const studentsSnapshot = await db.collection('users')
+                                .where('role', '==', 'student')
+                                .where('class', '==', classId)
+                                .get();
+                            studentsCount += studentsSnapshot.size;
+                            console.log(`Class ${classId}: ${studentsSnapshot.size} students`);
+                        } catch (error) {
+                            console.error(`Error fetching students for class ${classId}:`, error);
+                        }
+                    }
                 }
-
-                // Get recent results using the exams we fetched
-                const examIds = examsSnapshot.docs.map(doc => doc.id);
-                let resultsSnapshot;
-                if (examIds.length > 0) {
-                    resultsSnapshot = await db.collection('results')
-                        .where('examId', 'in', examIds.slice(0, 10)) // Firestore 'in' limit is 10
-                        .orderBy('submittedAt', 'desc')
-                        .limit(5)
-                        .get();
-                } else {
-                    resultsSnapshot = { empty: true, forEach: () => { } }; // Empty results
-                }
-
-                // Update counts
-                document.getElementById('totalQuestions').textContent = questionsSnapshot.size;
-                document.getElementById('totalExams').textContent = examsSnapshot.size;
 
                 // Calculate active exams
                 const now = new Date();
-                const activeExams = examsSnapshot.docs.filter(doc => {
-                    const exam = doc.data();
-                    const availableUntil = exam.availableUntil?.toDate();
-                    return availableUntil && now <= availableUntil;
-                }).length;
+                let activeExams = 0;
+                let recentResults = [];
 
+                examsSnapshot.forEach(doc => {
+                    const exam = doc.data();
+                    let availableUntil = null;
+
+                    // Safely convert timestamp
+                    if (exam.availableUntil) {
+                        if (exam.availableUntil.toDate) {
+                            availableUntil = exam.availableUntil.toDate();
+                        } else if (exam.availableUntil.seconds) {
+                            availableUntil = new Date(exam.availableUntil.seconds * 1000);
+                        }
+                    }
+
+                    if (availableUntil && now <= availableUntil) {
+                        activeExams++;
+                    }
+                });
+
+                // Get recent results
+                if (examsSnapshot.size > 0) {
+                    const examIds = examsSnapshot.docs.map(doc => doc.id);
+                    console.log('Fetching results for exams:', examIds);
+
+                    // Get results for first 5 exams
+                    for (let i = 0; i < Math.min(examIds.length, 5); i++) {
+                        try {
+                            const resultsSnapshot = await db.collection('results')
+                                .where('examId', '==', examIds[i])
+                                .orderBy('submittedAt', 'desc')
+                                .limit(3)
+                                .get();
+
+                            resultsSnapshot.forEach(doc => {
+                                recentResults.push({ id: doc.id, ...doc.data() });
+                            });
+                        } catch (error) {
+                            console.error(`Error fetching results for exam ${examIds[i]}:`, error);
+                        }
+                    }
+
+                    // Sort by date and take top 5
+                    recentResults.sort((a, b) => {
+                        const dateA = getTimestamp(a.submittedAt);
+                        const dateB = getTimestamp(b.submittedAt);
+                        return dateB - dateA;
+                    }).splice(5);
+                }
+
+                console.log(`Dashboard stats - Questions: ${questionsSnapshot.size}, Exams: ${examsSnapshot.size}, Active: ${activeExams}, Students: ${studentsCount}, Recent Results: ${recentResults.length}`);
+
+                // Update UI
+                document.getElementById('totalQuestions').textContent = questionsSnapshot.size;
+                document.getElementById('totalExams').textContent = examsSnapshot.size;
                 document.getElementById('activeExams').textContent = activeExams;
                 document.getElementById('totalStudents').textContent = studentsCount;
 
-                // Load recent activity
-                loadRecentActivity(resultsSnapshot);
-
-                // Load assigned information
+                // Load recent activity and assigned info
+                loadRecentActivity(recentResults);
                 loadAssignedInformation();
+
+                showNotification('Dashboard loaded successfully!', 'success');
 
             } catch (error) {
                 console.error('Error loading dashboard data:', error);
                 showNotification('Error loading dashboard data', 'error');
 
-                // Set default values on error
+                // Set default values
                 document.getElementById('totalQuestions').textContent = '0';
                 document.getElementById('totalExams').textContent = '0';
                 document.getElementById('activeExams').textContent = '0';
@@ -1471,26 +1749,39 @@
             }
         }
 
-        function loadRecentActivity(resultsSnapshot) {
+        // Helper function for timestamp conversion
+        function getTimestamp(timestamp) {
+            if (!timestamp) return new Date(0);
+            if (timestamp.toDate) return timestamp.toDate();
+            if (timestamp.seconds) return new Date(timestamp.seconds * 1000);
+            if (timestamp instanceof Date) return timestamp;
+            return new Date(0);
+        }
+
+        function loadRecentActivity(results) {
             const activityContainer = document.getElementById('recentActivity');
 
-            if (!resultsSnapshot || resultsSnapshot.empty) {
-                activityContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No recent activity</p>';
+            if (!activityContainer) {
+                console.error('Recent activity container not found!');
+                return;
+            }
+
+            if (!results || results.length === 0) {
+                activityContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No recent exam activity</p>';
                 return;
             }
 
             let activityHTML = '';
-            resultsSnapshot.forEach(doc => {
-                const result = doc.data();
-                const submittedDate = result.submittedAt?.toDate
-                    ? new Date(result.submittedAt.toDate()).toLocaleString()
-                    : 'Unknown date';
+            results.forEach(result => {
+                const submittedDate = getTimestamp(result.submittedAt).toLocaleString();
+                const examTitle = result.examTitle || 'Unknown Exam';
+                const percentage = result.percentage || 0;
 
                 activityHTML += `
             <div style="padding: 10px; border-left: 4px solid var(--secondary); background: #f8f9fa; margin-bottom: 10px;">
                 <strong>Exam Completed</strong>
                 <p style="margin: 5px 0 0 0; color: #666;">
-                    Student scored ${result.percentage || 0}% in ${result.examTitle || 'Unknown Exam'}
+                    Student scored ${percentage}% in ${examTitle}
                 </p>
                 <small style="color: #999;">${submittedDate}</small>
             </div>
@@ -1498,44 +1789,376 @@
             });
 
             activityContainer.innerHTML = activityHTML;
+            console.log(`Loaded ${results.length} recent activities`);
         }
 
         function loadAssignedInformation() {
             const assignedInfo = document.getElementById('assignedInfo');
             const profileAssignedInfo = document.getElementById('profileAssignedInfo');
 
+            if (!assignedInfo && !profileAssignedInfo) {
+                console.error('Assigned info containers not found!');
+                return;
+            }
+
             let assignedHTML = '';
 
-            if (staffSubjects.length > 0) {
-                assignedHTML += '<h4 style="margin-bottom: 10px; color: var(--primary);">Assigned Subjects:</h4>';
-                assignedHTML += '<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">';
-                staffSubjects.forEach(subjectId => {
-                    const subject = subjects.find(s => s.id === subjectId);
-                    if (subject) {
-                        assignedHTML += `<span style="background: var(--primary); color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">${subject.subjectName}</span>`;
-                    }
+            // Load subjects and classes first if not loaded
+            if (subjects.length === 0 || classes.length === 0) {
+                assignedHTML = '<p style="color: #666;">Loading assigned information...</p>';
+            } else {
+                if (staffSubjects.length > 0) {
+                    assignedHTML += '<h4 style="margin-bottom: 10px; color: var(--primary);">Assigned Subjects:</h4>';
+                    assignedHTML += '<div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px;">';
+
+                    staffSubjects.forEach(subjectId => {
+                        const subject = subjects.find(s => s.id === subjectId);
+                        if (subject) {
+                            assignedHTML += `<span style="background: var(--primary); color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">${subject.subjectName}</span>`;
+                        } else {
+                            assignedHTML += `<span style="background: #ccc; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">Unknown Subject (${subjectId})</span>`;
+                        }
+                    });
+                    assignedHTML += '</div>';
+                }
+
+                if (staffClasses.length > 0) {
+                    assignedHTML += '<h4 style="margin-bottom: 10px; color: var(--primary);">Assigned Classes:</h4>';
+                    assignedHTML += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
+
+                    staffClasses.forEach(classId => {
+                        const cls = classes.find(c => c.id === classId);
+                        if (cls) {
+                            assignedHTML += `<span style="background: var(--secondary); color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">${cls.className}</span>`;
+                        } else {
+                            assignedHTML += `<span style="background: #ccc; color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">Unknown Class (${classId})</span>`;
+                        }
+                    });
+                    assignedHTML += '</div>';
+                }
+
+                if (!assignedHTML) {
+                    assignedHTML = '<p style="color: #666;">No subjects or classes assigned yet.</p>';
+                }
+            }
+
+            if (assignedInfo) assignedInfo.innerHTML = assignedHTML;
+            if (profileAssignedInfo) profileAssignedInfo.innerHTML = assignedHTML;
+
+            console.log('Assigned information loaded');
+        }
+
+        // Student Management Functions
+        async function loadStudentsData() {
+            try {
+                if (!staffClasses || staffClasses.length === 0) {
+                    document.getElementById('studentsTableBody').innerHTML =
+                        '<tr><td colspan="6" style="text-align: center; padding: 20px;">No classes assigned</td></tr>';
+                    updateStudentFilters();
+                    return;
+                }
+
+                // Get students from all assigned classes
+                const studentPromises = staffClasses.map(classId =>
+                    db.collection('users')
+                        .where('role', '==', 'student')
+                        .where('class', '==', classId)
+                        .get()
+                );
+
+                const studentSnapshots = await Promise.all(studentPromises);
+                let students = studentSnapshots.flatMap(snapshot =>
+                    snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+                );
+
+                // Also get students enrolled in staff's subjects
+                if (staffSubjects && staffSubjects.length > 0) {
+                    const subjectStudentsSnapshot = await db.collection('users')
+                        .where('role', '==', 'student')
+                        .where('subjects', 'array-contains-any', staffSubjects)
+                        .get();
+
+                    const subjectStudents = subjectStudentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+                    // Merge and remove duplicates
+                    const allStudents = [...students, ...subjectStudents];
+                    students = allStudents.filter((student, index, self) =>
+                        index === self.findIndex(s => s.id === student.id)
+                    );
+                }
+
+                // Store all students for filtering
+                window.allStudents = students;
+
+                populateStudentsTable(students);
+                updateStudentFilters();
+            } catch (error) {
+                console.error('Error loading students data:', error);
+                showNotification('Error loading students data', 'error');
+            }
+        }
+
+        function updateStudentFilters() {
+            const classFilter = document.getElementById('studentFilterClass');
+            const subjectFilter = document.getElementById('studentFilterSubject');
+
+            if (classFilter) {
+                classFilter.innerHTML = '<option value="">All Classes</option>';
+                classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.id;
+                    option.textContent = cls.className;
+                    classFilter.appendChild(option);
                 });
-                assignedHTML += '</div>';
             }
 
-            if (staffClasses.length > 0) {
-                assignedHTML += '<h4 style="margin-bottom: 10px; color: var(--primary);">Assigned Classes:</h4>';
-                assignedHTML += '<div style="display: flex; flex-wrap: wrap; gap: 10px;">';
-                staffClasses.forEach(classId => {
-                    const cls = classes.find(c => c.id === classId);
-                    if (cls) {
-                        assignedHTML += `<span style="background: var(--secondary); color: white; padding: 5px 10px; border-radius: 15px; font-size: 0.9rem;">${cls.className}</span>`;
-                    }
+            if (subjectFilter) {
+                subjectFilter.innerHTML = '<option value="">All Subjects</option>';
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.subjectName;
+                    subjectFilter.appendChild(option);
                 });
-                assignedHTML += '</div>';
+            }
+        }
+
+        function filterStudents() {
+            const classFilter = document.getElementById('studentFilterClass').value;
+            const subjectFilter = document.getElementById('studentFilterSubject').value;
+
+            let filteredStudents = window.allStudents || [];
+
+            if (classFilter) {
+                filteredStudents = filteredStudents.filter(student => student.class === classFilter);
             }
 
-            if (!assignedHTML) {
-                assignedHTML = '<p style="color: #666;">No subjects or classes assigned yet.</p>';
+            if (subjectFilter) {
+                filteredStudents = filteredStudents.filter(student =>
+                    student.subjects && student.subjects.includes(subjectFilter)
+                );
             }
 
-            assignedInfo.innerHTML = assignedHTML;
-            profileAssignedInfo.innerHTML = assignedHTML;
+            populateStudentsTable(filteredStudents);
+        }
+
+        function populateStudentsTable(students) {
+            const studentsTableBody = document.getElementById('studentsTableBody');
+
+            if (!students || students.length === 0) {
+                studentsTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No students found matching the criteria</td></tr>';
+                return;
+            }
+
+            studentsTableBody.innerHTML = '';
+            students.forEach(student => {
+                const cls = classes.find(c => c.id === student.class);
+
+                // Check if staff is class teacher for this student's class
+                const isClassTeacher = staffClasses.includes(student.class);
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+            <td>${student.admissionNumber}</td>
+            <td>${student.firstName} ${student.lastName}</td>
+            <td>${cls?.className || student.class}</td>
+            <td>${student.phone || 'N/A'}</td>
+            <td>
+                <span class="status-badge ${student.isActive ? 'status-active' : 'status-inactive'}">
+                    ${student.isActive ? 'Active' : 'Inactive'}
+                </span>
+            </td>
+            <td class="action-buttons">
+                ${isClassTeacher ? `
+                    <button class="action-btn btn-primary" onclick="editStudent('${student.id}')">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn btn-danger" onclick="deleteStudent('${student.id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                ` : `
+                    <span style="color: #666; font-size: 0.9rem;">View Only</span>
+                `}
+            </td>
+        `;
+                studentsTableBody.appendChild(row);
+            });
+        }
+
+        function openStudentModal() {
+            populateStudentForm();
+            resetStudentForm(); // Ensure fresh state
+            showModal('addStudentModal');
+        }
+
+        function populateStudentForm() {
+            const classSelect = document.getElementById('studentClass');
+            classSelect.innerHTML = '<option value="">Select Class</option>';
+
+            // Only show classes where staff is class teacher
+            classes.forEach(cls => {
+                if (staffClasses.includes(cls.id)) {
+                    const option = document.createElement('option');
+                    option.value = cls.id;
+                    option.textContent = cls.className;
+                    classSelect.appendChild(option);
+                }
+            });
+
+            // Set default password
+            document.getElementById('studentPassword').value = 'password123';
+
+            // Reset form
+            document.getElementById('studentForm').reset();
+            document.getElementById('studentActive').checked = true;
+        }
+
+        async function saveStudent() {
+            const classId = document.getElementById('studentClass').value;
+            const admissionNumber = document.getElementById('studentAdmissionNo').value;
+
+            // Check if staff is class teacher for the selected class
+            if (!staffClasses.includes(classId)) {
+                showNotification('You are not authorized to add students to this class.', 'error');
+                return;
+            }
+
+            const studentData = {
+                admissionNumber: admissionNumber,
+                firstName: document.getElementById('studentFirstName').value,
+                lastName: document.getElementById('studentLastName').value,
+                phone: document.getElementById('studentPhone').value,
+                class: classId,
+                role: 'student',
+                isActive: document.getElementById('studentActive').checked,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            // Only include password for new students, not when editing
+            if (!currentEditingStudentId) {
+                studentData.password = document.getElementById('studentPassword').value;
+                studentData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            }
+
+            try {
+                // Check if admission number already exists (excluding current student if editing)
+                const existingStudentQuery = await db.collection('users')
+                    .where('admissionNumber', '==', studentData.admissionNumber)
+                    .get();
+
+                let admissionNumberExists = false;
+
+                if (currentEditingStudentId) {
+                    // For editing: check if any other student has this admission number
+                    admissionNumberExists = existingStudentQuery.docs.some(doc =>
+                        doc.id !== currentEditingStudentId
+                    );
+                } else {
+                    // For new student: check if any student has this admission number
+                    admissionNumberExists = !existingStudentQuery.empty;
+                }
+
+                if (admissionNumberExists) {
+                    showNotification('Admission number already exists!', 'error');
+                    return;
+                }
+
+                if (currentEditingStudentId) {
+                    // Update existing student
+                    await db.collection('users').doc(currentEditingStudentId).update(studentData);
+                    showNotification('Student updated successfully!', 'success');
+                } else {
+                    // Create new student
+                    await db.collection('users').add(studentData);
+                    showNotification('Student added successfully!', 'success');
+                }
+
+                hideModal('addStudentModal');
+                resetStudentForm();
+                loadStudentsData();
+            } catch (error) {
+                console.error('Error saving student:', error);
+                showNotification('Error saving student. Please try again.', 'error');
+            }
+        }
+
+        async function editStudent(studentId) {
+            try {
+                const studentDoc = await db.collection('users').doc(studentId).get();
+                if (!studentDoc.exists) {
+                    showNotification('Student not found!', 'error');
+                    return;
+                }
+
+                const student = studentDoc.data();
+
+                // Check if staff is class teacher for this student's class
+                if (!staffClasses.includes(student.class)) {
+                    showNotification('You are not authorized to edit this student.', 'error');
+                    return;
+                }
+
+                currentEditingStudentId = studentId;
+                document.getElementById('studentModalTitle').textContent = 'Edit Student';
+
+                // Populate form with student data
+                document.getElementById('studentAdmissionNo').value = student.admissionNumber;
+                document.getElementById('studentFirstName').value = student.firstName;
+                document.getElementById('studentLastName').value = student.lastName;
+                document.getElementById('studentPhone').value = student.phone || '';
+                document.getElementById('studentClass').value = student.class;
+                document.getElementById('studentActive').checked = student.isActive !== false;
+
+                // Hide password field for editing and clear any existing value
+                const passwordGroup = document.getElementById('studentPassword').closest('.form-group');
+                passwordGroup.style.display = 'none';
+                document.getElementById('studentPassword').value = '';
+
+                showModal('addStudentModal');
+            } catch (error) {
+                console.error('Error loading student data:', error);
+                showNotification('Error loading student data', 'error');
+            }
+        }
+
+        // Reset function for the student form:
+        function resetStudentForm() {
+            document.getElementById('studentForm').reset();
+            currentEditingStudentId = null;
+            document.getElementById('studentModalTitle').textContent = 'Add Student';
+
+            // Show password field and set default password for new students
+            const passwordGroup = document.getElementById('studentPassword').closest('.form-group');
+            passwordGroup.style.display = 'block';
+            document.getElementById('studentPassword').value = 'password123';
+            document.getElementById('studentActive').checked = true;
+        }
+
+        async function deleteStudent(studentId) {
+            try {
+                const studentDoc = await db.collection('users').doc(studentId).get();
+                if (!studentDoc.exists) {
+                    showNotification('Student not found!', 'error');
+                    return;
+                }
+
+                const student = studentDoc.data();
+
+                // Check if staff is class teacher for this student's class
+                if (!staffClasses.includes(student.class)) {
+                    showNotification('You are not authorized to delete this student.', 'error');
+                    return;
+                }
+
+                if (confirm('Are you sure you want to delete this student?')) {
+                    await db.collection('users').doc(studentId).delete();
+                    loadStudentsData();
+                    showNotification('Student deleted successfully!', 'success');
+                }
+            } catch (error) {
+                console.error('Error deleting student:', error);
+                showNotification('Error deleting student.', 'error');
+            }
         }
 
         // Questions Bank Functions
@@ -1556,7 +2179,7 @@
             const questionsTableBody = document.getElementById('questionsTableBody');
 
             if (questions.length === 0) {
-                questionsTableBody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 20px;">No questions found</td></tr>';
+                questionsTableBody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 20px;">No questions found</td></tr>';
                 return;
             }
 
@@ -1567,25 +2190,62 @@
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${question.questionText.substring(0, 100)}${question.questionText.length > 100 ? '...' : ''}</td>
-                    <td>${subject?.subjectName || question.subjectId}</td>
-                    <td>${cls?.className || question.classId}</td>
-                    <td>
-                        <span class="status-badge ${question.difficulty === 'easy' ? 'status-active' : question.difficulty === 'medium' ? 'status-warning' : 'status-inactive'}">
-                            ${question.difficulty}
-                        </span>
-                    </td>
-                    <td>${question.marks}</td>
-                    <td class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="editQuestion('${question.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn btn-danger" onclick="deleteQuestion('${question.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                `;
+            <td>
+                <input type="checkbox" class="question-checkbox" value="${question.id}" style="margin: 0;">
+            </td>
+            <td>${question.questionText.substring(0, 100)}${question.questionText.length > 100 ? '...' : ''}</td>
+            <td>${subject?.subjectName || question.subjectId}</td>
+            <td>${cls?.className || question.classId}</td>
+            <td>
+                <span class="status-badge ${question.difficulty === 'easy' ? 'status-active' : question.difficulty === 'medium' ? 'status-warning' : 'status-inactive'}">
+                    ${question.difficulty}
+                </span>
+            </td>
+            <td>${question.marks}</td>
+            <td class="action-buttons">
+                <button class="action-btn btn-primary" onclick="editQuestion('${question.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn btn-danger" onclick="deleteQuestion('${question.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </td>
+        `;
                 questionsTableBody.appendChild(row);
+            });
+
+            // Setup batch selection
+            setupBatchSelection();
+        }
+
+        function setupBatchSelection() {
+            const selectAll = document.getElementById('selectAllQuestions');
+            const checkboxes = document.querySelectorAll('.question-checkbox');
+
+            if (selectAll) {
+                selectAll.addEventListener('change', function () {
+                    checkboxes.forEach(checkbox => {
+                        checkbox.checked = this.checked;
+                        if (this.checked) {
+                            selectedQuestionIds.add(checkbox.value);
+                        } else {
+                            selectedQuestionIds.delete(checkbox.value);
+                        }
+                    });
+                });
+            }
+
+            // Update individual checkboxes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        selectedQuestionIds.add(this.value);
+                    } else {
+                        selectedQuestionIds.delete(this.value);
+                        // Uncheck select all if any checkbox is unchecked
+                        if (selectAll) selectAll.checked = false;
+                    }
+                });
             });
         }
 
@@ -1661,22 +2321,52 @@
             const subjectFilter = document.getElementById('filterSubject');
             const classFilter = document.getElementById('filterClass');
 
-            subjectFilter.innerHTML = '<option value="">All Subjects</option>';
-            classFilter.innerHTML = '<option value="">All Classes</option>';
+            if (subjectFilter) {
+                subjectFilter.innerHTML = '<option value="">All Subjects</option>';
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject.id;
+                    option.textContent = subject.subjectName;
+                    subjectFilter.appendChild(option);
+                });
+            }
 
-            subjects.forEach(subject => {
-                const option = document.createElement('option');
-                option.value = subject.id;
-                option.textContent = subject.subjectName;
-                subjectFilter.appendChild(option);
-            });
+            if (classFilter) {
+                classFilter.innerHTML = '<option value="">All Classes</option>';
+                classes.forEach(cls => {
+                    const option = document.createElement('option');
+                    option.value = cls.id;
+                    option.textContent = cls.className;
+                    classFilter.appendChild(option);
+                });
+            }
+        }
 
-            classes.forEach(cls => {
-                const option = document.createElement('option');
-                option.value = cls.id;
-                option.textContent = cls.className;
-                classFilter.appendChild(option);
-            });
+        // Batch Delete Functions
+        function deleteSelectedQuestions() {
+            const selectedQuestions = Array.from(selectedQuestionIds);
+
+            if (selectedQuestions.length === 0) {
+                showNotification('Please select questions to delete.', 'warning');
+                return;
+            }
+
+            if (confirm(`Are you sure you want to delete ${selectedQuestions.length} question(s)?`)) {
+                const deletePromises = selectedQuestions.map(questionId =>
+                    db.collection('questions').doc(questionId).delete()
+                );
+
+                Promise.all(deletePromises)
+                    .then(() => {
+                        selectedQuestionIds.clear();
+                        loadQuestionsData();
+                        showNotification(`Successfully deleted ${selectedQuestions.length} question(s)!`, 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error deleting questions:', error);
+                        showNotification('Error deleting questions.', 'error');
+                    });
+            }
         }
 
         // Bulk Upload Functions
@@ -1776,13 +2466,13 @@
             uploadedQuestions.slice(0, 5).forEach((question, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${question.questionText.substring(0, 50)}...</td>
-                    <td>${question.options.A.substring(0, 20)}...</td>
-                    <td>${question.options.B.substring(0, 20)}...</td>
-                    <td>${question.options.C.substring(0, 20)}...</td>
-                    <td>${question.options.D.substring(0, 20)}...</td>
-                    <td>${question.correctAnswer}</td>
-                `;
+            <td>${question.questionText.substring(0, 50)}...</td>
+            <td>${question.options.A.substring(0, 20)}...</td>
+            <td>${question.options.B.substring(0, 20)}...</td>
+            <td>${question.options.C.substring(0, 20)}...</td>
+            <td>${question.options.D.substring(0, 20)}...</td>
+            <td>${question.correctAnswer}</td>
+        `;
                 previewTableBody.appendChild(row);
             });
 
@@ -1893,26 +2583,26 @@
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${exam.examTitle}</td>
-                    <td>${subject?.subjectName || exam.subjectId}</td>
-                    <td>${cls?.className || exam.classId}</td>
-                    <td>${exam.duration} mins</td>
-                    <td>${exam.totalQuestions}</td>
-                    <td>
-                        <span class="status-badge ${statusClass}">${status}</span>
-                    </td>
-                    <td class="action-buttons">
-                        <button class="action-btn btn-primary" onclick="editExam('${exam.id}')">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn btn-danger" onclick="deleteExam('${exam.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                        <button class="action-btn btn-success" onclick="viewExamResults('${exam.id}')">
-                            <i class="fas fa-chart-bar"></i>
-                        </button>
-                    </td>
-                `;
+            <td>${exam.examTitle}</td>
+            <td>${subject?.subjectName || exam.subjectId}</td>
+            <td>${cls?.className || exam.classId}</td>
+            <td>${exam.duration} mins</td>
+            <td>${exam.totalQuestions}</td>
+            <td>
+                <span class="status-badge ${statusClass}">${status}</span>
+            </td>
+            <td class="action-buttons">
+                <button class="action-btn btn-primary" onclick="editExam('${exam.id}')">
+                    <i class="fas fa-edit"></i>
+                </button>
+                <button class="action-btn btn-danger" onclick="deleteExam('${exam.id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+                <button class="action-btn btn-success" onclick="viewExamResults('${exam.id}')">
+                    <i class="fas fa-chart-bar"></i>
+                </button>
+            </td>
+        `;
                 examsTableBody.appendChild(row);
             });
         }
@@ -2077,14 +2767,14 @@
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${student?.firstName} ${student?.lastName}</td>
-                    <td>${student?.admissionNumber}</td>
-                    <td>${result.score}/${result.totalQuestions}</td>
-                    <td>${result.percentage}%</td>
-                    <td>${calculateGrade(result.percentage)}</td>
-                    <td>${Math.floor(result.timeSpent / 60)}:${(result.timeSpent % 60).toString().padStart(2, '0')}</td>
-                    <td>${result.submittedAt?.toDate().toLocaleDateString()}</td>
-                `;
+            <td>${student?.firstName} ${student?.lastName}</td>
+            <td>${student?.admissionNumber}</td>
+            <td>${result.score}/${result.totalQuestions}</td>
+            <td>${result.percentage}%</td>
+            <td>${calculateGrade(result.percentage)}</td>
+            <td>${Math.floor(result.timeSpent / 60)}:${(result.timeSpent % 60).toString().padStart(2, '0')}</td>
+            <td>${result.submittedAt?.toDate().toLocaleDateString()}</td>
+        `;
                 resultsTableBody.appendChild(row);
             });
         }
@@ -2109,16 +2799,16 @@
 
             const total = results.length;
             const chartHTML = `
-                <div style="display: flex; height: 100%; align-items: end; gap: 10px; padding: 20px;">
-                    ${Object.entries(gradeCounts).map(([grade, count]) => `
-                        <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-                            <div style="background: var(--${getGradeColor(grade)}); width: 80%; height: ${(count / total) * 200}px; border-radius: 5px 5px 0 0;"></div>
-                            <div style="margin-top: 10px; font-weight: bold;">${grade}</div>
-                            <div style="font-size: 0.8em; color: #666;">${count}</div>
-                        </div>
-                    `).join('')}
+        <div style="display: flex; height: 100%; align-items: end; gap: 10px; padding: 20px;">
+            ${Object.entries(gradeCounts).map(([grade, count]) => `
+                <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+                    <div style="background: var(--${getGradeColor(grade)}); width: 80%; height: ${(count / total) * 200}px; border-radius: 5px 5px 0 0;"></div>
+                    <div style="margin-top: 10px; font-weight: bold;">${grade}</div>
+                    <div style="font-size: 0.8em; color: #666;">${count}</div>
                 </div>
-            `;
+            `).join('')}
+        </div>
+    `;
 
             chartContainer.innerHTML = chartHTML;
         }
@@ -2226,17 +2916,17 @@
             // Create notification element
             const notification = document.createElement('div');
             notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 5px;
-                color: white;
-                font-weight: 600;
-                z-index: 10000;
-                max-width: 300px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    `;
 
             const bgColors = {
                 success: '#28a745',
@@ -2261,13 +2951,265 @@
         }
 
         // Placeholder functions for edit operations
-        function editQuestion(questionId) {
-            showNotification('Edit question functionality coming soon!', 'info');
+        // Replace the placeholder functions with these complete implementations:
+
+        // Edit Question Function
+        async function editQuestion(questionId) {
+            try {
+                const questionDoc = await db.collection('questions').doc(questionId).get();
+                if (!questionDoc.exists) {
+                    showNotification('Question not found!', 'error');
+                    return;
+                }
+
+                const question = questionDoc.data();
+
+                // Check if the question belongs to the current staff
+                if (question.createdBy !== currentStaff.userId) {
+                    showNotification('You are not authorized to edit this question.', 'error');
+                    return;
+                }
+
+                // Load subjects and classes first
+                await loadSubjectsAndClasses();
+
+                // Populate the form with question data
+                document.getElementById('questionText').value = question.questionText;
+                document.getElementById('questionSubject').value = question.subjectId;
+                document.getElementById('questionClass').value = question.classId;
+                document.getElementById('questionMarks').value = question.marks;
+                document.getElementById('questionDifficulty').value = question.difficulty;
+                document.getElementById('optionA').value = question.options.A;
+                document.getElementById('optionB').value = question.options.B;
+                document.getElementById('optionC').value = question.options.C;
+                document.getElementById('optionD').value = question.options.D;
+                document.getElementById('correctOption').value = question.correctAnswer;
+
+                // Store the question ID for updating
+                window.editingQuestionId = questionId;
+
+                // Change modal title and button text
+                document.querySelector('#addQuestionModal .modal-title').textContent = 'Edit Question';
+                document.getElementById('saveQuestionBtn').textContent = 'Update Question';
+
+                showModal('addQuestionModal');
+            } catch (error) {
+                console.error('Error loading question for editing:', error);
+                showNotification('Error loading question data', 'error');
+            }
         }
 
-        function editExam(examId) {
-            showNotification('Edit exam functionality coming soon!', 'info');
+        // Edit Exam Function
+        async function editExam(examId) {
+            try {
+                const examDoc = await db.collection('exams').doc(examId).get();
+                if (!examDoc.exists) {
+                    showNotification('Exam not found!', 'error');
+                    return;
+                }
+
+                const exam = examDoc.data();
+
+                // Check if the exam belongs to the current staff
+                if (exam.createdBy !== currentStaff.userId) {
+                    showNotification('You are not authorized to edit this exam.', 'error');
+                    return;
+                }
+
+                // Load subjects and classes first
+                await loadSubjectsAndClasses();
+
+                // Populate the form with exam data
+                document.getElementById('examTitle').value = exam.examTitle;
+                document.getElementById('examDescription').value = exam.description || '';
+                document.getElementById('examSubject').value = exam.subjectId;
+                document.getElementById('examClass').value = exam.classId;
+                document.getElementById('examDuration').value = exam.duration;
+                document.getElementById('examTotalQuestions').value = exam.totalQuestions;
+                document.getElementById('shuffleQuestions').checked = exam.shuffleQuestions || false;
+                document.getElementById('allowMultipleAttempts').checked = exam.allowMultipleAttempts || false;
+                document.getElementById('maxAttempts').value = exam.maxAttempts || 1;
+
+                // Convert Firestore timestamps to datetime-local format
+                const availableFrom = exam.availableFrom?.toDate();
+                const availableUntil = exam.availableUntil?.toDate();
+
+                if (availableFrom) {
+                    document.getElementById('examAvailableFrom').value = formatDateTimeLocal(availableFrom);
+                }
+                if (availableUntil) {
+                    document.getElementById('examAvailableUntil').value = formatDateTimeLocal(availableUntil);
+                }
+
+                // Show/hide max attempts container based on multiple attempts setting
+                document.getElementById('maxAttemptsContainer').style.display =
+                    exam.allowMultipleAttempts ? 'block' : 'none';
+
+                // Store the exam ID for updating
+                window.editingExamId = examId;
+
+                // Change modal title and button text
+                document.querySelector('#createExamModal .modal-title').textContent = 'Edit Exam';
+                document.getElementById('saveExamBtn').textContent = 'Update Exam';
+
+                showModal('createExamModal');
+            } catch (error) {
+                console.error('Error loading exam for editing:', error);
+                showNotification('Error loading exam data', 'error');
+            }
         }
+
+        // Update the saveQuestion function to handle both create and update:
+        async function saveQuestion() {
+            const questionData = {
+                questionText: document.getElementById('questionText').value,
+                questionType: 'multiple_choice',
+                options: {
+                    A: document.getElementById('optionA').value,
+                    B: document.getElementById('optionB').value,
+                    C: document.getElementById('optionC').value,
+                    D: document.getElementById('optionD').value
+                },
+                correctAnswer: document.getElementById('correctOption').value,
+                subjectId: document.getElementById('questionSubject').value,
+                classId: document.getElementById('questionClass').value,
+                marks: parseInt(document.getElementById('questionMarks').value),
+                difficulty: document.getElementById('questionDifficulty').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                isActive: true
+            };
+
+            try {
+                if (window.editingQuestionId) {
+                    // Update existing question
+                    await db.collection('questions').doc(window.editingQuestionId).update(questionData);
+                    showNotification('Question updated successfully!', 'success');
+                } else {
+                    // Create new question
+                    questionData.createdBy = currentStaff.userId;
+                    questionData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('questions').add(questionData);
+                    showNotification('Question created successfully!', 'success');
+                }
+
+                hideModal('addQuestionModal');
+                resetQuestionForm();
+                loadQuestionsData();
+
+            } catch (error) {
+                console.error('Error saving question:', error);
+                showNotification('Error saving question. Please try again.', 'error');
+            }
+        }
+
+        // Update the saveExam function to handle both create and update:
+        async function saveExam() {
+            const examData = {
+                examTitle: document.getElementById('examTitle').value,
+                description: document.getElementById('examDescription').value,
+                subjectId: document.getElementById('examSubject').value,
+                classId: document.getElementById('examClass').value,
+                duration: parseInt(document.getElementById('examDuration').value),
+                totalQuestions: parseInt(document.getElementById('examTotalQuestions').value),
+                totalMarks: parseInt(document.getElementById('examTotalQuestions').value),
+                shuffleQuestions: document.getElementById('shuffleQuestions').checked,
+                allowMultipleAttempts: document.getElementById('allowMultipleAttempts').checked,
+                maxAttempts: document.getElementById('allowMultipleAttempts').checked ?
+                    parseInt(document.getElementById('maxAttempts').value) : 1,
+                availableFrom: firebase.firestore.Timestamp.fromDate(
+                    new Date(document.getElementById('examAvailableFrom').value)
+                ),
+                availableUntil: firebase.firestore.Timestamp.fromDate(
+                    new Date(document.getElementById('examAvailableUntil').value)
+                ),
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                isActive: true
+            };
+
+            try {
+                if (window.editingExamId) {
+                    // Update existing exam
+                    await db.collection('exams').doc(window.editingExamId).update(examData);
+                    showNotification('Exam updated successfully!', 'success');
+                } else {
+                    // Create new exam
+                    examData.createdBy = currentStaff.userId;
+                    examData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+                    await db.collection('exams').add(examData);
+                    showNotification('Exam created successfully!', 'success');
+                }
+
+                hideModal('createExamModal');
+                resetExamForm();
+                loadExamsData();
+
+            } catch (error) {
+                console.error('Error saving exam:', error);
+                showNotification('Error saving exam. Please try again.', 'error');
+            }
+        }
+
+        // Add these reset functions:
+        function resetQuestionForm() {
+            document.getElementById('addQuestionForm').reset();
+            window.editingQuestionId = null;
+            document.querySelector('#addQuestionModal .modal-title').textContent = 'Add Question';
+            document.getElementById('saveQuestionBtn').textContent = 'Save Question';
+        }
+
+        function resetExamForm() {
+            document.getElementById('createExamForm').reset();
+            window.editingExamId = null;
+            document.querySelector('#createExamModal .modal-title').textContent = 'Create New Exam';
+            document.getElementById('saveExamBtn').textContent = 'Create Exam';
+
+            // Set default dates
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            document.getElementById('examAvailableFrom').value = formatDateTimeLocal(now);
+            document.getElementById('examAvailableUntil').value = formatDateTimeLocal(tomorrow);
+
+            // Reset multiple attempts UI
+            document.getElementById('maxAttemptsContainer').style.display = 'none';
+        }
+
+        // Update the modal cancel buttons to also reset the forms:
+        document.getElementById('cancelQuestionBtn')?.addEventListener('click', () => {
+            hideModal('addQuestionModal');
+            resetQuestionForm();
+        });
+
+        document.getElementById('cancelExamBtn')?.addEventListener('click', () => {
+            hideModal('createExamModal');
+            resetExamForm();
+        });
+
+        // Also reset forms when modal is closed via X button or clicking outside
+        document.querySelectorAll('.modal-close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', (e) => {
+                const modal = closeBtn.closest('.modal');
+                if (modal.id === 'addQuestionModal') {
+                    resetQuestionForm();
+                } else if (modal.id === 'createExamModal') {
+                    resetExamForm();
+                }
+                modal.classList.remove('active');
+            });
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    if (modal.id === 'addQuestionModal') {
+                        resetQuestionForm();
+                    } else if (modal.id === 'createExamModal') {
+                        resetExamForm();
+                    }
+                    modal.classList.remove('active');
+                }
+            });
+        });
 
         function deleteQuestion(questionId) {
             if (confirm('Are you sure you want to delete this question?')) {

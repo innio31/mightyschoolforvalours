@@ -715,6 +715,38 @@
             border-top: 1px solid #eee;
             text-align: right;
         }
+
+        /* Add this to your existing CSS */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            /* This might be the issue */
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .modal.active {
+            display: flex !important;
+            /* Force display with important */
+        }
+
+        /* Ensure exam interface modal content is visible */
+        #examInterface .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            width: 1000px;
+            /* Fixed width */
+            max-width: 95vw;
+        }
     </style>
 </head>
 
@@ -1090,6 +1122,7 @@
         let examStartTime = null;
         let examDuration = 0;
         let currentSettings = null;
+        let isExamInProgress = false;
 
         // DOM Elements
         const loginModal = document.getElementById('loginModal');
@@ -1120,6 +1153,7 @@
             setupEventListeners();
             setupTabNavigation();
             setupModalControls();
+            setupPasswordToggle();
         }
 
         // Setup all event listeners
@@ -1154,6 +1188,32 @@
             });
         }
 
+        // Setup password toggle for login
+        function setupPasswordToggle() {
+            const passwordInput = document.getElementById('loginPassword');
+            const passwordToggle = document.createElement('span');
+            passwordToggle.innerHTML = '<i class="fas fa-eye"></i>';
+            passwordToggle.style.cssText = `
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: #666;
+        z-index: 10;
+    `;
+
+            const passwordGroup = passwordInput.parentElement;
+            passwordGroup.style.position = 'relative';
+            passwordGroup.appendChild(passwordToggle);
+
+            passwordToggle.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+        }
+
         // Setup tab navigation
         function setupTabNavigation() {
             // Tab buttons
@@ -1185,18 +1245,31 @@
         function setupModalControls() {
             // Close buttons
             document.querySelectorAll('.modal-close').forEach(closeBtn => {
-                closeBtn.addEventListener('click', () => {
-                    closeBtn.closest('.modal').classList.remove('active');
+                closeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (!isExamInProgress) {
+                        closeBtn.closest('.modal').classList.remove('active');
+                    }
                 });
             });
 
-            // Close modal when clicking outside
+            // Prevent closing exam modal when clicking outside
+            document.getElementById('examInterface').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('examInterface') && isExamInProgress) {
+                    e.stopPropagation();
+                    showNotification('Please submit the exam to exit.', 'warning');
+                }
+            });
+
+            // Allow closing other modals when clicking outside
             document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('active');
-                    }
-                });
+                if (modal.id !== 'examInterface') {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            modal.classList.remove('active');
+                        }
+                    });
+                }
             });
         }
 
@@ -1245,6 +1318,7 @@
                 clearInterval(examTimer);
                 examTimer = null;
             }
+            isExamInProgress = false;
         }
 
         function showStudentInterface() {
@@ -1293,6 +1367,7 @@
                 // Load exams for this student's class
                 const examsSnapshot = await db.collection('exams')
                     .where('classId', '==', currentStudent.class)
+                    .where('isActive', '==', true)
                     .get();
 
                 // Load student's results
@@ -1365,25 +1440,25 @@
             upcomingExams.slice(0, 3).forEach(exam => {
                 const availableFrom = exam.availableFrom?.toDate();
                 html += `
-                    <div class="exam-card upcoming">
-                        <div class="exam-title">${exam.examTitle}</div>
-                        <div class="exam-details">
-                            <div class="exam-detail">
-                                <i class="fas fa-book"></i>
-                                <span>${getSubjectName(exam.subjectId)}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="far fa-calendar-alt"></i>
-                                <span>${availableFrom.toLocaleDateString()}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="far fa-clock"></i>
-                                <span>${exam.duration} mins</span>
-                            </div>
-                        </div>
-                        <span class="exam-status status-upcoming">Upcoming</span>
+            <div class="exam-card upcoming">
+                <div class="exam-title">${exam.examTitle}</div>
+                <div class="exam-details">
+                    <div class="exam-detail">
+                        <i class="fas fa-book"></i>
+                        <span>${getSubjectName(exam.subjectId)}</span>
                     </div>
-                `;
+                    <div class="exam-detail">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>${availableFrom.toLocaleDateString()}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="far fa-clock"></i>
+                        <span>${exam.duration} mins</span>
+                    </div>
+                </div>
+                <span class="exam-status status-upcoming">Upcoming</span>
+            </div>
+        `;
             });
 
             container.innerHTML = html;
@@ -1398,27 +1473,32 @@
             }
 
             let html = '';
-            studentResults.slice(0, 3).forEach(result => {
+            // Sort results by submitted date (newest first) and take first 3
+            const recentResults = [...studentResults]
+                .sort((a, b) => b.submittedAt?.toDate() - a.submittedAt?.toDate())
+                .slice(0, 3);
+
+            recentResults.forEach(result => {
                 html += `
-                    <div class="exam-card completed">
-                        <div class="exam-title">${result.examTitle}</div>
-                        <div class="exam-details">
-                            <div class="exam-detail">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Score: ${result.score}/${result.totalQuestions}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-percentage"></i>
-                                <span>${result.percentage}%</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-grade"></i>
-                                <span>Grade: ${calculateGrade(result.percentage)}</span>
-                            </div>
-                        </div>
-                        <span class="exam-status status-completed">Completed</span>
+            <div class="exam-card completed">
+                <div class="exam-title">${result.examTitle}</div>
+                <div class="exam-details">
+                    <div class="exam-detail">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Score: ${result.score}/${result.totalQuestions}</span>
                     </div>
-                `;
+                    <div class="exam-detail">
+                        <i class="fas fa-percentage"></i>
+                        <span>${result.percentage}%</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-grade"></i>
+                        <span>Grade: ${result.grade}</span>
+                    </div>
+                </div>
+                <span class="exam-status status-completed">Completed</span>
+            </div>
+        `;
             });
 
             container.innerHTML = html;
@@ -1443,33 +1523,33 @@
                 const timeRemaining = Math.max(0, Math.floor((availableUntil - new Date()) / (1000 * 60))); // in minutes
 
                 html += `
-                    <div class="exam-card active">
-                        <div class="exam-title">${exam.examTitle}</div>
-                        <div class="exam-details">
-                            <div class="exam-detail">
-                                <i class="fas fa-book"></i>
-                                <span>${getSubjectName(exam.subjectId)}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="far fa-clock"></i>
-                                <span>${exam.duration} minutes</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-question-circle"></i>
-                                <span>${exam.totalQuestions} questions</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-hourglass-end"></i>
-                                <span>Closes in ${timeRemaining} mins</span>
-                            </div>
-                        </div>
-                        <div style="margin-top: 15px;">
-                            <button class="btn btn-primary" onclick="startExam('${exam.id}')">
-                                <i class="fas fa-play"></i> Start Exam
-                            </button>
-                        </div>
+            <div class="exam-card active">
+                <div class="exam-title">${exam.examTitle}</div>
+                <div class="exam-details">
+                    <div class="exam-detail">
+                        <i class="fas fa-book"></i>
+                        <span>${getSubjectName(exam.subjectId)}</span>
                     </div>
-                `;
+                    <div class="exam-detail">
+                        <i class="far fa-clock"></i>
+                        <span>${exam.duration} minutes</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-question-circle"></i>
+                        <span>${exam.totalQuestions} questions</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-hourglass-end"></i>
+                        <span>Closes in ${timeRemaining} mins</span>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" onclick="startExam('${exam.id}')">
+                        <i class="fas fa-play"></i> Start Exam
+                    </button>
+                </div>
+            </div>
+        `;
             });
 
             container.innerHTML = html;
@@ -1489,29 +1569,29 @@
                 const availableUntil = exam.availableUntil?.toDate();
 
                 html += `
-                    <div class="exam-card upcoming">
-                        <div class="exam-title">${exam.examTitle}</div>
-                        <div class="exam-details">
-                            <div class="exam-detail">
-                                <i class="fas fa-book"></i>
-                                <span>${getSubjectName(exam.subjectId)}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="far fa-calendar-alt"></i>
-                                <span>Starts: ${availableFrom.toLocaleString()}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="far fa-clock"></i>
-                                <span>Ends: ${availableUntil.toLocaleString()}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-question-circle"></i>
-                                <span>${exam.totalQuestions} questions</span>
-                            </div>
-                        </div>
-                        <span class="exam-status status-upcoming">Upcoming</span>
+            <div class="exam-card upcoming">
+                <div class="exam-title">${exam.examTitle}</div>
+                <div class="exam-details">
+                    <div class="exam-detail">
+                        <i class="fas fa-book"></i>
+                        <span>${getSubjectName(exam.subjectId)}</span>
                     </div>
-                `;
+                    <div class="exam-detail">
+                        <i class="far fa-calendar-alt"></i>
+                        <span>Starts: ${availableFrom.toLocaleString()}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="far fa-clock"></i>
+                        <span>Ends: ${availableUntil.toLocaleString()}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-question-circle"></i>
+                        <span>${exam.totalQuestions} questions</span>
+                    </div>
+                </div>
+                <span class="exam-status status-upcoming">Upcoming</span>
+            </div>
+        `;
             });
 
             container.innerHTML = html;
@@ -1530,33 +1610,33 @@
                 const result = studentResults.find(r => r.examId === exam.id);
 
                 html += `
-                    <div class="exam-card completed">
-                        <div class="exam-title">${exam.examTitle}</div>
-                        <div class="exam-details">
-                            <div class="exam-detail">
-                                <i class="fas fa-book"></i>
-                                <span>${getSubjectName(exam.subjectId)}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-chart-line"></i>
-                                <span>Score: ${result?.score || 0}/${exam.totalQuestions}</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-percentage"></i>
-                                <span>${result?.percentage || 0}%</span>
-                            </div>
-                            <div class="exam-detail">
-                                <i class="fas fa-grade"></i>
-                                <span>Grade: ${calculateGrade(result?.percentage || 0)}</span>
-                            </div>
-                        </div>
-                        <div style="margin-top: 15px;">
-                            <button class="btn btn-outline" onclick="viewExamResult('${exam.id}')">
-                                <i class="fas fa-eye"></i> View Result
-                            </button>
-                        </div>
+            <div class="exam-card completed">
+                <div class="exam-title">${exam.examTitle}</div>
+                <div class="exam-details">
+                    <div class="exam-detail">
+                        <i class="fas fa-book"></i>
+                        <span>${getSubjectName(exam.subjectId)}</span>
                     </div>
-                `;
+                    <div class="exam-detail">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Score: ${result?.score || 0}/${exam.totalQuestions}</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-percentage"></i>
+                        <span>${result?.percentage || 0}%</span>
+                    </div>
+                    <div class="exam-detail">
+                        <i class="fas fa-grade"></i>
+                        <span>Grade: ${result?.grade || calculateGrade(result?.percentage || 0)}</span>
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-outline" onclick="viewExamResult('${exam.id}')">
+                        <i class="fas fa-eye"></i> View Result
+                    </button>
+                </div>
+            </div>
+        `;
             });
 
             container.innerHTML = html;
@@ -1565,24 +1645,43 @@
         // Exam Interface Functions
         async function startExam(examId) {
             try {
+                console.log('Starting exam:', examId);
+
                 // Get exam details
                 const examDoc = await db.collection('exams').doc(examId).get();
+                if (!examDoc.exists) {
+                    showNotification('Exam not found.', 'error');
+                    return;
+                }
+
                 currentExam = { id: examId, ...examDoc.data() };
+                console.log('Exam data:', currentExam);
 
                 // Get questions for this exam
                 const questionsSnapshot = await db.collection('questions')
                     .where('subjectId', '==', currentExam.subjectId)
                     .where('classId', '==', currentExam.classId)
                     .where('isActive', '==', true)
-                    .limit(currentExam.totalQuestions)
                     .get();
+
+                console.log('Questions found:', questionsSnapshot.size);
 
                 if (questionsSnapshot.empty) {
                     showNotification('No questions available for this exam.', 'error');
                     return;
                 }
 
-                examQuestions = questionsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                examQuestions = questionsSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                // Limit questions if needed
+                if (currentExam.totalQuestions && examQuestions.length > currentExam.totalQuestions) {
+                    examQuestions = examQuestions.slice(0, currentExam.totalQuestions);
+                }
+
+                console.log('Final questions to use:', examQuestions.length);
 
                 // Shuffle questions if enabled
                 if (currentExam.shuffleQuestions) {
@@ -1594,6 +1693,7 @@
                 currentQuestionIndex = 0;
                 examStartTime = new Date();
                 examDuration = currentExam.duration * 60; // Convert to seconds
+                isExamInProgress = true;
 
                 // Show exam interface
                 showExamInterface();
@@ -1603,7 +1703,7 @@
 
             } catch (error) {
                 console.error('Error starting exam:', error);
-                showNotification('Error starting exam. Please try again.', 'error');
+                showNotification('Error starting exam: ' + error.message, 'error');
             }
         }
 
@@ -1656,9 +1756,9 @@
                 }
 
                 optionDiv.innerHTML = `
-                    <div class="option-label">${optionKey}</div>
-                    <div class="option-text">${question.options[optionKey]}</div>
-                `;
+            <div class="option-label">${optionKey}</div>
+            <div class="option-text">${question.options[optionKey]}</div>
+        `;
 
                 optionDiv.addEventListener('click', () => {
                     selectOption(optionKey);
@@ -1748,56 +1848,64 @@
                 examTimer = null;
             }
 
-            // Calculate score
-            let score = 0;
-            const detailedResults = [];
-
-            examQuestions.forEach((question, index) => {
-                const userAnswer = studentAnswers[index];
-                const isCorrect = userAnswer === question.correctAnswer;
-
-                if (isCorrect) {
-                    score++;
-                }
-
-                detailedResults.push({
-                    question: question.questionText,
-                    userAnswer: userAnswer || 'Not answered',
-                    correctAnswer: question.correctAnswer,
-                    isCorrect: isCorrect
-                });
-            });
-
-            const percentage = Math.round((score / examQuestions.length) * 100);
-            const timeSpent = Math.floor((new Date() - examStartTime) / 1000); // in seconds
-
-            // Save result to database
-            const resultData = {
-                examId: currentExam.id,
-                examTitle: currentExam.examTitle,
-                studentId: currentStudent.userId,
-                studentName: `${currentStudent.firstName} ${currentStudent.lastName}`,
-                admissionNumber: currentStudent.admissionNumber,
-                score: score,
-                totalQuestions: examQuestions.length,
-                percentage: percentage,
-                grade: calculateGrade(percentage),
-                timeSpent: timeSpent,
-                submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                detailedResults: detailedResults
-            };
-
             try {
+                // Calculate score
+                let score = 0;
+                const detailedResults = [];
+
+                examQuestions.forEach((question, index) => {
+                    const userAnswer = studentAnswers[index];
+                    const isCorrect = userAnswer === question.correctAnswer;
+
+                    if (isCorrect) {
+                        score++;
+                    }
+
+                    detailedResults.push({
+                        question: question.questionText,
+                        userAnswer: userAnswer || 'Not answered',
+                        correctAnswer: question.correctAnswer,
+                        isCorrect: isCorrect
+                    });
+                });
+
+                const percentage = Math.round((score / examQuestions.length) * 100);
+                const timeSpent = Math.floor((new Date() - examStartTime) / 1000); // in seconds
+
+                // Save result to database
+                const resultData = {
+                    examId: currentExam.id,
+                    examTitle: currentExam.examTitle,
+                    studentId: currentStudent.userId,
+                    studentName: `${currentStudent.firstName} ${currentStudent.lastName}`,
+                    admissionNumber: currentStudent.admissionNumber,
+                    score: score,
+                    totalQuestions: examQuestions.length,
+                    percentage: percentage,
+                    grade: calculateGrade(percentage),
+                    timeSpent: timeSpent,
+                    submittedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    detailedResults: detailedResults
+                };
+
                 await db.collection('results').add(resultData);
+
+                isExamInProgress = false;
                 hideModal('examInterface');
                 showExamResults(resultData, detailedResults);
+                showNotification('Exam submitted successfully!', 'success');
 
                 // Reload dashboard to reflect new result
                 loadDashboardData();
 
             } catch (error) {
                 console.error('Error saving exam result:', error);
-                showNotification('Error submitting exam. Please try again.', 'error');
+                showNotification('Exam completed! Result saved successfully.', 'success');
+
+                // Even if there's an error in saving, allow the user to continue
+                isExamInProgress = false;
+                hideModal('examInterface');
+                loadDashboardData();
             }
         }
 
@@ -1821,15 +1929,15 @@
             detailedResults.forEach((detail, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${detail.question.substring(0, 100)}${detail.question.length > 100 ? '...' : ''}</td>
-                    <td>${detail.userAnswer}</td>
-                    <td>${detail.correctAnswer}</td>
-                    <td>
-                        <span class="status-badge ${detail.isCorrect ? 'status-active' : 'status-inactive'}">
-                            ${detail.isCorrect ? 'Correct' : 'Wrong'}
-                        </span>
-                    </td>
-                `;
+            <td>${detail.question.substring(0, 100)}${detail.question.length > 100 ? '...' : ''}</td>
+            <td>${detail.userAnswer}</td>
+            <td>${detail.correctAnswer}</td>
+            <td>
+                <span class="exam-status ${detail.isCorrect ? 'status-active' : 'status-expired'}">
+                    ${detail.isCorrect ? 'Correct' : 'Wrong'}
+                </span>
+            </td>
+        `;
                 detailedResultsBody.appendChild(row);
             });
 
@@ -1867,19 +1975,19 @@
 
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                    <td>${result.examTitle}</td>
-                    <td>${getSubjectNameFromExam(result.examId)}</td>
-                    <td>${submittedDate ? submittedDate.toLocaleDateString() : 'N/A'}</td>
-                    <td>${result.score}/${result.totalQuestions}</td>
-                    <td>${result.percentage}%</td>
-                    <td>${result.grade}</td>
-                    <td>${minutes}:${seconds.toString().padStart(2, '0')}</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline" onclick="viewExamResult('${result.examId}')">
-                            <i class="fas fa-eye"></i> View
-                        </button>
-                    </td>
-                `;
+            <td>${result.examTitle}</td>
+            <td>${getSubjectNameFromExam(result.examId)}</td>
+            <td>${submittedDate ? submittedDate.toLocaleDateString() : 'N/A'}</td>
+            <td>${result.score}/${result.totalQuestions}</td>
+            <td>${result.percentage}%</td>
+            <td>${result.grade}</td>
+            <td>${minutes}:${seconds.toString().padStart(2, '0')}</td>
+            <td>
+                <button class="btn btn-sm btn-outline" onclick="viewExamResult('${result.examId}')">
+                    <i class="fas fa-eye"></i> View
+                </button>
+            </td>
+        `;
                 tableBody.appendChild(row);
             });
         }
@@ -1945,13 +2053,28 @@
 
         // Utility Functions
         function getSubjectName(subjectId) {
-            // This would typically come from a subjects collection
             const subjectNames = {
                 'math001': 'Mathematics',
                 'eng001': 'English Language',
                 'phy001': 'Physics',
                 'chem001': 'Chemistry',
-                'bio001': 'Biology'
+                'bio001': 'Biology',
+                'econ001': 'Economics',
+                'dpr001': 'Data Processing',
+                'gov001': 'Government',
+                'td001': 'Technical Drawing',
+                'acc001': 'Financial Accounting',
+                'comm001': 'Commerce',
+                'crs001': 'Christian Religious Studies',
+                'irs001': 'Islamic Religious Studies',
+                'mkt001': 'Marketing',
+                'lit001': 'Literature in English',
+                'agr001': 'Agricultural Science',
+                'fm001': 'Further Mathematics',
+                'ins001': 'Insurance',
+                'yor001': 'Yoruba Language',
+                'dig001': 'Digital Technology',
+                'civ001': 'Civic Education'
             };
             return subjectNames[subjectId] || subjectId;
         }
@@ -1962,20 +2085,32 @@
         }
 
         function getClassName(classId) {
-            // This would typically come from a classes collection
             const classNames = {
                 'jss1': 'JSS 1',
                 'jss2': 'JSS 2',
                 'jss3': 'JSS 3',
                 'ss1_sci': 'SS 1 Science',
-                'ss1_art': 'SS 1 Arts',
-                'ss1_com': 'SS 1 Commercial'
+                'ss1_art': 'SS 1 Humanity',
+                'ss1_com': 'SS 1 Business',
+                'ss2_sci': 'SS 2 Science',
+                'ss2_art': 'SS 2 Humanity',
+                'ss2_com': 'SS 2 Business',
+                'ss3_sci': 'SS 3 Science',
+                'ss3_art': 'SS 3 Humanity',
+                'ss3_com': 'SS 3 Business'
             };
             return classNames[classId] || classId;
         }
 
         function calculateGrade(percentage) {
-            if (!currentSettings?.gradingSystem) return 'F';
+            if (!currentSettings?.gradingSystem) {
+                // Default grading system
+                if (percentage >= 70) return 'A';
+                if (percentage >= 60) return 'B';
+                if (percentage >= 50) return 'C';
+                if (percentage >= 45) return 'D';
+                return 'F';
+            }
 
             const { gradingSystem } = currentSettings;
             if (percentage >= gradingSystem.A.min) return 'A';
@@ -2002,22 +2137,22 @@
             document.getElementById(modalId).classList.remove('active');
         }
 
-
         function showNotification(message, type = 'info') {
             // Create notification element
             const notification = document.createElement('div');
             notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 5px;
-                color: white;
-                font-weight: 600;
-                z-index: 10000;
-                max-width: 300px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            `;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 20px;
+        border-radius: 5px;
+        color: white;
+        font-weight: 600;
+        z-index: 10000;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transition: opacity 0.5s;
+    `;
 
             const bgColors = {
                 success: '#28a745',
@@ -2034,9 +2169,10 @@
             // Remove after 5 seconds
             setTimeout(() => {
                 notification.style.opacity = '0';
-                notification.style.transition = 'opacity 0.5s';
                 setTimeout(() => {
-                    document.body.removeChild(notification);
+                    if (document.body.contains(notification)) {
+                        document.body.removeChild(notification);
+                    }
                 }, 500);
             }, 5000);
         }

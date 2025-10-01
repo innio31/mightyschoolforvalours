@@ -3408,21 +3408,169 @@
             }, 5000);
         }
 
-        // Placeholder functions for edit operations
-        function editSubject(subjectId) {
-            showNotification('Edit subject functionality coming soon!', 'info');
+        // Functions for edit operations
+        async function editSubject(subjectId) {
+            try {
+                const subjectDoc = await db.collection('subjects').doc(subjectId).get();
+                if (!subjectDoc.exists) {
+                    showNotification('Subject not found!', 'error');
+                    return;
+                }
+
+                const subject = subjectDoc.data();
+
+                // Populate the form
+                document.getElementById('subjectName').value = subject.subjectName || '';
+                document.getElementById('subjectCode').value = subject.subjectCode || '';
+                document.getElementById('subjectDescription').value = subject.description || '';
+
+                // Change modal title and button
+                document.querySelector('#addSubjectModal .modal-title').textContent = 'Edit Subject';
+                document.getElementById('saveSubjectBtn').textContent = 'Update Subject';
+
+                // Store the subject ID for updating
+                document.getElementById('saveSubjectBtn').setAttribute('data-edit-id', subjectId);
+
+                showModal('addSubjectModal');
+            } catch (error) {
+                console.error('Error loading subject for edit:', error);
+                showNotification('Error loading subject data.', 'error');
+            }
         }
 
-        function editClass(classId) {
-            showNotification('Edit class functionality coming soon!', 'info');
+        async function editClass(classId) {
+            try {
+                const classDoc = await db.collection('classes').doc(classId).get();
+                if (!classDoc.exists) {
+                    showNotification('Class not found!', 'error');
+                    return;
+                }
+
+                const cls = classDoc.data();
+
+                // Populate the form
+                document.getElementById('className').value = cls.className || '';
+                document.getElementById('classCode').value = cls.classCode || '';
+                document.getElementById('classLevel').value = cls.level || '';
+                document.getElementById('classDescription').value = cls.description || '';
+
+                // Populate teachers dropdown
+                const teacherSelect = document.getElementById('classTeacher');
+                teacherSelect.innerHTML = '<option value="">No Class Teacher</option>';
+
+                const staffSnapshot = await db.collection('users').where('role', '==', 'staff').get();
+                staffSnapshot.forEach(doc => {
+                    const staff = doc.data();
+                    const option = document.createElement('option');
+                    option.value = doc.id;
+                    option.textContent = `${staff.firstName} ${staff.lastName} (${staff.staffId})`;
+                    if (cls.classTeacher === doc.id) {
+                        option.selected = true;
+                    }
+                    teacherSelect.appendChild(option);
+                });
+
+                // Change modal title and button
+                document.querySelector('#addClassModal .modal-title').textContent = 'Edit Class';
+                document.getElementById('saveClassBtn').textContent = 'Update Class';
+
+                // Store the class ID for updating
+                document.getElementById('saveClassBtn').setAttribute('data-edit-id', classId);
+
+                showModal('addClassModal');
+            } catch (error) {
+                console.error('Error loading class for edit:', error);
+                showNotification('Error loading class data.', 'error');
+            }
         }
 
-        function editQuestion(questionId) {
-            showNotification('Edit question functionality coming soon!', 'info');
+        async function editQuestion(questionId) {
+            try {
+                const questionDoc = await db.collection('questions').doc(questionId).get();
+                if (!questionDoc.exists) {
+                    showNotification('Question not found!', 'error');
+                    return;
+                }
+
+                const question = questionDoc.data();
+
+                // Load subjects and classes first
+                await loadSubjectsAndClasses();
+
+                // Populate the form
+                document.getElementById('questionText').value = question.questionText || '';
+                document.getElementById('questionSubject').value = question.subjectId || '';
+                document.getElementById('questionClass').value = question.classId || '';
+                document.getElementById('questionMarks').value = question.marks || 1;
+                document.getElementById('questionDifficulty').value = question.difficulty || 'medium';
+                document.getElementById('optionA').value = question.options?.A || '';
+                document.getElementById('optionB').value = question.options?.B || '';
+                document.getElementById('optionC').value = question.options?.C || '';
+                document.getElementById('optionD').value = question.options?.D || '';
+                document.getElementById('correctOption').value = question.correctAnswer || 'A';
+
+                // Change modal title and button
+                document.querySelector('#addQuestionModal .modal-title').textContent = 'Edit Question';
+                document.getElementById('saveQuestionBtn').textContent = 'Update Question';
+
+                // Store the question ID for updating
+                document.getElementById('saveQuestionBtn').setAttribute('data-edit-id', questionId);
+
+                showModal('addQuestionModal');
+            } catch (error) {
+                console.error('Error loading question for edit:', error);
+                showNotification('Error loading question data.', 'error');
+            }
         }
 
-        function editExam(examId) {
-            showNotification('Edit exam functionality coming soon!', 'info');
+        async function editExam(examId) {
+            try {
+                const examDoc = await db.collection('exams').doc(examId).get();
+                if (!examDoc.exists) {
+                    showNotification('Exam not found!', 'error');
+                    return;
+                }
+
+                const exam = examDoc.data();
+
+                // Load subjects and classes first
+                await loadSubjectsAndClasses();
+
+                // Populate the form
+                document.getElementById('examTitle').value = exam.examTitle || '';
+                document.getElementById('examDescription').value = exam.description || '';
+                document.getElementById('examSubject').value = exam.subjectId || '';
+                document.getElementById('examClass').value = exam.classId || '';
+                document.getElementById('examDuration').value = exam.duration || 60;
+                document.getElementById('examTotalQuestions').value = exam.totalQuestions || 20;
+                document.getElementById('shuffleQuestions').checked = exam.shuffleQuestions !== false;
+                document.getElementById('allowMultipleAttempts').checked = exam.allowMultipleAttempts || false;
+                document.getElementById('maxAttempts').value = exam.maxAttempts || 1;
+
+                // Set dates
+                if (exam.availableFrom) {
+                    document.getElementById('examAvailableFrom').value = formatDateTimeLocal(exam.availableFrom.toDate());
+                }
+                if (exam.availableUntil) {
+                    document.getElementById('examAvailableUntil').value = formatDateTimeLocal(exam.availableUntil.toDate());
+                }
+
+                // Toggle max attempts container
+                document.getElementById('maxAttemptsContainer').style.display =
+                    exam.allowMultipleAttempts ? 'block' : 'none';
+
+                // Change modal title and button
+                document.querySelector('#createExamModal .modal-title').textContent = 'Edit Exam';
+                document.getElementById('saveExamBtn').textContent = 'Update Exam';
+
+                // Store the exam ID for updating
+                document.getElementById('saveExamBtn').setAttribute('data-edit-id', examId);
+
+                showModal('createExamModal');
+            } catch (error) {
+                console.error('Error loading exam for edit:', error);
+                showNotification('Error loading exam data.', 'error');
+            }
         }
 
         function deleteQuestion(questionId) {

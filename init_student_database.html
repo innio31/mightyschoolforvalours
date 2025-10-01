@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Students to Firebase</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+
+        button {
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        button:hover {
+            background-color: #3367d6;
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .progress {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        #progressBar {
+            width: 100%;
+            height: 20px;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        #progressFill {
+            height: 100%;
+            background-color: #4285f4;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Add Students to Firebase</h1>
+
+        <div id="firebaseConfig" style="margin-bottom: 20px;">
+            <h3>Firebase Configuration</h3>
+            <p>Make sure to add your Firebase config below:</p>
+        </div>
+
+        <button id="addStudentsBtn" onclick="addAllStudents()">Add All Students to Firebase</button>
+
+        <div id="progressBar">
+            <div id="progressFill"></div>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="studentCount" style="text-align: center; margin: 20px 0;">
+            <strong>Total Students: 46</strong>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
+            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
+            projectId: "mightyschoolforvalours-91aa4",
+            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
+            messagingSenderId: "778024125256",
+            appId: "1:778024125256:web:31d482406bf06a2125a97d",
+            measurementId: "G-C2NY58GRFT"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // All students data - matching your exact field format
+        const students = [
+            { userId: "student002", admissionNumber: "MSV1164C", firstName: "Farian Oreoluwa", lastName: "Adeleke", class: "ss3_art", password: "adeleke" },
+            { userId: "student003", admissionNumber: "MSV838C", firstName: "Oyinkansola Sarah", lastName: "Adeosun", class: "ss3_art", password: "adeosun" },
+            { userId: "student004", admissionNumber: "MSV845C", firstName: "Mercy Oluwaferanmi", lastName: "Afolayan", class: "ss3_art", password: "afolayan" },
+            { userId: "student005", admissionNumber: "MSV1089C", firstName: "Ayomide Olamide", lastName: "Ajayi", class: "ss3_art", password: "ajayi" },
+            { userId: "student006", admissionNumber: "MSV1152C", firstName: "Gbenga Oluwasegun", lastName: "Awolusi", class: "ss3_art", password: "awolusi" },
+            { userId: "student007", admissionNumber: "MSV1236C", firstName: "Samuel Oluwasegun", lastName: "Ayegbo", class: "ss3_art", password: "ayegbo" },
+            { userId: "student008", admissionNumber: "MSV884C", firstName: "Ireoluwa Gabriel", lastName: "Bada", class: "ss3_art", password: "bada" },
+            { userId: "student009", admissionNumber: "MSV1172C", firstName: "Yetunde Deborah", lastName: "Bolarinde", class: "ss3_art", password: "bolarinde" },
+            { userId: "student010", admissionNumber: "MSV850C", firstName: "Mustapha Inioluwa", lastName: "Durajaiye", class: "ss3_art", password: "durajaiye" },
+            { userId: "student011", admissionNumber: "MSV857C", firstName: "Omotolashe Hikimat", lastName: "Eletu", class: "ss3_art", password: "eletu" },
+            { userId: "student012", admissionNumber: "MSV853C", firstName: "Uyiosa Harrison", lastName: "Enotiemwonmwam", class: "ss3_art", password: "enotiemwonmwam" },
+            { userId: "student013", admissionNumber: "MSV877C", firstName: "Eric Efosa", lastName: "Fidelis", class: "ss3_art", password: "fidelis" },
+            { userId: "student014", admissionNumber: "MSV1179C", firstName: "Testimony Oluwadamilola", lastName: "Folaranmi", class: "ss3_art", password: "folaranmi" },
+            { userId: "student015", admissionNumber: "MSV1174C", firstName: "Islamiyat Oyinkansola", lastName: "Giwa", class: "ss3_art", password: "giwa" },
+            { userId: "student016", admissionNumber: "MSV897C", firstName: "Halimot Morayo", lastName: "Hassan", class: "ss3_art", password: "hassan" },
+            { userId: "student017", admissionNumber: "MSV789C", firstName: "Selim Opeyemi", lastName: "Hassan", class: "ss3_art", password: "hassan" },
+            { userId: "student018", admissionNumber: "MSV975C", firstName: "Goodluck Emmanuel", lastName: "Idibia", class: "ss3_art", password: "idibia" },
+            { userId: "student019", admissionNumber: "MSV919C", firstName: "Peculiar Chineyenwa", lastName: "Ifeanyi", class: "ss3_art", password: "ifeanyi" },
+            { userId: "student020", admissionNumber: "MSV895C", firstName: "Treasure Chidiebube", lastName: "Ikechukwu", class: "ss3_art", password: "ikechukwu" },
+            { userId: "student021", admissionNumber: "MSV1087C", firstName: "Ameerah Iseoluwa", lastName: "Issa", class: "ss3_art", password: "issa" },
+            { userId: "student022", admissionNumber: "MSV858C", firstName: "Fathia Pelumi", lastName: "Jimoh", class: "ss3_art", password: "jimoh" },
+            { userId: "student023", admissionNumber: "MSV091C", firstName: "Success Elizabeth", lastName: "Kayode", class: "ss3_art", password: "kayode" },
+            { userId: "student024", admissionNumber: "MSV1102C", firstName: "Gilama Peniel", lastName: "Kulam", class: "ss3_art", password: "kulam" },
+            { userId: "student025", admissionNumber: "MSV906C", firstName: "Aminat Omowunmi", lastName: "Memud", class: "ss3_art", password: "memud" },
+            { userId: "student026", admissionNumber: "MSV956C", firstName: "Damilola Gabriel", lastName: "Mogaji", class: "ss3_art", password: "mogaji" },
+            { userId: "student027", admissionNumber: "MSV863C", firstName: "Joseph Osebhajimede", lastName: "Nasiru", class: "ss3_art", password: "nasiru" },
+            { userId: "student028", admissionNumber: "MSV865C", firstName: "Elizabeth Inumidun", lastName: "Odeyemi", class: "ss3_art", password: "odeyemi" },
+            { userId: "student029", admissionNumber: "MSV1147C", firstName: "David Oladele", lastName: "Ogunseye", class: "ss3_art", password: "ogunseye" },
+            { userId: "student030", admissionNumber: "MSV866C", firstName: "Haabeebat Oyindamola", lastName: "Oladejo", class: "ss3_art", password: "oladejo" },
+            { userId: "student031", admissionNumber: "MSV867C", firstName: "Elizabeth Oluwabunmi", lastName: "Olafisoye", class: "ss3_art", password: "olafisoye" },
+            { userId: "student032", admissionNumber: "MSV1156C", firstName: "Oluwatimileyin Mary", lastName: "Olanro", class: "ss3_art", password: "olanro" },
+            { userId: "student033", admissionNumber: "MSV878C", firstName: "David Olamilekan", lastName: "Olanusi", class: "ss3_art", password: "olanusi" },
+            { userId: "student034", admissionNumber: "MSV1166C", firstName: "Aliyah Odunayo", lastName: "Omotosho", class: "ss3_art", password: "omotosho" },
+            { userId: "student035", admissionNumber: "MSV870C", firstName: "Joseph Oluwanifemi", lastName: "Onajobi", class: "ss3_art", password: "onajobi" },
+            { userId: "student036", admissionNumber: "MSV871C", firstName: "Omotola Esther", lastName: "Oniyide", class: "ss3_art", password: "oniyide" },
+            { userId: "student037", admissionNumber: "MSV1175C", firstName: "Sherifah Ayodeji", lastName: "Orolade", class: "ss3_art", password: "orolade" },
+            { userId: "student038", admissionNumber: "MSV900C", firstName: "Morayo Inioluwa", lastName: "Osamo", class: "ss3_art", password: "osamo" },
+            { userId: "student039", admissionNumber: "MSV912C", firstName: "Israel Oluwadamilare", lastName: "Oyewole", class: "ss3_art", password: "oyewole" },
+            { userId: "student040", admissionNumber: "MSSV932C", firstName: "Adijat Precious", lastName: "Raji", class: "ss3_art", password: "raji" },
+            { userId: "student041", admissionNumber: "MSV873C", firstName: "Temitayo Sarah", lastName: "Rotimi", class: "ss3_art", password: "rotimi" },
+            { userId: "student042", admissionNumber: "MSV784C", firstName: "Moses Oluwapelumi", lastName: "Samuel", class: "ss3_art", password: "samuel" },
+            { userId: "student043", admissionNumber: "MSV1182C", firstName: "Flourish Titoluwani", lastName: "Soetan", class: "ss3_art", password: "soetan" },
+            { userId: "student044", admissionNumber: "MSV1169C", firstName: "Precious Somoyeni", lastName: "Sumanu", class: "ss3_art", password: "sumanu" },
+            { userId: "student045", admissionNumber: "MSV872C", firstName: "Oluwatojumi Beatrice", lastName: "Tapere-Femi", class: "ss3_art", password: "tapere-femi" },
+            { userId: "student046", admissionNumber: "MSV876C", firstName: "Moyinoluwa Soiat", lastName: "Wahab", class: "ss3_art", password: "wahab" },
+            { userId: "student047", admissionNumber: "MSV875C", firstName: "Aliyah Motunrayo", lastName: "Zakariyah", class: "ss3_art", password: "zakariyah" }
+        ];
+
+        async function addAllStudents() {
+            const button = document.getElementById('addStudentsBtn');
+            const status = document.getElementById('status');
+            const progressFill = document.getElementById('progressFill');
+
+            button.disabled = true;
+            button.textContent = 'Adding Students...';
+            status.style.display = 'block';
+            status.className = 'status progress';
+            status.textContent = 'Starting to add students to "users" collection...';
+
+            let addedCount = 0;
+            const totalStudents = students.length;
+
+            try {
+                for (let i = 0; i < students.length; i++) {
+                    const student = students[i];
+
+                    // Update progress
+                    const progress = ((i + 1) / totalStudents) * 100;
+                    progressFill.style.width = progress + '%';
+
+                    status.textContent = `Adding student ${i + 1} of ${totalStudents}: ${student.firstName} ${student.lastName}`;
+
+                    // Add student to 'users' collection with exact field format
+                    await db.collection('users').doc(student.userId).set({
+                        admissionNumber: student.admissionNumber,
+                        class: student.class,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        firstName: student.firstName,
+                        isActive: true,
+                        lastName: student.lastName,
+                        lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                        mustChangePassword: false,
+                        password: student.password.toLowerCase(), // Ensure lowercase
+                        phone: "",
+                        role: "student",
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        userId: student.userId
+                    });
+
+                    addedCount++;
+
+                    // Small delay to avoid overwhelming Firebase
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                }
+
+                status.className = 'status success';
+                status.textContent = `✅ Successfully added ${addedCount} students to "users" collection!`;
+                progressFill.style.width = '100%';
+
+            } catch (error) {
+                status.className = 'status error';
+                status.textContent = `❌ Error: ${error.message}`;
+                console.error('Error adding students:', error);
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Add All Students to Firebase';
+            }
+        }
+
+        // Display Firebase config instructions
+        document.getElementById('firebaseConfig').innerHTML += `
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px;">
+                <strong>Current Config:</strong><br>
+                projectId: "${firebaseConfig.projectId || 'NOT SET'}"<br>
+                apiKey: "${firebaseConfig.apiKey || 'NOT SET'}"
+            </div>
+            <p><small>To update config, edit the firebaseConfig object in the script.</small></p>
+            <p><strong>Collection:</strong> <code>users</code></p>
+        `;
+    </script>
+</body>
+
+</html>
