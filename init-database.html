@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Initialize CBT Database - Mighty School For Valours</title>
+    <title>Initialize CBT Database - The Climax Brains Academy, Ota</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -216,7 +216,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">Mighty School For Valours</div>
+            <div class="logo">The Climax Brains Academy, Ota</div>
             <div class="subtitle">CBT System Database Initialization</div>
         </div>
 
@@ -310,7 +310,7 @@
             </div>
             <div class="credential-item">
                 <strong>Sample Staff:</strong><br>
-                Email: <code>teacher.math@mightyschool.edu.ng</code><br>
+                Email: <code>teacher.math@brainsacademy.edu.ng</code><br>
                 Password: <code>staff123</code>
             </div>
         </div>
@@ -319,13 +319,14 @@
     <script>
         // Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDDJln5uWh_xmDA7bXowbFT-yL6zlBPtRg",
-            authDomain: "mightyschoolforvalours-91aa4.firebaseapp.com",
-            projectId: "mightyschoolforvalours-91aa4",
-            storageBucket: "mightyschoolforvalours-91aa4.firebasestorage.app",
-            messagingSenderId: "778024125256",
-            appId: "1:778024125256:web:31d482406bf06a2125a97d",
-            measurementId: "G-C2NY58GRFT"
+            apiKey: "AIzaSyDuKgSUZejLLveOe8oXlHo64OnCDFvwPc4",
+            authDomain: "climax-brains-academy-cbt.firebaseapp.com",
+            databaseURL: "https://climax-brains-academy-cbt-default-rtdb.firebaseio.com",
+            projectId: "climax-brains-academy-cbt",
+            storageBucket: "climax-brains-academy-cbt.firebasestorage.app",
+            messagingSenderId: "1024257040553",
+            appId: "1:1024257040553:web:3cc25d238fa378358f09b8",
+            measurementId: "G-LVDHYESXJG"
         };
 
         // Initialize Firebase
@@ -389,7 +390,7 @@
                         password: 'staff123',
                         firstName: 'Mathematics',
                         lastName: 'Teacher',
-                        email: 'MSV00049CO@mightyschool.edu.ng',
+                        email: 'MSV00049CO@brainsacademy.edu.ng',
                         role: 'staff',
                         roles: {
                             isSubjectTeacher: true,
@@ -413,7 +414,7 @@
                     },
                     {
                         id: 'staff002',
-                        staffId: 'teacher.english@mightyschoolforvalours.com',
+                        staffId: 'teacher.english@climaxbrains.com',
                         password: 'staff123',
                         firstName: 'English',
                         lastName: 'Teacher',
@@ -677,7 +678,7 @@
 
                 await db.collection('settings').doc('school_settings').set({
                     settingId: 'school_settings',
-                    schoolName: 'Mighty School For Valours',
+                    schoolName: 'The Climax Brains Academy, Ota',
                     academicTerm: 'First Term',
                     academicYear: '2025/2026',
                     gradingSystem: {
