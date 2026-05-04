@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>About Us | Mighty School for Valours — Ota, Ogun State</title>
+    <meta name="description"
+        content="Learn about Mighty School for Valours — our mission, vision, values, leadership team and teaching staff. Excellence in education since 2013 in Ota, Ogun State.">
+    <meta name="keywords"
+        content="about Mighty School for Valours, MSV leadership, school mission, Ota Ogun State school">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://mightyschoolforvalours.edu.ng/about.html">
+    <meta property="og:title" content="About | Mighty School for Valours">
+    <meta property="og:description"
+        content="Our mission, values, leadership and teaching staff — MSV, Ota, Ogun State.">
+    <meta property="og:url" content="https://mightyschoolforvalours.edu.ng/about.html">
+    <link rel="icon" type="image/jpg" href="images/logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --navy: #1c3877;
+            --navy-dark: #122560;
+            --navy-deep: #0b1a42;
+            --red: #e23639;
+            --red-dark: #b82c2e;
+            --gold: #c9a84c;
+            --gold-light: #f0e0a8;
+            --white: #ffffff;
+            --off-white: #f7f8fc;
+            --light-gray: #eef0f6;
+            --text: #1a1a2e;
+            --text-muted: #5a6074;
+            --border: #dde2f0;
+            --shadow-sm: 0 2px 8px rgba(28, 56, 119, 0.08);
+            --shadow-md: 0 8px 32px rgba(28, 56, 119, 0.12);
+            --shadow-lg: 0 20px 60px rgba(28, 56, 119, 0.18);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 12px;
+            --container-padding: 1.25rem;
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            background: var(--white);
+            overflow-x: hidden;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* TOPBAR - enhanced mobile */
+        .topbar {
+            background: var(--navy-deep);
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.7rem;
+            padding: 0.5rem 0;
+        }
+
+        .topbar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar a {
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+        }
+
+        .topbar a:hover {
+            color: var(--gold);
+        }
+
+        .topbar-left,
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            flex-wrap: wrap;
+        }
+
+        .topbar i {
+            color: var(--gold);
+            margin-right: 0.25rem;
+            font-size: 0.7rem;
+        }
+
+        /* HEADER - sticky friendly */
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 64px;
+            height: auto;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            flex-shrink: 1;
+        }
+
+        .logo img {
+            height: 44px;
+            width: 44px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--navy);
+        }
+
+        .logo-motto {
+            font-size: 0.55rem;
+            font-weight: 600;
+            color: var(--red);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .nav-link {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            text-decoration: none;
+            padding: 0.5rem 0.7rem;
+            border-radius: 6px;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: var(--navy);
+            background: var(--light-gray);
+        }
+
+        .nav-link.active {
+            color: var(--navy);
+            font-weight: 600;
+        }
+
+        .nav-portal {
+            background: var(--navy);
+            color: var(--white) !important;
+            padding: 0.4rem 0.9rem;
+            border-radius: 6px;
+            margin-left: 0.2rem;
+        }
+
+        .nav-portal:hover {
+            background: var(--navy-dark) !important;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-left: auto;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: var(--navy);
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        /* PAGE HERO - improved spacing */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy-deep) 0%, var(--navy) 60%, #2a4f99 100%);
+            padding: 3rem 0 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 7vw, 3rem);
+            font-weight: 900;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .page-hero p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.95rem;
+            max-width: 500px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* SECTIONS - responsive spacing */
+        .section {
+            padding: 3rem 0;
+        }
+
+        .section-alt {
+            background: var(--off-white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        .section-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--red);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-label::before {
+            content: '';
+            display: block;
+            width: 20px;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.6rem, 5vw, 2.4rem);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            max-width: 580px;
+            margin-bottom: 2rem;
+        }
+
+        /* MVV Cards - improved touch */
+        .mvv-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .mvv-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1.8rem 1.5rem;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .mvv-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .mvv-card-accent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+
+        .mvv-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .mvv-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 0.6rem;
+        }
+
+        .mvv-text {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Values pills - grid responsive */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.85rem;
+        }
+
+        .value-pill {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 1rem 0.75rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .value-pill-icon {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            display: block;
+            color: var(--navy);
+        }
+
+        .value-pill-name {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text);
+        }
+
+        /* Stats responsive */
+        .stats-bar {
+            background: var(--navy);
+            padding: 2rem 0;
+        }
+
+        .stats-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+            color: var(--white);
+            padding: 0.5rem;
+        }
+
+        .stat-num {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            display: block;
+        }
+
+        .stat-lbl {
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        /* Story + Timeline - stack on mobile */
+        .story-timeline-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .story-timeline-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 3rem;
+                align-items: start;
+            }
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 1.8rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0.5rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--navy), var(--red));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 1.8rem;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -1.8rem;
+            top: 0.25rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--navy);
+            border: 2px solid var(--white);
+            box-shadow: 0 0 0 2px var(--navy);
+        }
+
+        .timeline-year {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--navy);
+            letter-spacing: 0.04em;
+            margin-bottom: 0.2rem;
+        }
+
+        .timeline-title {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        /* Team grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+        }
+
+        /* Staff filter - scrollable on mobile */
+        .filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+        }
+
+        .filter-btn {
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--white);
+            font-size: 0.8rem;
+            font-weight: 500;
+            white-space: nowrap;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: var(--navy);
+            color: var(--white);
+            border-color: var(--navy);
+        }
+
+        .staff-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .staff-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .staff-card.hidden {
+            display: none;
+        }
+
+        .staff-avatar {
+            height: 100px;
+            background: linear-gradient(135deg, var(--light-gray), var(--border));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--navy);
+            opacity: 0.4;
+        }
+
+        .staff-info {
+            padding: 0.85rem;
+        }
+
+        .staff-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--navy);
+            margin-bottom: 0.2rem;
+        }
+
+        .staff-subject {
+            font-size: 0.7rem;
+            color: var(--red);
+            font-weight: 500;
+        }
+
+        .staff-dept-tag {
+            display: inline-block;
+            margin-top: 0.35rem;
+            background: var(--light-gray);
+            color: var(--text-muted);
+            font-size: 0.6rem;
+            font-weight: 500;
+            padding: 0.15rem 0.5rem;
+            border-radius: 100px;
+        }
+
+        /* CTA banner */
+        .cta-banner {
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .cta-banner h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 5vw, 2.2rem);
+            color: var(--white);
+            margin-bottom: 0.5rem;
+        }
+
+        .cta-banner p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+            padding: 0 0.5rem;
+        }
+
+        /* FOOTER - fully responsive */
+        .footer {
+            background: var(--navy-deep);
+            color: rgba(255, 255, 255, 0.75);
+            padding: 2.5rem 0 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        @media (min-width: 640px) {
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-grid {
+                grid-template-columns: 2fr 1fr 1fr 1.5fr;
+            }
+        }
+
+        .footer-logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-logo-wrap img {
+            height: 44px;
+            width: 44px;
+            border-radius: 50%;
+        }
+
+        .footer-logo-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--white);
+        }
+
+        .footer-desc {
+            font-size: 0.85rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.07);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .footer-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--gold);
+            display: inline-block;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.65);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--gold);
+            padding-left: 4px;
+        }
+
+        .footer-contact li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.7rem;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .footer-contact i {
+            color: var(--gold);
+            margin-top: 0.2rem;
+            flex-shrink: 0;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 1rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: center;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+        }
+
+        /* Mobile navigation */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav {
+                position: fixed;
+                top: 64px;
+                left: 0;
+                right: 0;
+                background: var(--white);
+                flex-direction: column;
+                align-items: stretch;
+                padding: 1rem 1.25rem 1.5rem;
+                box-shadow: var(--shadow-md);
+                transform: translateY(-110%);
+                transition: transform 0.3s ease;
+                z-index: 998;
+                gap: 0.25rem;
+            }
+
+            .nav.open {
+                transform: translateY(0);
+            }
+
+            .nav-link {
+                padding: 0.7rem 1rem;
+                white-space: normal;
+                text-align: center;
+            }
+
+            .nav-portal {
+                text-align: center;
+                margin-top: 0.25rem;
+            }
+
+            .topbar-left span:first-child {
+                max-width: 160px;
+                white-space: normal;
+                line-height: 1.3;
+            }
+
+            .topbar-inner {
+                justify-content: center;
+                text-align: center;
+            }
+
+            .mvv-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* small screen touch improvements */
+        @media (max-width: 480px) {
+            :root {
+                --container-padding: 1rem;
+            }
+
+            .team-photo {
+                height: 150px;
+            }
+
+            .team-info {
+                padding: 1rem;
+            }
+
+            .btn {
+                padding: 0.7rem 1.4rem;
+                font-size: 0.85rem;
+            }
+
+            .section {
+                padding: 2.2rem 0;
+            }
+        }
+
+        .team-photo {
+            height: 180px;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .team-photo-tag {
+            position: absolute;
+            bottom: 0.6rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: var(--navy-deep);
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 0.2rem 0.7rem;
+            border-radius: 100px;
+            white-space: nowrap;
+        }
+
+        .team-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin-bottom: 0.2rem;
+        }
+
+        .team-role {
+            font-size: 0.75rem;
+            color: var(--red);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-bio {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-outline-white {
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            background: transparent;
+            color: var(--white);
+        }
+
+        .btn-outline-white:hover {
+            background: var(--white);
+            color: var(--red);
+            border-color: var(--white);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="topbar-inner">
+            <div class="topbar-left">
+                <span><i class="fas fa-map-marker-alt"></i>Iyesi-Osuke Road, Ota, Ogun State</span>
+                <span><i class="fas fa-clock"></i>Mon – Fri: 7:30am – 4pm</span>
+            </div>
+            <div class="topbar-right">
+                <a href="tel:08125088948"><i class="fas fa-phone"></i>08125088948</a>
+                <a href="mailto:mforvalour@gmail.com"><i class="fas fa-envelope"></i>Email</a>
+            </div>
+        </div>
+    </div>
+
+    <header class="header" id="header">
+        <div class="nav-wrapper">
+            <a href="index.html" class="logo">
+                <img src="images/logo.jpg" alt="Mighty School for Valours Logo">
+                <div class="logo-text">
+                    <span class="logo-name">Mighty School for Valours</span>
+                    <span class="logo-motto">Broad &amp; Balanced Education</span>
+                </div>
+            </a>
+            <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+                <span></span><span></span><span></span>
+            </button>
+            <nav class="nav" id="nav">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link active">About</a>
+                <a href="admissions.html" class="nav-link">Admissions</a>
+                <a href="https://portal.mightyschoolforvalours.com" class="nav-link nav-portal"><i
+                        class="fas fa-lock"></i> Portal</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-hero">
+        <div class="page-hero-inner">
+            <h1>About Our School</h1>
+            <p>Over a decade of shaping young minds with broad, balanced education and strong moral values.</p>
+            <nav class="breadcrumb">
+                <a href="index.html">Home</a>
+                <span>/</span>
+                <span class="current">About Us</span>
+            </nav>
+        </div>
+    </div>
+
+    <section class="section section-alt">
+        <div class="container">
+            <span class="section-label">Our Foundation</span>
+            <h2 class="section-title">Mission, Vision &amp; Values</h2>
+            <p class="section-subtitle">The guiding principles that shape everything we do at Mighty School for Valours.
+            </p>
+            <div class="mvv-grid reveal">
+                <div class="mvv-card">
+                    <div class="mvv-card-accent"></div>
+                    <div class="mvv-icon"><i class="fas fa-bullseye"></i></div>
+                    <h3 class="mvv-title">Our Mission</h3>
+                    <p class="mvv-text">To deliver excellent and all-round education to happy, sound and assertive
+                        intellectuals — equipping them with knowledge, skills and character to thrive.</p>
+                </div>
+                <div class="mvv-card">
+                    <div class="mvv-card-accent"></div>
+                    <div class="mvv-icon"><i class="fas fa-eye"></i></div>
+                    <h3 class="mvv-title">Our Vision</h3>
+                    <p class="mvv-text">To raise good citizens who will be literates, disciplined, hardworking and
+                        God-fearing through a broad and balanced education that promotes excellence and total
+                        well-being.</p>
+                </div>
+                <div class="mvv-card">
+                    <div class="mvv-card-accent"></div>
+                    <div class="mvv-icon"><i class="fas fa-star"></i></div>
+                    <h3 class="mvv-title">Our Values</h3>
+                    <p class="mvv-text">Passion for Excellence · Strength from Hardwork · Courage and Honesty · Respect
+                        for People · Praying Always · Responsibility to Society.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <span class="section-label">What We Stand For</span>
+            <h2 class="section-title">Our Core Values</h2>
+            <p class="section-subtitle" style="margin-bottom:1.8rem;">Six pillars that define the MSV spirit.</p>
+            <div class="values-grid reveal">
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-fire-flame-curved"></i></span>
+                    <div class="value-pill-name">Passion for Excellence</div>
+                </div>
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-hammer"></i></span>
+                    <div class="value-pill-name">Strength from Hardwork</div>
+                </div>
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-shield-halved"></i></span>
+                    <div class="value-pill-name">Courage &amp; Honesty</div>
+                </div>
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-handshake"></i></span>
+                    <div class="value-pill-name">Respect for People</div>
+                </div>
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-pray"></i></span>
+                    <div class="value-pill-name">Praying Always</div>
+                </div>
+                <div class="value-pill"><span class="value-pill-icon"><i class="fas fa-earth-africa"></i></span>
+                    <div class="value-pill-name">Responsibility to Society</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-bar">
+        <div class="stats-inner">
+            <div class="stat"><span class="stat-num">2013</span><span class="stat-lbl">Year Founded</span></div>
+            <div class="stat"><span class="stat-num">Pre–SSS</span><span class="stat-lbl">Levels Covered</span></div>
+            <div class="stat"><span class="stat-num">100%</span><span class="stat-lbl">Committed Staff</span></div>
+            <div class="stat"><span class="stat-num">1</span><span class="stat-lbl">State Award Won</span></div>
+        </div>
+    </div>
+
+    <section class="section section-alt">
+        <div class="container">
+            <div class="story-timeline-grid">
+                <div class="reveal">
+                    <span class="section-label">Our Story</span>
+                    <h2 class="section-title">A Decade of Impact</h2>
+                    <p style="color:var(--text-muted); font-size:0.9rem; line-height:1.7; margin-bottom:1.5rem;">Mighty
+                        School for Valours was founded with a clear conviction: that every Nigerian child deserves
+                        transformative education. Since 2013, that conviction has shaped our curriculum and community.
+                    </p>
+                    <a href="admissions.html" class="btn btn-navy">Join Our Community <i
+                            class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="timeline reveal">
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2013</div>
+                        <div class="timeline-title">Founded &amp; First Pupils</div>
+                        <div class="timeline-desc">MSV opens in Ota, Ogun State with a vision for broad education.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot red"></div>
+                        <div class="timeline-year">2015</div>
+                        <div class="timeline-title">Primary Expansion</div>
+                        <div class="timeline-desc">Growing demand leads to primary wing expansion.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot gold"></div>
+                        <div class="timeline-year">2018</div>
+                        <div class="timeline-title">State Award Winner</div>
+                        <div class="timeline-desc">MSV wins Ogun State Governor's Essay Competition.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot red"></div>
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-title">Secondary School Launched</div>
+                        <div class="timeline-desc">Complete Pre-School to SSS institution.</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot"></div>
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-title">Digital Transformation</div>
+                        <div class="timeline-desc">MSV School Management Portal launched.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <span class="section-label">Our Leadership</span>
+            <h2 class="section-title">The People Behind MSV</h2>
+            <p class="section-subtitle">Experienced, passionate leaders committed to every child's success.</p>
+            <div class="team-grid reveal">
+                <div class="team-card">
+                    <div class="team-photo"><i class="fas fa-user-tie"></i><span class="team-photo-tag">Grand
+                            Patron</span></div>
+                    <div class="team-info">
+                        <h3 class="team-name">Mr. Olaosebikan Soetan</h3>
+                        <p class="team-role">Grand Patron</p>
+                        <p class="team-bio">Visionary guidance and unwavering support shaping MSV's values.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-photo"><i class="fas fa-user-tie"></i><span class="team-photo-tag">Director</span>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Mr. Moyosola Soetan</h3>
+                        <p class="team-role">Director of Schools</p>
+                        <p class="team-bio">Leads with vision for academic excellence and moral formation.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-photo"><i class="fas fa-user-tie"></i><span class="team-photo-tag">Director
+                            Mrs.</span></div>
+                    <div class="team-info">
+                        <h3 class="team-name">Mrs. Foluke Soetan</h3>
+                        <p class="team-role">Director (Academic Affairs)</p>
+                        <p class="team-bio">Oversees curriculum, teaching quality and learning outcomes.</p>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-photo"><i class="fas fa-user-tie"></i><span class="team-photo-tag">Bursar</span>
+                    </div>
+                    <div class="team-info">
+                        <h3 class="team-name">Mrs. Alabi</h3>
+                        <p class="team-role">Bursar</p>
+                        <p class="team-bio">Manages financial operations and resource allocation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-alt">
+        <div class="container">
+            <span class="section-label">Our Educators</span>
+            <h2 class="section-title">21st Century Teaching Staff</h2>
+            <p class="section-subtitle" style="margin-bottom:1.2rem;">Qualified, dedicated teachers across all
+                departments.</p>
+            <div class="filter-bar">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="science">Science</button>
+                <button class="filter-btn" data-filter="arts">Arts &amp; Social</button>
+                <button class="filter-btn" data-filter="commercial">Commercial</button>
+                <button class="filter-btn" data-filter="language">Languages</button>
+                <button class="filter-btn" data-filter="primary">Primary</button>
+            </div>
+            <div class="staff-grid reveal">
+                <div class="staff-card" data-dept="science">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Mathematics / Further Maths</div><span
+                            class="staff-dept-tag">Science</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="science">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Physics / Chemistry</div><span class="staff-dept-tag">Science</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="science">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Biology / Agric</div><span class="staff-dept-tag">Science</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="language">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">English &amp; Literature</div><span
+                            class="staff-dept-tag">Languages</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="language">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Yoruba Language</div><span class="staff-dept-tag">Languages</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="commercial">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Commerce / Accounting</div><span
+                            class="staff-dept-tag">Commercial</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="arts">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Social Studies / Civic Ed.</div><span class="staff-dept-tag">Arts
+                            &amp; Social</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="primary">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Primary Class Teacher</div><span
+                            class="staff-dept-tag">Primary</span>
+                    </div>
+                </div>
+                <div class="staff-card" data-dept="primary">
+                    <div class="staff-avatar"><i class="fas fa-user"></i></div>
+                    <div class="staff-info">
+                        <div class="staff-name">Staff Member</div>
+                        <div class="staff-subject">Nursery / Pre-School</div><span class="staff-dept-tag">Primary</span>
+                    </div>
+                </div>
+            </div>
+            <p style="color:var(--text-muted); font-size:0.75rem; margin-top:1rem; text-align:center;"><i
+                    class="fas fa-info-circle" style="color:var(--navy);"></i> Staff profiles updated as new faculty
+                join.</p>
+        </div>
+    </section>
+
+    <div class="cta-banner">
+        <div class="container">
+            <h2>Become Part of the MSV Family</h2>
+            <p>Admissions are open for all levels. Apply online or visit us at Ota, Ogun State.</p>
+            <div style="display:flex; gap:0.8rem; justify-content:center; flex-wrap:wrap;">
+                <a href="admissions.html" class="btn"
+                    style="background:var(--white);color:var(--red);font-weight:700;"><i class="fas fa-file-alt"></i>
+                    Apply Now</a>
+                <a href="index.html#contact" class="btn btn-outline-white">Contact Us</a>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-logo-wrap"><img src="images/logo.jpg" alt="MSV Logo">
+                        <div>
+                            <div class="footer-logo-name">Mighty School for Valours</div>
+                            <div style="font-size:0.65rem;color:var(--gold);">BROAD &amp; BALANCED EDUCATION</div>
+                        </div>
+                    </div>
+                    <p class="footer-desc">Nurturing excellence and character since 2013.</p>
+                    <div class="social-links"><a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a><a
+                            href="#" class="social-link"><i class="fab fa-x-twitter"></i></a><a href="#"
+                            class="social-link"><i class="fab fa-instagram"></i></a></div>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="admissions.html">Admissions</a></li>
+                        <li><a href="https://portal.mightyschoolforvalours.com">Student Portal</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Programmes</h3>
+                    <ul class="footer-links">
+                        <li><a href="admissions.html">Crèche &amp; Nursery</a></li>
+                        <li><a href="admissions.html">Primary School</a></li>
+                        <li><a href="admissions.html">Junior Secondary</a></li>
+                        <li><a href="admissions.html">Senior Secondary</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="footer-links footer-contact">
+                        <li><i class="fas fa-map-marker-alt"></i> Plot 1-4, School Avenue, Favour Land Estate,
+                            Iyesi-Osuke Road, Ota, Ogun State</li>
+                        <li><i class="fas fa-phone"></i><a href="tel:08125088948">08125088948</a></li>
+                        <li><i class="fas fa-phone"></i><a href="tel:08120493299">08120493299</a></li>
+                        <li><i class="fas fa-envelope"></i><a
+                                href="mailto:mforvalour@gmail.com">mforvalour@gmail.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Mighty School for Valours. All Rights Reserved.</p>
+                <p>Designed by <a href="https://impactdigitalacademy.com.ng" target="_blank">Impact Digital Services</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => header.classList.toggle('scrolled', window.scrollY > 40));
+        const hamburger = document.getElementById('hamburger');
+        const nav = document.getElementById('nav');
+        hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); nav.classList.toggle('open'); });
+        document.querySelectorAll('#nav a').forEach(link => link.addEventListener('click', () => { hamburger.classList.remove('open'); nav.classList.remove('open'); }));
+        document.querySelectorAll('.filter-btn').forEach(btn => { btn.addEventListener('click', () => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); const filter = btn.dataset.filter; document.querySelectorAll('.staff-card').forEach(card => { card.classList.toggle('hidden', filter !== 'all' && card.dataset.dept !== filter); }); }); });
+        const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>
