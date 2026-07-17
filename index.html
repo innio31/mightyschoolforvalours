@@ -876,6 +876,63 @@
             line-height: 1.6;
         }
 
+        /* ── ICT SECTION ── */
+        .ict-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .ict-text p {
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 1.25rem;
+        }
+
+        .ict-highlights {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .ict-highlight {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--light-gray);
+            padding: 0.6rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 500;
+            color: var(--navy);
+            font-size: 0.9rem;
+        }
+
+        .ict-highlight i {
+            color: var(--red);
+        }
+
+        .ict-gallery-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .ict-gallery-mini img {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            background: var(--light-gray);
+        }
+
+        .ict-gallery-mini img:hover {
+            transform: scale(1.03);
+            box-shadow: var(--shadow-sm);
+        }
+
         /* ── GALLERY ── */
         .gallery-grid {
             display: grid;
@@ -1122,6 +1179,10 @@
             .achievements-inner {
                 grid-template-columns: 1fr;
             }
+
+            .ict-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         @media (max-width: 768px) {
@@ -1190,6 +1251,10 @@
             .achievements-list {
                 grid-template-columns: 1fr;
             }
+
+            .ict-gallery-mini {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 480px) {
@@ -1208,6 +1273,10 @@
 
             .gallery-item:first-child {
                 grid-column: span 1;
+            }
+
+            .ict-gallery-mini {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1246,6 +1315,7 @@
                 <a href="index.html" class="nav-link active">Home</a>
                 <a href="about.html" class="nav-link">About</a>
                 <a href="admissions.html" class="nav-link">Admissions</a>
+                <a href="gallery.html" class="nav-link">Gallery</a>
                 <a href="https://acad.com.ng/msv/login.php" class="nav-link nav-portal"><i class="fas fa-lock"></i>
                     Portal</a>
             </nav>
@@ -1518,8 +1588,43 @@
         </div>
     </section>
 
-    <!-- Gallery -->
+    <!-- ICT Section -->
     <section class="section section-alt">
+        <div class="container">
+            <span class="section-label">Technology & Innovation</span>
+            <h2 class="section-title">Our ICT Infrastructure</h2>
+            <p class="section-subtitle">Equipping students with 21st-century digital skills through modern technology
+                and hands-on learning.</p>
+
+            <div class="ict-grid reveal">
+                <div class="ict-text">
+                    <p><strong>Mighty School for Valours</strong> boasts a state-of-the-art ICT centre with high-speed
+                        internet, modern computer labs, and interactive smart boards. Every student from Primary to
+                        Senior Secondary receives practical training in digital literacy, coding, and research skills.
+                    </p>
+                    <p>Our ICT curriculum is designed to foster problem-solving, creativity, and digital responsibility.
+                        We integrate technology across all subjects, preparing our learners for a future where digital
+                        fluency is essential.</p>
+                    <div class="ict-highlights">
+                        <span class="ict-highlight"><i class="fas fa-wifi"></i> High-speed fibre</span>
+                        <span class="ict-highlight"><i class="fas fa-laptop"></i> 100+ workstations</span>
+                        <span class="ict-highlight"><i class="fas fa-code"></i> Coding &amp; robotics</span>
+                        <span class="ict-highlight"><i class="fas fa-video"></i> Smart boards</span>
+                    </div>
+                    <a href="gallery.html" class="btn btn-navy"><i class="fas fa-images"></i> View ICT Gallery</a>
+                </div>
+                <div class="ict-gallery-mini">
+                    <img src="images/ict/cbt1.jpg" alt="ICT lab" loading="lazy">
+                    <img src="images/ict/cbt2.jpg" alt="Students coding" loading="lazy">
+                    <img src="images/ict/cbt3.jpg" alt="Robotics class" loading="lazy">
+                    <img src="images/ict/cbt4.jpg" alt="Digital classroom" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery -->
+    <section class="section">
         <div class="container">
             <span class="section-label">Life at MSV</span>
             <h2 class="section-title">Campus Gallery</h2>
@@ -1551,6 +1656,9 @@
                         alt="Library reading" loading="lazy">
                     <div class="gallery-caption">Library & quiet study</div>
                 </div>
+            </div>
+            <div style="text-align:center; margin-top:2.5rem;">
+                <a href="gallery.html" class="btn btn-primary"><i class="fas fa-arrow-right"></i> See More Photos</a>
             </div>
         </div>
     </section>
@@ -1598,6 +1706,7 @@
                         <li><a href="index.html">Home</a></li>
                         <li><a href="about.html">About Us</a></li>
                         <li><a href="admissions.html">Admissions</a></li>
+                        <li><a href="gallery.html">Gallery</a></li>
                         <li><a href="https://acad.com.ng/msv/login.php">Student Portal</a></li>
                     </ul>
                 </div>
@@ -1659,6 +1768,7 @@
         const slides = document.querySelectorAll('.hero-slide');
         const indicators = document.querySelectorAll('.indicator');
         let current = 0;
+
         function goToSlide(n) {
             slides[current].classList.remove('active');
             indicators[current].classList.remove('active');
